@@ -1,0 +1,10 @@
+/* Trong editor CKEditor */
+.ck-editor__editable .ck-content table,
+.ck-editor__editable .ck-content figure.table > table {
+    border: 1px solid #333 !important;
+    border-collapse: collapse;
+}
+.ck-editor__editable .ck-content table td,
+.ck-editor__editable .ck-content table th {
+    border: 1px solid #333 !important;
+}

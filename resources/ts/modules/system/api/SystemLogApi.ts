@@ -1,0 +1,41 @@
+import type { PagiInfo, PagiResult } from "../../page/type";
+import type { SystemLog, SystemLogFilter } from "../type";
+
+
+export class SystemLogApi{
+    /** lấy danh sách Lịch sử thao tác có phân trang */
+    static async getPaginateSystemLog(data : SystemLogFilter | Partial<SystemLog>, page = 'page-1') : Promise<PagiResult<SystemLog>>{
+        const url = "/api/system/system-log/paginate/";
+        try {
+            const res = await window._apiGet(url + page, data);
+            return res;
+        }catch(err : any){
+            window._toastbox(err.responseJSON?.message || "Có lỗi xảy ra, vui lòng thử lại", "danger");
+            return {
+                listResult: [],
+                pagiInfo: {
+                    pagi_number: [],
+                    last: 0,
+                    limit: 0,
+                    current_page: 0,
+                    total: 0,
+                    query: "",
+                    route: url,
+                },
+            };
+        }
+    }
+
+    /** lấy danh sách Tủ sách có phân trang */
+    static async getListSystemLog(data : SystemLogFilter | Partial<SystemLog>) : Promise<SystemLog[]>{
+        const url = "/api/system/system-log/list";
+        try {
+            const res = await window._apiGet(url, data);
+            return res;
+        }catch(err: any){
+            window._toastbox(err.responseJSON?.message || "Có lỗi xảy ra, vui lòng thử lại", "danger");
+            return [];
+        }
+    }
+
+}

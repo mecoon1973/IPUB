@@ -1,0 +1,79 @@
+<?php
+namespace Modules\System\Service\Impl;
+
+use Core\Object\Paginate;
+use Illuminate\Support\Facades\Auth;
+
+use Modules\System\Service\BosachService;
+use Modules\System\Repository\BosachRepository;
+use Core\Repository\CountersOlmRepository as CounterRepository;
+
+use Core\Service\BaseService;
+use Exception;
+use Modules\System\Model\DM_BOSACH;
+use Modules\System\Object\FilterBosach;
+
+class BosachServiceImpl extends BaseService implements BosachService
+{
+    /** @var BosachRepository */
+    protected $baseRepo;
+
+    public function __construct(BosachRepository $baseRepo) {
+        parent::__construct($baseRepo);
+    }
+
+    public function getPaginate(FilterBosach $filter, string $page = 'page-1') : array {
+        $conditions = $filter->buildConditions();
+        $paginate = new Paginate([
+            "conditions" => $conditions,
+            "limit" => 15,
+            "page" => $page
+        ]);
+        $result = $this->pagination($paginate);
+        return [
+            "listResult" => $result->list,
+            "pagiInfo" => $result->pagi_info
+        ];
+    }
+
+    public function getList(FilterBosach $filter) {
+        $result = $this->baseRepo->findAllWithFilter($filter);
+        return $result;
+    }
+
+    public function store(array $data) : DM_BOSACH {
+        if(data_get($data, "id", 0) != 0) {
+            /** @var DM_BOSACH $bosach */
+            $bosach = $this->baseRepo->get($data["id"]);
+            if($bosach) {
+                $bosach->update($data);
+                return $bosach;
+            }
+        }
+
+        $this->isExistBosach($data["MaBo"]);
+
+        /** @var DM_BOSACH $bosach */
+        $bosach = $this->baseRepo->create($data);
+        if(!$bosach){
+            throw new Exception("Có lỗi xảy ra, vui lòng thử lại");
+        }
+        return $bosach;
+    }
+
+    public function delete(int $id) : bool {
+        $bosach = $this->baseRepo->get($id);
+        if(!$bosach){
+            throw new Exception("Bộ sách không tồn tại");
+        }
+        $bosach->IsDeleted = true;
+        return $bosach->save();
+    }
+
+    private function isExistBosach(string $maBo) {
+        $bosach = $this->baseRepo->findOne(["MaBo" => $maBo]);
+        if($bosach){
+            throw new Exception("Mã bộ sách đã tồn tại");
+        }
+    }
+}

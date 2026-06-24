@@ -1,0 +1,58 @@
+/**
+ * Lưới 6 cột cố định — mọi hàng dùng cùng ranh giới cột để nhãn/ô nhập thẳng hàng dọc.
+ * - 3 ô / hàng: mỗi ô span 2
+ * - 2 ô / hàng (vd. Năm XB + Tên sách): 2 + 4
+ * - 2 ô rộng bằng nhau: mỗi ô span 3
+ * - 1 ô full: span 6
+ */
+.phieu-lc-form.phieu-dk-form .phieu-dk-grid-3,
+.phieu-lc-form.phieu-dk-form .phieu-dk-grid-2,
+.phieu-lc-form.phieu-dk-form .phieu-dk-grid-2wide {
+    display: grid;
+    grid-template-columns: repeat(6, minmax(0, 1fr));
+    gap: 0;
+    align-items: stretch;
+    border-bottom: 1px solid #eee;
+}
+
+.phieu-lc-form.phieu-dk-form .phieu-dk-grid-3 > .phieu-dk-inline-row,
+.phieu-lc-form.phieu-dk-form .phieu-dk-grid-2 > .phieu-dk-inline-row,
+.phieu-lc-form.phieu-dk-form .phieu-dk-grid-2wide > .phieu-dk-inline-row {
+    border-bottom: none;
+    min-width: 0;
+}
+
+.phieu-lc-form.phieu-dk-form .phieu-dk-grid-3 > .phieu-dk-inline-row {
+    grid-column: span 2;
+}
+
+.phieu-lc-form.phieu-dk-form .phieu-dk-grid-3 > .phieu-dk-inline-row:not(:last-child) {
+    border-right: 1px solid #eee;
+}
+
+.phieu-lc-form.phieu-dk-form .phieu-dk-grid-2 > .phieu-dk-inline-row:first-child {
+    grid-column: span 2;
+    border-right: 1px solid #eee;
+}
+
+.phieu-lc-form.phieu-dk-form .phieu-dk-grid-2 > .phieu-dk-inline-row:last-child {
+    grid-column: span 4;
+}
+
+.phieu-lc-form.phieu-dk-form .phieu-dk-grid-2wide > .phieu-dk-inline-row {
+    grid-column: span 3;
+}
+
+.phieu-lc-form.phieu-dk-form .phieu-dk-grid-2wide > .phieu-dk-inline-row:first-child {
+    border-right: 1px solid #eee;
+}
+
+/* Nhãn cùng độ rộng trong mỗi ô → cột nhãn thẳng hàng giữa các hàng */
+.phieu-lc-form .phieu-dk-inline-row .phieu-dk-label {
+    flex: 0 0 118px;
+    max-width: 118px;
+}
+
+.phieu-lc-form .phieu-dk-inline-row .phieu-dk-label-section {
+    max-width: none;
+}

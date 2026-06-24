@@ -1,0 +1,25 @@
+<?php
+namespace Modules\Topic\Service;
+
+use Core\Service\IBaseService;
+use Modules\Topic\Model\PHIEU_DK_DETAI;
+use Modules\Topic\Object\FilterPhieuDkDetai;
+
+/**
+ * @extends IBaseService<PHIEU_DK_DETAI>
+ */
+interface PhieuDkDetaiService extends IBaseService {
+
+    public function getPaginate(FilterPhieuDkDetai $filter, string $page = 'page-1'): array;
+
+    public function getList(FilterPhieuDkDetai $filter);
+
+    public function store(array $data): PHIEU_DK_DETAI;
+
+    public function delete(int $id): bool;
+
+    /** chuẩn hóa dữ liệu biên tập viên trong phiếu DK đề tài
+     * thêm giá trị idListBTV chứa các _id User BTV trong phiếu
+     */
+    public function convertDataListBTV();
+}

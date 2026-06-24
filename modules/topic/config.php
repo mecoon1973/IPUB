@@ -1,0 +1,26 @@
+<?php
+return [
+    "CONFIG_TRANG_THAI" => [
+        0 => "01. Các đề tài chưa xét duyệt",
+        1 => "02. HĐXB đơn vị trả lại",
+        2 => "03. HĐXB đơn vị đang xét duyệt",
+        3 => "04. HĐXB đơn vị phê duyệt",
+        4 => "10. HĐXB NXBGDVN trả lại",
+        5 => "11. HĐXB NXBGDVN đang xét duyệt",
+        6 => "12. HĐXB NXBGDVN phê duyệt",
+        7 => "16. CXB trả lại",
+        8 => "15. CXB đang xét duyệt",
+        9 => "14. CXB phê duyệt",
+        10 => "17. Kết chuyển thành sách",
+        11 => "06. HĐXB Miền trả lại",
+        12 => "07. HĐXB Miền đang xét duyệt",
+        13 => "08.1. HĐXB Miền phê duyệt",
+        14 => "08.2. HĐXB Miền thẩm định",
+        15 => "05. HĐXB Miền chưa xét duyệt",
+        16 => "09. Hội đồng XB NXBGDVN chưa xét duyệt",
+        17 => "13. Các đề tài Cục xuất bản chưa xét duyệt",
+        18 => "18.Yêu cầu đọc rà soát - kiểm định",
+        19 => "19. Đang đọc rà soát - kiểm định",
+        20 => "20. Đã đọc rà soát - kiểm định",
+    ],
+];
