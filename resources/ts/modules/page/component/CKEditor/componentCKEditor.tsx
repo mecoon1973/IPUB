@@ -25,20 +25,34 @@ import {
     TableCellProperties,
 } from '@ckeditor/ckeditor5-table';
 import { LineHeight } from '@rickx/ckeditor5-line-height';
+import { GeneralHtmlSupport, ImageInline, ImageBlock } from 'ckeditor5';
 import React from 'react';
 import { CONFIG_ALIGNMENT, CONFIG_CONTENT_TOOLBAR_TABLE, CONFIG_DEFAULT_PROPERTIES_TABLE, CONFIG_FONT_FAMILY, CONFIG_FONT_SIZE, CONFIG_HEADING, CONFIG_LINE_HEIGHT } from './configCKEditor';
+
+type CKEditorInstance = Parameters<NonNullable<React.ComponentProps<typeof CKEditor>['onReady']>>[0];
+
+/**
+ * Chèn một đoạn HTML vào vị trí con trỏ hiện tại của editor.
+ */
+export function insertHtmlToEditor(editor: CKEditorInstance, html: string): void {
+    const viewFragment = editor.data.processor.toView(html);
+    const modelFragment = editor.data.toModel(viewFragment);
+    editor.model.insertContent(modelFragment);
+}
 
 interface ComponentCKEditorProps {
     data: string;
     onChange: (data: string) => void;
+    onReady?: (editor: CKEditorInstance) => void;
 }
 
 export const ComponentCKEditor = React.memo((props: ComponentCKEditorProps) => {
-    const { data, onChange } = props;
+    const { data, onChange, onReady } = props;
     return (
         <CKEditor
             editor={ClassicEditor}
             data={data}
+            onReady={(editor) => onReady?.(editor)}
             onChange={(_event, editor) => {
                 onChange(editor.getData());
             }}
@@ -66,6 +80,9 @@ export const ComponentCKEditor = React.memo((props: ComponentCKEditorProps) => {
                     TableProperties,
                     TableCellProperties,
                     LineHeight,
+                    GeneralHtmlSupport,
+                    ImageInline,
+                    ImageBlock,
                 ],
                 toolbar: [
                     'bold',
@@ -96,6 +113,16 @@ export const ComponentCKEditor = React.memo((props: ComponentCKEditorProps) => {
                     'undo',
                     'redo',
                 ],
+                htmlSupport: {
+                    allow: [
+                        {
+                            name: /^(img|span|p|div|br|table|tbody|thead|tr|td|th|figure)$/,
+                            attributes: true,
+                            classes: true,
+                            styles: true,
+                        },
+                    ],
+                },
                 heading: {
                     options: CONFIG_HEADING,
                 },

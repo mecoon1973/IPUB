@@ -1,5 +1,5 @@
 import { Checkbox, Input, Radio, Select, Space, Typography } from "antd";
-import type { PhieuDkDetai } from "../../../type";
+import { KieuBanQuyen, type PhieuDkDetai } from "../../../type";
 import React, { useCallback, useMemo, useState } from "react";
 import "../../../../../../css/modules/topic/PhieuDkDetai/FormFieldPhieuDkDetai.css";
 import DatePicker from "../../../../core/utils/DatePicker";
@@ -322,8 +322,8 @@ const FormFieldPhieuDkDetai = React.memo((props: FormFieldPhieuDkDetaiProps) => 
                                 value={form.KieuBanQuyen === undefined || form.KieuBanQuyen === null ? undefined : form.KieuBanQuyen}
                                 onChange={(v) => setField("KieuBanQuyen", v)}
                                 options={[
-                                    { value: 1, label: "Có thời hạn" },
-                                    { value: 2, label: "Không thời hạn" },
+                                    { value: KieuBanQuyen.CO_THOI_HAN, label: "Có thời hạn" },
+                                    { value: KieuBanQuyen.VO_THOI_HAN, label: "Không thời hạn" },
                                 ]}
                             />
                         </div>
@@ -339,7 +339,7 @@ const FormFieldPhieuDkDetai = React.memo((props: FormFieldPhieuDkDetaiProps) => 
                                 format="DD/MM/YYYY"
                             />
                         </div>
-                        {form.KieuBanQuyen === 1 && (
+                        {form.KieuBanQuyen === KieuBanQuyen.CO_THOI_HAN && (
                             <React.Fragment>
                                 <div className="phieu-dk-133-item" {...markField("BanQuyenDenNgay")}>
                                     <Typography.Text className="d-block mb-1">

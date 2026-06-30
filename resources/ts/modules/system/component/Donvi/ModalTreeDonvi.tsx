@@ -57,7 +57,11 @@ export const ModalTreeDonvi = React.memo((props: ModalTreeDonviProps) => {
                     listDonvi={listDonvi}
                     usingselectChoose={isSelectChoose}
                     selectedId={selectedId}
-                    handlerSelectedId={handlerSelectedId}
+                    handlerSelectedId={(id: number | number[]) => {
+                        if(!Array.isArray(id)){
+                            handlerSelectedId(id);
+                        }
+                    }}
                     {...(handlerChooseDonvi && { handlerChooseDonvi })}
                 />
             </div>

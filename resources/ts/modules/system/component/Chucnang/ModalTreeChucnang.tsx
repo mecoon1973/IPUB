@@ -43,7 +43,11 @@ export const ModalTreeChucnang = React.memo((props: ModalTreeChucnangProps) => {
                     listData={listChucnang}
                     usingselectChoose={isSelectChoose}
                     selectedId={selectedId}
-                    handlerSelectedId={handlerSelectedId}
+                    handlerSelectedId={(id: number | number[]) => {
+                        if(!Array.isArray(id)){
+                            handlerSelectedId(id);
+                        }
+                    }}
                     handlerChooseData={handlerChooseChucnang}
                     getLabel={(chucnang) => chucnang.Title}
                 />

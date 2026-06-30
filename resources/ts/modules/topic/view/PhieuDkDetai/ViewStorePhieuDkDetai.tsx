@@ -4,7 +4,7 @@ import {
 } from "../../../core/utils/helpers";
 import React, { useState } from "react";
 import { useCallback } from "react";
-import type { PhieuDkDetai } from "../../type";
+import { KieuBanQuyen, type PhieuDkDetai } from "../../type";
 import { PhieuDkDetaiApi } from "../../api/PhieuDkDetaiApi";
 import { ComponentTitleStore } from "../../../page/component/componentTitleStore";
 import { Col, Row } from "antd";
@@ -92,7 +92,7 @@ function emptyFormState(): Partial<PhieuDkDetai> {
         GiaBia: 0,
         idListBTV: [],
         BanQuyen: false,
-        KieuBanQuyen: 2,
+        KieuBanQuyen: KieuBanQuyen.VO_THOI_HAN,
         IsXetDuyet: true,
         ID_DonVi: 0,
         TrangThai: 0,
@@ -196,7 +196,7 @@ export const ViewStorePhieuDkDetai = React.memo((props: ViewStorePhieuDkDetaiPro
             mapKeysRequired["Dai"] = "Dài";
         }
 
-        if(form.KieuBanQuyen === 1){
+        if(form.KieuBanQuyen === KieuBanQuyen.CO_THOI_HAN){
             mapKeysRequired["BanQuyenDenNgay"] = "Ngày bản quyền đến";
         }
         if(form.KieuHDBS == 1){

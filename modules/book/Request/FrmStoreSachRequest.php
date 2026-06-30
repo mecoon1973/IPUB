@@ -8,6 +8,16 @@ class FrmStoreSachRequest extends FormRequest
 
 {
     protected $casts = [
+        "id" => "int",
+        "MaSo" => "string",
+        "BanQuyen" => "boolean",
+        "KieuBanQuyen" => "int",
+        "GiaBia" => "int",
+        "ThongTinBanQuyen" => "string",
+        "SoHuuBanQuyen" => "string",
+        "BanQuyenTuNgay" => "date",
+        "BanQuyenDenNgay" => "date",
+
     ];
 
     /**
@@ -27,6 +37,15 @@ class FrmStoreSachRequest extends FormRequest
      */
     public function rules() {
         return [
+            "id" => "required|integer",
+            "MaSo" => "sometimes|string",
+            "BanQuyen" => "sometimes|boolean",
+            "KieuBanQuyen" => "sometimes|integer",
+            "GiaBia" => "sometimes|integer",
+            "ThongTinBanQuyen" => "sometimes|string",
+            "SoHuuBanQuyen" => "sometimes|string",
+            "BanQuyenTuNgay" => "sometimes|date",
+            "BanQuyenDenNgay" => "sometimes|date",
         ];
     }
 
@@ -35,6 +54,16 @@ class FrmStoreSachRequest extends FormRequest
      */
     public function messages() {
         return [
+            "id.required" => "ID không được để trống",
+            "id.integer" => "ID phải là định dạng số nguyên",
+            "MaSo.string" => "Mã số phải là định dạng chuỗi",
+            "BanQuyen.boolean" => "Bản quyền phải là định dạng boolean",
+            "KieuBanQuyen.integer" => "Kiểu bản quyền phải là định dạng số nguyên",
+            "ThongTinBanQuyen.string" => "Thông tin bản quyền phải là định dạng chuỗi",
+            "SoHuuBanQuyen.string" => "Sở hữu bản quyền phải là định dạng chuỗi",
+            "BanQuyenTuNgay.date" => "Ngày bắt đầu bản quyền phải là định dạng date",
+            "BanQuyenDenNgay.date" => "Ngày kết thúc bản quyền phải là định dạng date",
+            "GiaBia.integer" => "Giá bìa phải là định dạng số nguyên",
         ];
     }
 

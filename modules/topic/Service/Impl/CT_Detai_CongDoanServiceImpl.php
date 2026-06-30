@@ -58,7 +58,6 @@ class CT_Detai_CongDoanServiceImpl extends BaseService implements CT_Detai_CongD
     }
 
     public function delete(int $id): bool {
-        return false;
         $ct_detai_congdoan = $this->baseRepo->get($id);
         if(!$ct_detai_congdoan){
             throw new Exception("CT_Detai_Congdoan không tồn tại");

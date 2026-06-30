@@ -41,7 +41,10 @@ export const dashboard: NodeDashboard[] = [
                         type: "link",
                         routes: "",
                     },
-                    { title: "2.1.6 Danh mục sách", type: "link", routes: "" },
+                    {   title: "2.1.6 Danh mục sách",
+                        type: "link",
+                        routes: "/sach/quan-ly"
+                    },
                     {
                         title: "2.1.7 Phiếu chuyển bản thảo",
                         type: "link",

@@ -53,7 +53,11 @@ export const ViewPermissionSettings = React.memo((props: ViewPermissionSettingsP
                     return chucnang.Title ?? "";
                 }}
                 usingselectChoose={true}
-                handlerSelectedId={handleSelectedId}
+                handlerSelectedId={(id: number | number[]) => {
+                    if(Array.isArray(id)){
+                        setSelectedIds(id);
+                    }
+                }}
                 selectedId={selectedIds}
             />
         </div>

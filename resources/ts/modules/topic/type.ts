@@ -1,6 +1,11 @@
 import type { User } from "../user/type";
 import type { Relationships } from "../page/type";
 
+export enum KieuBanQuyen {
+    CO_THOI_HAN = 1,
+    VO_THOI_HAN = 2
+}
+
 export interface PhieuDkDetai {
     id: number;
     NgayDK: Date;
@@ -77,7 +82,7 @@ export interface PhieuDkDetai {
     DiaChiCungCap: string;
     ID_DetaiDKL: number;
     IsCancel: boolean;
-    KieuBanQuyen: number;
+    KieuBanQuyen: KieuBanQuyen;
     BanQuyenTuNgay: Date;
     BanQuyenDenNgay: Date;
     ThongTinBanQuyen: string;
@@ -195,62 +200,6 @@ export interface QDInFilter extends Partial<QDIn> {
     endDate: Date | null;
 };
 //
-
-// Sách
-export interface Sach {
-    id: number;
-    TenSach: string;
-    TacGia: string;
-    MaSo: string;
-    NamXuatBan: string;
-    BienTapVien: string;
-    SoTrang: number;
-    GiaBia: number;
-    LanTaiBan: number;
-    SoLuong: number;
-    NoiDung: string;
-    GhiChu: string;
-    CreatedOn: Date;
-    CreatedBy: number;
-    EditedOn: Date;
-    EditedBy: number;
-    IsDeleted: boolean;
-    IsUsed: boolean;
-    DaGui: boolean;
-    KhoaGuiNhan: string;
-    ISBNCode: string;
-    MaSoQTG: string;
-    VongThau: number;
-    LaDeTaiCKH: boolean;
-    ThongTinLienQuan: string;
-    FMAVACH: string;
-    BanQuyen: boolean;
-    CoMSISBN: boolean;
-    SoLuongConLai: number;
-    DungLuongTep: string;
-    DiaChiCungCap: string;
-    IsSachDienTu: boolean;
-    KieuBanQuyen: number;
-    BanQuyenTuNgay: Date;
-    BanQuyenDenNgay: Date;
-    ThongTinBanQuyen: string;
-    IsCancel: boolean;
-    IsDaDangKyLai: boolean;
-    LoaiChinhSua: number;
-    isTamDungCapPhep: boolean;
-    LyDoThayDoiSoLuong: string;
-    SoLuongTruocTamDung: number;
-    SoHuuBanQuyen: string;
-    LuaTuoi: string;
-    TypeLuaTuoi: number;
-    CanhBao: boolean;
-    TrangThaiDocBanThao: number;
-    YKienDocBanThao: string;
-    XetDuyetBanThao: boolean;
-    NguoiDocDuyet: string;
-    NgayDocDuyet: Date;
-    tenrutgon: string;
-}
 
 // Chi tiết quyết định in
 export interface CT_QD_In {

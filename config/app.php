@@ -141,6 +141,7 @@ return [
         Modules\Page\Provider::class,
         Modules\System\Provider::class,
         Modules\Topic\Provider::class,
+        Modules\Book\Provider::class,
         MongoDBServiceProvider::class,
     ])->toArray(),
 

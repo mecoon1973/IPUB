@@ -73,7 +73,11 @@ export const ViewPermissionSettingsNhom = React.memo((props: ViewPermissionSetti
                     return quyen.TenQuyen ?? "";
                 }}
                 usingselectChoose={true}
-                handlerSelectedId={handleSelectedId}
+                handlerSelectedId={(id: number | number[]) => {
+                    if(!Array.isArray(id)){
+                        handleSelectedId(id);
+                    }
+                }}
                 selectedId={formState.listIdQuyen ?? []}
             />
         </div>

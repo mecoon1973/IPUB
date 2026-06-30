@@ -106,6 +106,9 @@ export default defineConfig({
 
                 'resources/ts/modules/qualityAssessment/view/DsDocRaSoat/viewManageDsDocRaSoat.tsx',
                 'resources/ts/modules/qualityAssessment/view/DsDocRaSoat/viewStoreDsDocRaSoat.tsx',
+
+                'resources/ts/modules/book/view/Sach/viewManageSach.tsx',
+                'resources/ts/modules/book/view/Sach/viewPrintISBN.tsx',
             ],
             refresh: true,
         }),

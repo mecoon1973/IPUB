@@ -8,11 +8,11 @@ interface TreeDonviProps {
     /** hàm để ở bên ngoài có thể sử lý khi sau khi đã chọn đơn vị */
     handlerChooseDonvi?: (donvi: DonVi) => void;
     /** hàm bắt sự kiện khi sử dụng select cho chọn đơn vị */
-    handlerSelectedId?: (id: number) => void;
+    handlerSelectedId?: (id: number | number[]) => void;
     /** sử dụng select cho chọn đơn vị */
     usingselectChoose?: boolean;
     /** id của đơn vị đã chọn */
-    selectedId?: number;
+    selectedId?: number | number[];
     /** mở mặc định */
     openByDefault?: boolean;
     /** chiều cao */

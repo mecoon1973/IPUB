@@ -246,13 +246,3 @@ if(!function_exists('core_normalize_type_value')){
     }
 }
 
-if(!function_exists("helperExportFileFormHTML")) {
-    function helperExportFileFormHTML(string $html, string $type) {
-        switch($type){
-            case "pdf":
-                return ExportFile\PdfExporter::export($html);
-            default:
-                return "";
-        }
-    }
-}

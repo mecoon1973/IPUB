@@ -3,6 +3,7 @@ import { Button, Col, Modal, Row } from "antd";
 import { useManagePhieuDkDetaiStore } from "../../store/PhieuDkDetai/managePhieuDkDetaiStore";
 import { formatDateToString } from "../../../core/utils/helpersDayjs";
 import { useDataViewStore } from "../../../system/store/useDataViewStore";
+import { KieuBanQuyen } from "../../type";
 
 function InfoLine({ label, value }: { label: string; value: React.ReactNode }) {
     return (
@@ -24,7 +25,7 @@ export const ModalInfoPhieuDkDetaiComponent = React.memo(() => {
     }
 
     const tenMangSach = listMangsach.find((item) => item.id === PhieuDkDetaiContext.ID_MangSach)?.TenMang ?? "";
-    const kieuBanQuyen = PhieuDkDetaiContext.KieuBanQuyen === 1 ? "Có thời hạn" : "Không thời hạn";
+    const kieuBanQuyen = PhieuDkDetaiContext.KieuBanQuyen === KieuBanQuyen.CO_THOI_HAN ? "Có thời hạn" : "Không thời hạn";
 
     return (
         <Modal

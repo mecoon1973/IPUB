@@ -55,7 +55,6 @@ const TreeObject = React.memo((props: TreeObjectProps) => {
                     openByDefault={true}
                     autoSelectChild={true}
                     handlerSelectedId={(id: number | number[]) => {
-                        console.log(id);
                         setForm((prev) => {
                             if (Array.isArray(id)) {
                                 return { ...prev, nhom_ids: id };

@@ -8,6 +8,15 @@ use Modules\Book\Object\FilterSach;
 class FrmSearchSachRequest extends FormRequest
 {
     protected $casts = [
+        'MaSo' => 'string',
+        'title' => 'string',
+        'ID_MangSach' => 'int',
+        'ID_DonVi' => 'int',
+        'NamXuatBan' => 'string',
+        'NamTaiBan' => 'string',
+        'HTXB' => 'int',
+        'NgayDK' => 'array',
+        'relations' => 'array',
     ];
 
     /**
@@ -27,11 +36,31 @@ class FrmSearchSachRequest extends FormRequest
      */
     public function rules() {
         return [
+            'MaSo' => 'sometimes|string',
+            'title' => 'sometimes|string',
+            'ID_MangSach' => 'sometimes|int',
+            'ID_DonVi' => 'sometimes|int',
+            'NamXuatBan' => 'sometimes|string',
+            'NamTaiBan' => 'sometimes|string',
+            'HTXB' => 'sometimes|int',
+            'NgayDK' => 'sometimes|array',
+            'NgayDK.*' => 'sometimes|date',
+            'relations' => 'sometimes|array',
         ];
     }
 
     public function messages() {
         return [
+            'MaSo.string' => config("label.INPUT_ERROR"),
+            'title.string' => config("label.INPUT_ERROR"),
+            'ID_MangSach.int' => config("label.INPUT_ERROR"),
+            'ID_DonVi.int' => config("label.INPUT_ERROR"),
+            'NamXuatBan.string' => config("label.INPUT_ERROR"),
+            'NamTaiBan.string' => config("label.INPUT_ERROR"),
+            'HTXB.int' => config("label.INPUT_ERROR"),
+            'NgayDK.array' => config("label.INPUT_ERROR"),
+            'NgayDK.*.date' => config("label.INPUT_ERROR"),
+            'relations.array' => config("label.INPUT_ERROR"),
         ];
     }
 
@@ -39,6 +68,10 @@ class FrmSearchSachRequest extends FormRequest
     {
         $normalized = [];
         foreach ($this->casts as $field => $type) {
+            if (!$this->has($field)) {
+                continue;
+            }
+
             $normalized[$field] = core_normalize_type_value($type, $this->input($field));
         }
         if (!empty($normalized)) {

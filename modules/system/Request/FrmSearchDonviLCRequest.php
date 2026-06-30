@@ -45,6 +45,9 @@ class FrmSearchDonviLCRequest extends FormRequest
     {
         $normalized = [];
         foreach ($this->casts as $field => $type) {
+            if (!$this->has($field)) {
+                continue;
+            }
             $normalized[$field] = core_normalize_type_value($type, $this->input($field));
         }
         if (!empty($normalized)) {
