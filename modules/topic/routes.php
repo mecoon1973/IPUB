@@ -2,6 +2,7 @@
 
 use Illuminate\Support\Facades\Route;
 use Modules\Topic\Controller\DetaiCongDoanController;
+use Modules\Topic\Controller\HDXBNXBGDVNController;
 use Modules\Topic\Controller\PhieuDkDetaiController;
 use Modules\Topic\Controller\QDInController;
 
@@ -27,6 +28,10 @@ Route::group(['middleware' => ['web', 'auth.custom']], function () {
                 Route::post('/store', [QDInController::class, 'store'])->name('qd-in.store');
                 Route::delete('/delete/{id}', [QDInController::class, 'delete'])->name('qd-in.delete');
             });
+            Route::group(['prefix' => 'hdxb-nxbgdvn'], function () {
+                Route::get('/paginate/{page?}', [HDXBNXBGDVNController::class, 'getPaginate'])->name('hdxb-nxbgdvn.paginate')->where('page', regexRoute("page"));
+                Route::get('/list', [HDXBNXBGDVNController::class, 'getList'])->name('hdxb-nxbgdvn.list');
+            });
         });
     });
 
@@ -42,5 +47,8 @@ Route::group(['middleware' => ['web', 'auth.custom']], function () {
     Route::group(['prefix' => 'qd-in'], function () {
         Route::get('/quan-ly', [QDInController::class, 'viewManageQDIn'])->name('qd-in.manage');
         Route::get('/cap-nhat/{id?}', [QDInController::class, 'viewStoreQDIn'])->name('qd-in.store');
+    });
+    Route::group(['prefix' => 'hdxb-nxbgdvn'], function () {
+        Route::get('/quan-ly', [HDXBNXBGDVNController::class, 'viewManageHDXBNXBGDVN'])->name('hdxb-nxbgdvn.manage');
     });
 });

@@ -33,7 +33,7 @@ export const dashboard: NodeDashboard[] = [
                     {
                         title: "2.1.3.B HĐXB NXBGDVN",
                         type: "link",
-                        routes: "",
+                        routes: "/hdxb-nxbgdvn/quan-ly",
                     },
                     { title: "2.1.4 Cục xuất bản", type: "link", routes: "" },
                     {

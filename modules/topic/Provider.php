@@ -13,12 +13,16 @@ use Modules\Topic\Repository\PhieuDkDetaiRepository;
 use Modules\Topic\Repository\Impl\PhieuDkDetaiRepositoryImpl;
 use Modules\Topic\Repository\Impl\QDInRepositoryImpl;
 use Modules\Topic\Repository\QDInRepository;
+use Modules\Topic\Repository\HDXBNXBGDVNRepository;
+use Modules\Topic\Repository\Impl\HDXBNXBGDVNRepositoryImpl;
 use Modules\Topic\Service\CT_Detai_CongDoanService;
 use Modules\Topic\Service\CT_PhieuDkDetai_BtvService;
 use Modules\Topic\Service\Impl\CT_Detai_CongDoanServiceImpl;
 use Modules\Topic\Service\Impl\CT_PhieuDkDetai_BtvServiceImpl;
 use Modules\Topic\Service\Impl\QDInServiceImpl;
 use Modules\Topic\Service\QDInService;
+use Modules\Topic\Service\HDXBNXBGDVNService;
+use Modules\Topic\Service\Impl\HDXBNXBGDVNServiceImpl;
 
 class Provider extends ServiceProvider {
     /**
@@ -46,6 +50,8 @@ class Provider extends ServiceProvider {
         $this->app->bind(CT_Detai_CongDoanRepository::class, CT_Detai_CongDoanRepositoryImpl::class);
         $this->app->bind(QDInService::class, QDInServiceImpl::class);
         $this->app->bind(QDInRepository::class, QDInRepositoryImpl::class);
+        $this->app->bind(HDXBNXBGDVNService::class, HDXBNXBGDVNServiceImpl::class);
+        $this->app->bind(HDXBNXBGDVNRepository::class, HDXBNXBGDVNRepositoryImpl::class);
         // Gate::define('update-user', 'Modules\User\Policy\UserPolicy@isPermission');
 
     }

@@ -254,4 +254,28 @@ export interface CT_QD_In {
     LanNoiBan: number;
 }
 
+// Hợp đồng xuất bản - NXBGDVN
+export interface HDXBNXBGDVN {
+    id: number;
+    TenDeTai: string;
+    NamTaiBan: string;
+    NguoiDocDuyet: string;
+    TenDonVi: string;
+    TrangThai: number;
+}
+
+export type FilterHDXBNXBGDVN = Partial<
+    Pick<HDXBNXBGDVN, "TenDeTai" | "TrangThai">
+> & {
+    ID_DonVi?: number;
+    PhanCong?: number;
+} & Relationships;
+
+export const defaultFilterHDXBNXBGDVN: FilterHDXBNXBGDVN = {
+    TenDeTai: "",
+    ID_DonVi: 0,
+    PhanCong: -1,
+    TrangThai: -1,
+};
+
 //
