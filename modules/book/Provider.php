@@ -8,6 +8,10 @@ use Modules\Book\Repository\Impl\SachRepositoryImpl;
 use Modules\Book\Repository\SachRepository;
 use Modules\Book\Service\Impl\SachServiceImpl;
 use Modules\Book\Service\SachService;
+use Modules\Book\Service\Impl\PhieuChuyenBanThaoServiceImpl;
+use Modules\Book\Service\PhieuChuyenBanThaoService;
+use Modules\Book\Repository\Impl\PhieuChuyenBanThaoRepositoryImpl;
+use Modules\Book\Repository\PhieuChuyenBanThaoRepository;
 
 class Provider extends ServiceProvider {
     /**
@@ -47,7 +51,8 @@ class Provider extends ServiceProvider {
 
         $this->app->singleton(SachService::class, SachServiceImpl::class);
         $this->app->singleton(SachRepository::class, SachRepositoryImpl::class);
-
+        $this->app->singleton(PhieuChuyenBanThaoService::class, PhieuChuyenBanThaoServiceImpl::class);
+        $this->app->singleton(PhieuChuyenBanThaoRepository::class, PhieuChuyenBanThaoRepositoryImpl::class);
         $this->mergeConfigFrom(
             __DIR__.'/config.php', 'book'
         );
