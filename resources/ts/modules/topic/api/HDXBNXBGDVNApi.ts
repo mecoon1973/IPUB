@@ -30,4 +30,26 @@ export class HDXBNXBGDVNApi {
             };
         }
     }
+
+    static async getList(data: FilterHDXBNXBGDVN = HDXBNXBGDVNApi.conditionDefault): Promise<HDXBNXBGDVN[]> {
+        const url = "/api/topic/hdxb-nxbgdvn/list";
+        try {
+            const res = await window._apiGet(url, data);
+            return res as HDXBNXBGDVN[];
+        } catch (err: any) {
+            window._toastbox(err.responseJSON?.message || "Có lỗi xảy ra, vui lòng thử lại", "danger");
+            return [];
+        }
+    }
+
+    static async phanCongDocDuyet(ids: number[], idCanBo: number): Promise<boolean> {
+        const url = "/api/topic/hdxb-nxbgdvn/phan-cong-doc-duyet";
+        try {
+            await window._apiCreate(url, { ids, idCanBo });
+            return true;
+        } catch (err: any) {
+            window._toastbox(err.responseJSON?.message || "Có lỗi xảy ra, vui lòng thử lại", "danger");
+            return false;
+        }
+    }
 }

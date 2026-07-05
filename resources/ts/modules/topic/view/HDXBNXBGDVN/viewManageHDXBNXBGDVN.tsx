@@ -4,21 +4,27 @@ import type { Mangsach } from '../../../system/type';
 import type { FilterHDXBNXBGDVN, HDXBNXBGDVN } from '../../type';
 import FilterHDXBNXBGDVNComponent from '../../component/HDXBNXBGD/FilterHDXBNXBGDVNComponent';
 import TableHDXBNXBGDVNComponent from '../../component/HDXBNXBGD/TableHDXBNXBGDVNComponent';
+import ActionToolbarHDXBNXBGDVN from '../../component/HDXBNXBGD/ActionToolbarHDXBNXBGDVN';
+import ModalPhanCongDocDuyetHDXBNXBGDVN from '../../component/HDXBNXBGD/ModalPhanCongDocDuyetHDXBNXBGDVN';
+import ModalActionsHDXBNXBGDVN from '../../component/HDXBNXBGD/ModalActionsHDXBNXBGDVN';
 import { mountReactComponentOnReady, readRootDataProps } from '../../../core/utils/helpers';
 import { useManageHDXBNXBGDVNStore } from '../../store/HDXBNXBGDVN/manageHDXBNXBGDVN';
 import { HDXBNXBGDVNApi } from '../../api/HDXBNXBGDVNApi';
 import type { PagiInfo } from '../../../page/type';
 import { useDataViewStore } from '../../../system/store/useDataViewStore';
 import { ComponentPagination } from '../../../page/component/pagination';
+import type { User } from '../../../user/type';
 
 interface ViewManageHDXBNXBGDVNProps {
     listDonvi: DonVi[];
     listMangsach: Mangsach[];
     mapTrangThai: Record<number, string>;
+    listBTV: User[];
 }
 
 export const ViewManageHDXBNXBGDVN = React.memo((props: ViewManageHDXBNXBGDVNProps) => {
-    const { listDonvi, mapTrangThai } = props;
+    const { listDonvi, mapTrangThai, listBTV } = props;
+    console.log('mapTrangThai', mapTrangThai);
     const filter = useManageHDXBNXBGDVNStore((state) => state.filter);
     const setListHDXBNXBGD = useManageHDXBNXBGDVNStore((state) => state.setListHDXBNXBGD);
     const setIsLoadingSearch = useManageHDXBNXBGDVNStore((state) => state.setIsLoadingSearch);
@@ -47,8 +53,11 @@ export const ViewManageHDXBNXBGDVN = React.memo((props: ViewManageHDXBNXBGDVNPro
     return (
         <div className="px-2">
             <FilterHDXBNXBGDVNComponent listDonvi={listDonvi} getListHDXBNXBGD={getListHDXBNXBGD} />
+            <ActionToolbarHDXBNXBGDVN />
             <TableHDXBNXBGDVNComponent />
             <ComponentPagination pagiInfo={pagiInfo} callBack={getListHDXBNXBGD} />
+            <ModalPhanCongDocDuyetHDXBNXBGDVN listBTV={listBTV} onSuccess={getListHDXBNXBGD} />
+            <ModalActionsHDXBNXBGDVN onSuccess={getListHDXBNXBGD} />
         </div>
     );
 });
@@ -58,6 +67,7 @@ const bladeProps: ViewManageHDXBNXBGDVNProps = {
     listDonvi: [] as DonVi[],
     listMangsach: [] as Mangsach[],
     mapTrangThai: {} as Record<number, string>,
+    listBTV: [] as User[],
     ...readRootDataProps<ViewManageHDXBNXBGDVNProps>(ROOT_ID),
 };
 mountReactComponentOnReady(ROOT_ID, <ViewManageHDXBNXBGDVN {...bladeProps} />);

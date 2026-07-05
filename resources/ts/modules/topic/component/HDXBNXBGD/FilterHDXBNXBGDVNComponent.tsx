@@ -3,7 +3,7 @@ import type { DonVi } from '../../../user/type';
 import { ComponentSelectAntObject } from '../../../page/component/componentSelectAnt';
 import { useManageHDXBNXBGDVNStore } from '../../store/HDXBNXBGDVN/manageHDXBNXBGDVN';
 import type { FilterHDXBNXBGDVN } from '../../type';
-import { useDataViewStore } from '../../../system/store/useDataViewStore';
+import { HDXBNXBGDVN_TRANG_THAI_FILTER_OPTIONS } from '../../constants/hdxbNxbgdvn';
 
 interface FilterHDXBNXBGDVNComponentProps {
     listDonvi: DonVi[];
@@ -16,9 +16,6 @@ function FilterHDXBNXBGDVNComponent(props: FilterHDXBNXBGDVNComponentProps) {
     const filter = useManageHDXBNXBGDVNStore((state) => state.filter);
     const setFilter = useManageHDXBNXBGDVNStore((state) => state.setFilter);
     const isLoadingSearch = useManageHDXBNXBGDVNStore((state) => state.isLoadingSearch);
-    const mapTrangThai = useDataViewStore((state) => state.mapTrangThai);
-
-    const hdxbTrangThaiKeys = [4, 5, 6, 16];
 
     const updateFilter = <K extends keyof FilterHDXBNXBGDVN>(
         key: K,
@@ -83,9 +80,10 @@ function FilterHDXBNXBGDVNComponent(props: FilterHDXBNXBGDVNComponentProps) {
                         value={filter.TrangThai}
                         onChange={(e) => updateFilter('TrangThai', Number(e.target.value))}
                     >
-                        <option value={-1}>Tất cả</option>
-                        {hdxbTrangThaiKeys.map((key) => (
-                            <option key={key} value={key}>{mapTrangThai[key] ?? key}</option>
+                        {HDXBNXBGDVN_TRANG_THAI_FILTER_OPTIONS.map((option) => (
+                            <option key={option.value} value={option.value}>
+                                {option.label}
+                            </option>
                         ))}
                     </select>
                 </div>

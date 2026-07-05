@@ -13,7 +13,12 @@ use MongoDB\BSON\Regex;
  */
 class FilterHDXBNXBGDVN extends BaseObject {
     /** Trạng thái thuộc luồng HĐXB NXBGDVN */
-    public const TRANG_THAI_HDXB_NXBGDVN = [11, 12, 13, 14];
+    public const TRANG_THAI_HDXB_NXBGDVN = [
+        PhieuDkDetaiTrangThai::HDXB_NXBGDVN_TRA_LAI,
+        PhieuDkDetaiTrangThai::HDXB_NXBGDVN_DANG_XET,
+        PhieuDkDetaiTrangThai::HDXB_NXBGDVN_PHE_DUYET,
+        PhieuDkDetaiTrangThai::HDXB_NXBGDVN_CHUA_XET,
+    ];
 
     public ?string $TenDeTai = null;
     public ?int $ID_DonVi = null;
@@ -44,15 +49,6 @@ class FilterHDXBNXBGDVN extends BaseObject {
 
         if (isset($this->ID_DonVi) && $this->ID_DonVi !== 0) {
             $and[] = ["ID_DonVi" => (int) $this->ID_DonVi];
-        }
-
-        if ($this->PhanCong === 0) {
-            $and[] = ['$or' => [
-                ["BienTapVien" => ""],
-                ["BienTapVien" => null],
-            ]];
-        } elseif ($this->PhanCong === 1) {
-            $and[] = ["BienTapVien" => ['$nin' => ["", null]]];
         }
 
         $keywordOr = $this->buildTenDeTaiConditions();

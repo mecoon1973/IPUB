@@ -64,4 +64,15 @@ export class PhieuDkDetaiApi {
             return false;
         }
     }
+
+    static async xetDuyetNxbgdvn(id: number): Promise<PhieuDkDetai | null> {
+        const url = "/api/topic/phieu-dk-detai/xet-duyet-nxbgdvn";
+        try {
+            const res = await window._apiCreate(url, { id });
+            return res as PhieuDkDetai;
+        } catch (err: any) {
+            window._toastbox(err.responseJSON?.message || "Có lỗi xảy ra, vui lòng thử lại", "danger");
+            return null;
+        }
+    }
 }

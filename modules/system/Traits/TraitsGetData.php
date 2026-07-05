@@ -94,12 +94,9 @@ trait TraitsGetData
         if(in_array("mapTrangThai", $getData)){
             /** @var TrangThaiService $trangThaiService */
             $trangThaiService = app(TrangThaiService::class);
-            $listTrangThai = $trangThaiService->getList(new FilterTrangThai());
-            $mapTrangThai = [];
-            foreach($listTrangThai as $trangThai){
-                $mapTrangThai[$trangThai->MaTrangThai] = $trangThai->TenTrangThai;
-            }
-            $data['mapTrangThai'] = $mapTrangThai;
+            $data['mapTrangThai'] = $trangThaiService->getMapTrangThai(new FilterTrangThai([
+                'DaGui' => true,
+            ]));
         }
 
         if(in_array("listLoaiXbpLc", $getData)){

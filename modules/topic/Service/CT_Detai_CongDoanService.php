@@ -16,5 +16,8 @@ interface CT_Detai_CongDoanService extends IBaseService {
 
     public function store(array $data): CT_Detai_Congdoan;
 
+    /** Ghi công đoạn khi đề tài chuyển trạng thái (xét duyệt, …). */
+    public function ghiCongDoanTrangThai(int $idDeTai, int $idCanBo, int $trangThaiCu, int $trangThaiMoi): CT_Detai_Congdoan;
+
     public function delete(int $id): bool;
 }

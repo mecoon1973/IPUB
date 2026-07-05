@@ -257,4 +257,15 @@ class Helper {
     }
 
 
+    public function _call_user_func_custom($class, $func, $param = null) {
+        if(!$param) {
+            return $class->$func();
+        } else {
+            return is_array($param) ?
+            call_user_func_array([$class,  $func], $param) :
+            call_user_func([$class,  $func], $param);
+        }
+    }
+
+
 }

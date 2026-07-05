@@ -121,4 +121,43 @@ class PhieuDkDetaiController extends Controller {
             ], 500);
         }
     }
+
+    public function xetDuyetDeTai(Request $request): JsonResponse {
+        $idDeTai = (int) $request->input('id');
+        /** @var PhieuDkDetaiService $phieuDkDetaiService */
+        $phieuDkDetaiService = app(PhieuDkDetaiService::class);
+        try {
+            $idCanBo = $this->resolveIdCanBoNguoiDuyet();
+            $result = $phieuDkDetaiService->xetDuyetDeTai($idDeTai, $idCanBo);
+            return response()->json($result, 200);
+        } catch (Exception $exception) {
+            return response()->json([
+                'message' => $exception->getMessage(),
+            ], 500);
+        }
+    }
+
+    public function xetDuyetNxbgdvn(Request $request): JsonResponse {
+        $idDeTai = (int) $request->input('id');
+        /** @var PhieuDkDetaiService $phieuDkDetaiService */
+        $phieuDkDetaiService = app(PhieuDkDetaiService::class);
+        try {
+            $idCanBo = $this->resolveIdCanBoNguoiDuyet();
+            $result = $phieuDkDetaiService->xetDuyetNxbgdvn($idDeTai, $idCanBo);
+            return response()->json($result, 200);
+        } catch (Exception $exception) {
+            return response()->json([
+                'message' => $exception->getMessage(),
+            ], 500);
+        }
+    }
+
+    private function resolveIdCanBoNguoiDuyet(): int {
+        /** @var User|null $user */
+        $user = Auth::user();
+        if (!$user) {
+            throw new Exception("Người dùng chưa đăng nhập");
+        }
+        return (int) $user->_id;
+    }
 }

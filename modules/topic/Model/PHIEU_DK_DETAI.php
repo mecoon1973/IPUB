@@ -298,7 +298,7 @@ class PHIEU_DK_DETAI extends Model {
         "YKHDDD" => "",
         "BanQuyen" => false,
         "CoMSISBN" => false,
-        "IsXetDuyet" => true,
+        "IsXetDuyet" => false,
         "IsSachDienTu" => false,
         "DinhDangTep" => "",
         "DungLuongTep" => "",

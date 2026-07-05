@@ -5,6 +5,7 @@
         'listDonvi' => $listDonvi,
         'listMangsach' => $listMangsach,
         'mapTrangThai' => $mapTrangThai,
+        'listBTV' => $listBTV,
     ];
 @endphp
 

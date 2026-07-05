@@ -15,6 +15,8 @@ export interface ManagePhieuDkDetaiState {
     showModalInfoPhieuDkDetai: boolean;
     /** showProcessStepInfoModal mở modal chi tiết CT_Detai_Congdoan */
     showProcessStepInfoModal: boolean;
+    /** showModalXetDuyetNxbgdvn mở modal xét duyệt NXBGDVN */
+    showModalXetDuyetNxbgdvn: boolean;
     /** PhieuDkDetai chi tiết Phiếu đăng ký đề tài */
     PhieuDkDetaiContext: PhieuDkDetai|null;
     /** CT_Detai_Congdoan chi tiết CT_Detai_Congdoan */
@@ -29,6 +31,7 @@ interface ManagePhieuDkDetaiActions {
     resetFilter: () => void;
     setIsLoadingSearch: (isLoadingSearch: boolean) => void;
     setShowProcessStepInfoModal: (showProcessStepInfoModal: boolean) => void;
+    setShowModalXetDuyetNxbgdvn: (showModalXetDuyetNxbgdvn: boolean) => void;
     setShowModalInfoPhieuDkDetai: (showModalInfoPhieuDkDetai: boolean) => void;
     setPhieuDkDetaiContext: (PhieuDkDetaiContext: PhieuDkDetai|null) => void;
     setListDetaiCongdoan: (listDetaiCongdoan: Detai_Congdoan[] | ((prev: Detai_Congdoan[]) => Detai_Congdoan[])) => void;
@@ -43,6 +46,7 @@ const initialState: ManagePhieuDkDetaiState = {
     isLoadingSearch : false,
     showModalInfoPhieuDkDetai : false,
     showProcessStepInfoModal : false,
+    showModalXetDuyetNxbgdvn : false,
     PhieuDkDetaiContext : null,
     listDetaiCongdoan : [],
 };
@@ -69,6 +73,8 @@ export const useManagePhieuDkDetaiStore = create<ManagePhieuDkDetaiStore>((set, 
     setShowModalInfoPhieuDkDetai: (showModalInfoPhieuDkDetai: boolean) => set({ showModalInfoPhieuDkDetai }),
 
     setShowProcessStepInfoModal: (showProcessStepInfoModal: boolean) => set({ showProcessStepInfoModal }),
+
+    setShowModalXetDuyetNxbgdvn: (showModalXetDuyetNxbgdvn: boolean) => set({ showModalXetDuyetNxbgdvn }),
 
     setPhieuDkDetaiContext: (PhieuDkDetaiContext: PhieuDkDetai|null) => set({ PhieuDkDetaiContext }),
 

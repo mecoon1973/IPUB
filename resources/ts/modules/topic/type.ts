@@ -258,10 +258,18 @@ export interface CT_QD_In {
 export interface HDXBNXBGDVN {
     id: number;
     TenDeTai: string;
-    NamTaiBan: string;
-    NguoiDocDuyet: string;
-    TenDonVi: string;
+    NamTaiBan?: string;
+    NamXuatBan?: string;
+    NguoiDocDuyet?: string;
+    BienTapVien?: string;
+    TenDonVi?: string;
     TrangThai: number;
+    TenTrangThai?: string;
+    PhanCong?: string;
+    DaPhanCong?: boolean;
+    ID_CanBoDocDuyet?: number;
+    ID_DonVi?: number;
+    MaSo?: string;
 }
 
 export type FilterHDXBNXBGDVN = Partial<
