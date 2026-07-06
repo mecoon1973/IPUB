@@ -3,7 +3,7 @@ import {
     readRootDataProps,
 } from "../../../core/utils/helpers";
 import React, { useState, useCallback } from "react";
-import type Nhom from "../../type/Nhom";
+import type { Nhom } from "../../type/Nhom";
 import { NhomApi } from "../../api/NhomApi";
 import { ComponentTitleStore } from "../../../page/component/componentTitleStore";
 import { NhomFormFields } from "../../component/Nhom/NhomFormFields";

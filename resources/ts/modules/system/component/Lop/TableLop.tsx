@@ -1,7 +1,7 @@
 import React from "react";
 import { Dropdown, Table } from "antd";
 import type { MenuProps, TableProps } from "antd";
-import type Lop from "../../type/Lop";
+import type { Lop } from "../../type/Lop";
 
 interface TableLopProps {
     listLop: Lop[];

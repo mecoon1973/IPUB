@@ -5,8 +5,8 @@ import {
 import React, { useCallback, useEffect, useMemo, useState } from "react";
 import { Button, Divider, Flex } from "antd";
 import { defaultPagiInfo, type PagiInfo } from "../../../page/type";
-import type Lop from "../../type/Lop";
-import type Nhom from "../../type/Nhom";
+import type { Lop } from "../../type/Lop";
+import type { Nhom } from "../../type/Nhom";
 import { ComponentPagination } from "../../../page/component/pagination";
 import { LopApi } from "../../api/LopApi";
 import { TableLop } from "../../component/Lop/TableLop";

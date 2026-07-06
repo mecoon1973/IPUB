@@ -4,7 +4,7 @@ import {
 } from "../../../core/utils/helpers";
 import React, { useCallback, useEffect, useMemo, useState } from "react";
 import { defaultPagiInfo, type PagiInfo } from "../../../page/type";
-import type Monhoc from "../../type/MonHoc";
+import type { Monhoc } from "../../type/MonHoc";
 import { ComponentPagination } from "../../../page/component/pagination";
 import { MonhocApi } from "../../api/MonhocApi";
 import { Button, Divider, Dropdown, Table } from "antd";

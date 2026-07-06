@@ -1,6 +1,6 @@
 import React, { useCallback, useEffect, useMemo, useState } from "react";
 import { mountReactComponentOnReady, readRootDataProps } from "../../../core/utils/helpers";
-import type DonviLC from "../../type/DonviLC";
+import type { DonviLC } from "../../type/DonviLC";
 import { Button, Dropdown, Input, Table, type MenuProps, type TableProps, Divider } from "antd";
 import { DonviLCApi } from "../../api/DonviLCApi";
 import { defaultPagiInfo, type PagiInfo, type PagiResult } from "../../../page/type";

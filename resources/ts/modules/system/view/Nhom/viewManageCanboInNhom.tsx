@@ -9,7 +9,7 @@ import type { PagiInfo } from "../../../page/type";
 import type { DonVi } from "../../../user/type/DonVi";
 import type { User } from "../../../user/type/User";
 import { ComponentPagination } from "../../../page/component/pagination";
-import type Nhom from "../../type/Nhom";
+import type { Nhom } from "../../type/Nhom";
 import { TableCanboInNhom } from "../../component/Nhom/TableCanboInNhom";
 import { FilterCanboInNhom } from "../../component/Nhom/FilterCanboInNhom";
 import { DonviApi } from "../../api/DonviApi";

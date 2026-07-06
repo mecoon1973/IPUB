@@ -6,7 +6,7 @@ import React, { useState } from "react";
 import { useCallback } from "react";
 import { Col, Form, Input, Row, Select } from "antd";
 import { ComponentTitleStore } from "../../../page/component/componentTitleStore";
-import type LoaiXBP from "../../type/LoaiXBP";
+import type { LoaiXBP } from "../../type/LoaiXBP";
 import { LoaiXBPApi } from "../../api/LoaiXBPApi";
 import { LabelOpt, LabelReq } from "../../../page/component/componentLable";
 

@@ -6,7 +6,7 @@ import React, { useState } from "react";
 import { useCallback } from "react";
 import { Col, Row } from "antd";
 import { ComponentTitleStore } from "../../../page/component/componentTitleStore";
-import type Lop from "../../type/Lop";
+import type { Lop } from "../../type/Lop";
 import { LopApi } from "../../api/LopApi";
 import { LopFormFields } from "../../component/Lop/LopFormFields";
 

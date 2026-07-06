@@ -2,7 +2,7 @@ import React, { useCallback, useState } from "react";
 import { Checkbox, Col, Form, Input, Row } from "antd";
 import type { DonVi } from "../../../user/type/DonVi";
 import { ModalTreeDonvi } from "./ModalTreeDonvi";
-import type HDXB from "../../type/HDXB";
+import type { HDXB } from "../../type/HDXB";
 import { LabelOpt, LabelReq } from "../../../page/component/componentLable";
 
 type SetField = <K extends keyof DonVi>(key: K, value: DonVi[K]) => void;

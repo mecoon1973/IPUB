@@ -3,8 +3,8 @@ import {
     readRootDataProps,
 } from "../../../core/utils/helpers";
 import React, { useMemo, useState } from "react";
-import type DonviLC from "../../type/DonviLC";
-import type LoaiXbpLc from "../../type/LoaiXbpLc";
+import type { DonviLC } from "../../type/DonviLC";
+import type { LoaiXbpLc } from "../../type/LoaiXbpLc";
 import { useCallback } from "react";
 import { Col, Input, InputNumber, Row, Table, type TableProps } from "antd";
 import { ComponentTitleStore } from "../../../page/component/componentTitleStore";

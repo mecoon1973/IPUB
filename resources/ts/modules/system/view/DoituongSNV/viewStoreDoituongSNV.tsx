@@ -6,8 +6,8 @@ import React, { useMemo, useState } from "react";
 import { useCallback } from "react";
 import { Form, Input, InputNumber, Table, type TableProps } from "antd";
 import { ComponentTitleStore } from "../../../page/component/componentTitleStore";
-import type DoituongSNV from "../../type/DoiTuongSNV";
-import type LoaiSnv from "../../type/LoaiSnv";
+import type { DoituongSNV } from "../../type/DoiTuongSNV";
+import type { LoaiSnv } from "../../type/LoaiSnv";
 import { LabelReq } from "../../../page/component/componentLable";
 import { DoituongSNVApi } from "../../api/DoituongSNVApi";
 

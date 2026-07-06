@@ -1,5 +1,5 @@
 import React, { useCallback, useEffect, useMemo, useState } from "react";
-import type Mangsach from "../../type/MangSach";
+import type { Mangsach } from "../../type/MangSach";
 import { ComponentPagination } from "../../../page/component/pagination";
 import { readRootDataProps } from "../../../core/utils/helpers";
 import { mountReactComponentOnReady } from "../../../core/utils/helpers";

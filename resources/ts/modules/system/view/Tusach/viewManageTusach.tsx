@@ -4,7 +4,7 @@ import {
 } from "../../../core/utils/helpers";
 import React, { useCallback, useEffect, useMemo, useState } from "react";
 import { defaultPagiInfo, type PagiInfo } from "../../../page/type";
-import type Tusach from "../../type/TuSach";
+import type { Tusach } from "../../type/TuSach";
 import { ComponentPagination } from "../../../page/component/pagination";
 import { TusachApi } from "../../api/TusachApi";
 import { Button, Divider, Dropdown, Table } from "antd";

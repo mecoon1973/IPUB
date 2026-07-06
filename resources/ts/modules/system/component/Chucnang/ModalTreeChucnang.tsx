@@ -1,6 +1,6 @@
 import React, { useState, useCallback }from "react";
 import { Button, Modal } from "antd";
-import type ChucNang from "../../type/ChucNang";
+import type { ChucNang } from "../../type/ChucNang";
 import ComponentTree from "../../../page/component/componentTree";
 
 interface ModalTreeChucnangProps {

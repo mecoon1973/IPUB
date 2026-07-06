@@ -5,8 +5,8 @@ import {
 import React, { useState } from "react";
 import { useCallback } from "react";
 import { ComponentTitleStore } from "../../../page/component/componentTitleStore";
-import type ChucNang from "../../type/ChucNang";
-import type PhanHe from "../../type/PhanHe";
+import type { ChucNang } from "../../type/ChucNang";
+import type { PhanHe } from "../../type/PhanHe";
 import { ChucnangApi } from "../../api/ChucnangApi";
 import { ChucnangFormFields } from "../../component/Chucnang/ChucnangFormFields";
 import { useGetChucnang } from "../../hooks/Chucnang/useGetChucnang";

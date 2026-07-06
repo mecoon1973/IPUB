@@ -4,7 +4,7 @@ import {
 } from "../../../core/utils/helpers";
 import React, { useCallback, useEffect, useMemo, useState } from "react";
 import { defaultPagiInfo, type PagiInfo } from "../../../page/type";
-import type Congviecchebanin from "../../type/CongViecCheBanIn";
+import type { Congviecchebanin } from "../../type/CongViecCheBanIn";
 import { ComponentPagination } from "../../../page/component/pagination";
 import { CongviecchebaninApi } from "../../api/CongviecchebaninApi";
 import { Button, Divider, Dropdown, Table } from "antd";
