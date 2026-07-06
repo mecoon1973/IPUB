@@ -1,5 +1,5 @@
 import type { PagiInfo, PagiResult } from "../../page/type";
-import type {  QDIn, QDInFilter } from '../type';
+import type { QDIn, QDInFilter } from '../type/QDIn';
 
 
 export class QDInApi {

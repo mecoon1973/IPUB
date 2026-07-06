@@ -2,7 +2,7 @@ import React, { useCallback, useState } from "react";
 import { useManageCanboInNhomStore } from "../../store/Nhom/manageCanboInNhomStore";
 import { ModalTreeDonvi } from "../Donvi/ModalTreeDonvi";
 import { ModalChooseUser } from "../../../user/components/User/ModalChooseUser";
-import type { User } from "../../../user/type";
+import type { User } from "../../../user/type/User";
 import { NhomApi } from "../../api/NhomApi";
 
 

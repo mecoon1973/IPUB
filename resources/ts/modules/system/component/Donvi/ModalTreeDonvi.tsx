@@ -1,6 +1,6 @@
 import React, { useCallback, useEffect, useState } from "react";
 import { Button, Modal } from "antd";
-import type { DonVi } from "../../../user/type";
+import type { DonVi } from "../../../user/type/DonVi";
 import { DonviApi } from "../../api/DonviApi";
 import TreeDonvi from "./TreeDonvi";
 

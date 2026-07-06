@@ -1,5 +1,5 @@
 import type { PagiResult } from "../../page/type";
-import type { Monhoc } from "../type";
+import type { Monhoc } from "../type/MonHoc";
 
 
 export class MonhocApi{

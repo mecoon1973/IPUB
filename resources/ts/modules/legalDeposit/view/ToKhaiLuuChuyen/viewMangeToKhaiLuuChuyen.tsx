@@ -3,7 +3,8 @@ import {
     readRootDataProps,
 } from "../../../core/utils/helpers";
 import React, { useCallback, useEffect, useMemo, useState } from "react";
-import type { FilterTokhaiLuuChuyen, PhieuNhapLC, ToKhaiLuuChuyen } from "../../type";
+import type { PhieuNhapLC } from "../../type/PhieuNhapLC";
+import type { FilterTokhaiLuuChuyen, ToKhaiLuuChuyen } from "../../type/ToKhaiLuuChuyen";
 import { defaultPagiInfo, type PagiInfo } from "../../../page/type";
 import { ComponentPagination } from "../../../page/component/pagination";
 import { BookOutlined, SearchOutlined, ReloadOutlined } from '@ant-design/icons';

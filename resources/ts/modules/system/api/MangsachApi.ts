@@ -1,5 +1,5 @@
 import type { PagiInfo, PagiResult } from "../../page/type";
-import type { Mangsach } from "../type";
+import type { Mangsach } from "../type/MangSach";
 
 
 export class MangsachApi{

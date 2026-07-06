@@ -1,5 +1,5 @@
 import type { PagiInfo, PagiResult } from "../../page/type";
-import type { Bosach } from "../type";
+import type { Bosach } from "../type/BoSach";
 
 export class BosachApi {
     static readonly conditionDefault : Partial<Bosach> = {

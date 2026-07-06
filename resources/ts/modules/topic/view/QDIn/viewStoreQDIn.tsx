@@ -4,7 +4,7 @@ import type { ColumnsType } from "antd/es/table";
 import { mountReactComponentOnReady } from "../../../core/utils/helpers";
 import DatePickerAntd from "../../../core/utils/DatePicker";
 import { convertValueToDayjs, formatDateToString, toIso8601UtcOffset } from "../../../core/utils/helpersDayjs";
-import type { QDIn } from "../../type";
+import type { QDIn } from "../../type/QDIn";
 import { QDInApi } from "../../api/QDInApi";
 import FormFieldQDIn from "../../component/QDIn/FormFieldQDIn";
 import ModalChooseBook from "../../component/QDIn/ModalChooseBook";

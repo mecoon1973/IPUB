@@ -4,7 +4,7 @@ import {
 } from "../../../core/utils/helpers";
 import React, { useCallback, useEffect, useMemo, useState } from "react";
 import { defaultPagiInfo, type PagiInfo } from "../../../page/type";
-import type { Chuyenmon } from "../../type";
+import type Chuyenmon from "../../type/ChuyenMon";
 import { ComponentPagination } from "../../../page/component/pagination";
 import { ChuyenmonApi } from "../../api/ChuyenmonApi";
 import { Button, Divider, Dropdown, Table } from "antd";

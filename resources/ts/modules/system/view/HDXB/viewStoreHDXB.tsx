@@ -3,7 +3,7 @@ import {
     readRootDataProps,
 } from "../../../core/utils/helpers";
 import React, { useState, useCallback } from "react";
-import type { Nhom } from "../../type";
+import type Nhom from "../../type/Nhom";
 
 function emptyFormState(): Partial<Nhom> {
     return {

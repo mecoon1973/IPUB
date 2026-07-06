@@ -5,7 +5,7 @@ import {
 import React, { useCallback, useState } from "react";
 import { Col, Row } from "antd";
 import { ComponentTitleStore } from "../../../page/component/componentTitleStore";
-import type { PhieuNhapLC } from "../../type";
+import type { PhieuNhapLC } from "../../type/PhieuNhapLC";
 import { PhieuNhapLCApi } from "../../api/PhieuNhapLCApi";
 import { FormFieldPhieuNhapLC, type PhieuNhapLCFormState } from "../../component/PhieuNhapLC/FormFieldPhieuNhapLC";
 import dayjs from "dayjs";

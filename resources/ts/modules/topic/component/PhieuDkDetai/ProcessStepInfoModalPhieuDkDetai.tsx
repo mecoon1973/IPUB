@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { Button, Col, Modal, Row, Table, type TableProps } from "antd";
-import type { Detai_Congdoan } from "../../type";
+import type { Detai_Congdoan } from "../../type/Detai_Congdoan";
 import { useManagePhieuDkDetaiStore } from "../../store/PhieuDkDetai/managePhieuDkDetaiStore";
 import { formatDateToString } from "../../../core/utils/helpersDayjs";
 import { DetaiCongDoanApi } from "../../api/DetaiCongDoanApi";

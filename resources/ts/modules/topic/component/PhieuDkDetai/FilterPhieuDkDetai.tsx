@@ -3,7 +3,7 @@ import { useManagePhieuDkDetaiStore } from "../../store/PhieuDkDetai/managePhieu
 import { ModalTreeDonvi } from "../../../system/component/Donvi/ModalTreeDonvi";
 import { ModalTree } from "../../../page/component/componentModalTree";
 import DatePicker from "../../../core/utils/DatePicker";
-import type { FilterPhieuDkDetai as PhieuDkDetaiFilterShape } from "../../type";
+import type { FilterPhieuDkDetai as PhieuDkDetaiFilterShape } from "../../type/PhieuDkDetai";
 import { convertValueToDayjs } from "../../../core/utils/helpersDayjs";
 import { ComponentSelectAntObject } from "../../../page/component/componentSelectAnt";
 import { useDataViewStore } from "../../../system/store/useDataViewStore";

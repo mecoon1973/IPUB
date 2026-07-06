@@ -1,6 +1,6 @@
 import {useEffect, useCallback, useMemo, useState } from "react";
 import { useManageDonviStore } from "../../store/Donvi/manageDonviStore";
-import type { DonVi } from "../../../user/type";
+import type { DonVi } from "../../../user/type/DonVi";
 import { DonviApi } from "../../api/DonviApi";
 
 export function useGetDonVi(conditions: Record<string, any> = DonviApi.conditionDefault) {

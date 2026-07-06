@@ -4,7 +4,7 @@ import {
 } from "../../../core/utils/helpers";
 import React, { useCallback, useEffect, useMemo, useState } from "react";
 import { defaultPagiInfo, type PagiInfo } from "../../../page/type";
-import type { LoaiXBP } from "../../type";
+import type LoaiXBP from "../../type/LoaiXBP";
 import { ComponentPagination } from "../../../page/component/pagination";
 import { LoaiXBPApi } from "../../api/LoaiXBPApi";
 import { Button, Divider, Dropdown, Table } from "antd";

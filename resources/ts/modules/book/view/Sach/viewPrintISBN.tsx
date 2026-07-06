@@ -3,7 +3,7 @@ import { PrinterOutlined } from "@ant-design/icons";
 import { ComponentCKEditor, insertHtmlToEditor } from "../../../page/component/CKEditor/componentCKEditor";
 import { buildBarcodeSheetHtml } from "../../../page/component/CKEditor/barcodeHtml";
 import { mountReactComponentOnReady, readRootDataProps } from "../../../core/utils/helpers";
-import type { Sach } from "../../type";
+import type { Sach } from "../../type/Sach";
 
 interface ViewPrintISBNProps {
     sach: Sach|null;

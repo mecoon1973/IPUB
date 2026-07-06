@@ -1,6 +1,6 @@
 import React from "react";
 import { Checkbox, Input, InputNumber, Radio } from "antd";
-import type { PhieuChuyenBanThao } from "../../type";
+import type { PhieuChuyenBanThao } from "../../type/PhieuChuyenBanThao";
 import DatePicker from "../../../core/utils/DatePicker";
 import { convertValueToDayjs } from "../../../core/utils/helpersDayjs";
 import {

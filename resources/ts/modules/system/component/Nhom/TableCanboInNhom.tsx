@@ -1,7 +1,7 @@
 import React from "react";
 import { Table } from "antd";
 import type { TableProps } from "antd";
-import type { User } from "../../../user/type";
+import type { User } from "../../../user/type/User";
 import { useManageCanboInNhomStore } from "../../store/Nhom/manageCanboInNhomStore";
 import { formatDateToString } from "../../../core/utils/helpersDayjs";
 import { UserApi } from "../../../user/api/UserApi";

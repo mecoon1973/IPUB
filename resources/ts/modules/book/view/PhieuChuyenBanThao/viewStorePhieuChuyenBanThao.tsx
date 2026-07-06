@@ -3,7 +3,7 @@ import {
     readRootDataProps,
 } from "../../../core/utils/helpers";
 import React, { useCallback, useState } from "react";
-import type { PhieuChuyenBanThao } from "../../type";
+import type { PhieuChuyenBanThao } from "../../type/PhieuChuyenBanThao";
 import { ComponentTitleStore } from "../../../page/component/componentTitleStore";
 import { PhieuChuyenBanThaoApi } from "../../api/PhieuChuyenBanThaoApi";
 import { FormFieldPhieuChuyenBanThao } from "../../component/PhieuChuyenBanThao/FormFieldPhieuChuyenBanThao";

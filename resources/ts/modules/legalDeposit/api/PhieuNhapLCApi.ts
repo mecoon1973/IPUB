@@ -1,5 +1,5 @@
 import type { PagiInfo, PagiResult, Relationships } from "../../page/type";
-import type { FilterPhieuNhapLC, PhieuNhapLC } from "../type";
+import type { FilterPhieuNhapLC, PhieuNhapLC } from "../type/PhieuNhapLC";
 export class PhieuNhapLCApi {
     static readonly conditionDefault : Partial<PhieuNhapLC> = {
         IsDeleted : false,

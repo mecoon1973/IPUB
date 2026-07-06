@@ -1,6 +1,6 @@
 import { useCallback, useMemo, useState } from "react";
 import { useManageDonviStore } from "../../store/Donvi/manageDonviStore";
-import type { DonVi } from "../../../user/type";
+import type { DonVi } from "../../../user/type/DonVi";
 
 export function useSearchTextDonvi() {
     const listDonvi = useManageDonviStore(state => state.listDonvi);

@@ -1,7 +1,8 @@
 import React, { useCallback, useState } from "react";
 import { Checkbox, Col, Input, Row, Select } from "antd";
 import type { Dayjs } from "dayjs";
-import type { DonVi, User } from "../../../user/type";
+import type { DonVi } from "../../../user/type/DonVi";
+import type { User } from "../../../user/type/User";
 import DatePicker from "../../../core/utils/DatePicker";
 import { ModalTreeDonvi } from "../../../system/component/Donvi/ModalTreeDonvi";
 import { convertValueToDayjs } from "../../../core/utils/helpersDayjs";

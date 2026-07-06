@@ -1,5 +1,5 @@
 import type { PagiInfo, PagiResult } from "../../page/type";
-import type { Chuyenmon } from "../type";
+import type { Chuyenmon } from "../type/ChuyenMon";
 
 
 export class ChuyenmonApi{

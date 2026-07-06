@@ -1,5 +1,5 @@
 import type { PagiInfo, PagiResult } from "../../page/type";
-import type { BienMoiTruong, FilterBienMoiTruong } from "../type";
+import type { BienMoiTruong, FilterBienMoiTruong } from "../type/BienMoiTruong";
 
 export class BienMoiTruongApi {
     static readonly conditionDefault : Partial<BienMoiTruong> = {

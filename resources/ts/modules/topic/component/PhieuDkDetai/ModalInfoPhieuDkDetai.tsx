@@ -3,7 +3,7 @@ import { Button, Col, Modal, Row } from "antd";
 import { useManagePhieuDkDetaiStore } from "../../store/PhieuDkDetai/managePhieuDkDetaiStore";
 import { formatDateToString } from "../../../core/utils/helpersDayjs";
 import { useDataViewStore } from "../../../system/store/useDataViewStore";
-import { KieuBanQuyen } from "../../type";
+import { KieuBanQuyen } from "../../type/PhieuDkDetai";
 
 function InfoLine({ label, value }: { label: string; value: React.ReactNode }) {
     return (

@@ -1,4 +1,4 @@
-import type { PhanHe } from '../type';
+import type { PhanHe } from '../type/PhanHe';
 
 export class PhanHeApi{
 

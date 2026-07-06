@@ -3,7 +3,7 @@ import {
     readRootDataProps,
 } from "../../../core/utils/helpers";
 import React, { useCallback, useEffect, useMemo, useState } from "react";
-import type { BienMoiTruong, FilterBienMoiTruong } from "../../type";
+import type BienMoiTruong, type FilterBienMoiTruong from "../../type/BienMoiTruong";
 import { defaultPagiInfo, type PagiInfo } from "../../../page/type";
 import { ComponentPagination } from "../../../page/component/pagination";
 import { Button, Col, Divider, Dropdown, Input, Row, Table, Typography } from "antd";

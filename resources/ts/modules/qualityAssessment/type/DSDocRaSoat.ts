@@ -1,5 +1,5 @@
-import type { Relationships } from "../page/type";
-import type { User } from "../user/type";
+import type { Relationships } from "../../page/type";
+import type { User } from "../../user/type/User";
 
 export type TypeDSDocRaSoat = "KIEM_DINH" | "RA_SOAT";
 

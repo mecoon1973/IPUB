@@ -1,5 +1,5 @@
 import type { PagiInfo, PagiResult } from "../../page/type";
-import type { SystemLog, SystemLogFilter } from "../type";
+import type { SystemLog, SystemLogFilter } from "../type/SystemLog";
 
 
 export class SystemLogApi{

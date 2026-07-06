@@ -1,6 +1,7 @@
 import React, { useCallback, useState } from "react";
 import { Checkbox, Col, Form, Input, Row, Select } from "antd";
-import type { ChucNang, PhanHe } from "../../type";
+import type ChucNang from "../../type/ChucNang";
+import type PhanHe from "../../type/PhanHe";
 import { ModalTreeChucnang } from "./ModalTreeChucnang";
 import { LabelOpt, LabelReq } from "../../../page/component/componentLable";
 

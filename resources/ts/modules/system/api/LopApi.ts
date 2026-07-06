@@ -1,5 +1,5 @@
 import type { PagiInfo, PagiResult } from "../../page/type";
-import type { Lop } from "../type";
+import type { Lop } from "../type/Lop";
 
 
 export class LopApi{

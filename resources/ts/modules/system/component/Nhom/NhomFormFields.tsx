@@ -1,6 +1,6 @@
 import React from "react";
 import { Form, Input } from "antd";
-import type { Nhom } from "../../type";
+import type Nhom from "../../type/Nhom";
 import { LabelReq } from "../../../page/component/componentLable";
 
 interface NhomFormFieldsProps {

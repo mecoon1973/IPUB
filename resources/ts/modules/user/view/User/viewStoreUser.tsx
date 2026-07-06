@@ -3,7 +3,7 @@ import {
     readRootDataProps,
 } from "../../../core/utils/helpers";
 import React, { useState } from "react";
-import type { User } from "../../../user/type";
+import type { User } from "../../../user/type/User";
 import { useCallback } from "react";
 import { ComponentTitleStore } from "../../../page/component/componentTitleStore";
 import { UserFormFields } from "../../components/User/UserFormFields";

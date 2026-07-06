@@ -1,5 +1,5 @@
 import type { PagiResult } from "../../page/type";
-import type { PhieuChuyenBanThao } from "../type";
+import type { PhieuChuyenBanThao } from "../type/PhieuChuyenBanThao";
 
 export class PhieuChuyenBanThaoApi {
     static readonly conditionDefault : Partial<PhieuChuyenBanThao> = {

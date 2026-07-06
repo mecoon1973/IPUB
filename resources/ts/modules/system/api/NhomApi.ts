@@ -1,5 +1,5 @@
 import type { PagiInfo, PagiResult } from "../../page/type";
-import type { Nhom } from "../type";
+import type { Nhom } from "../type/Nhom";
 
 export class NhomApi{
 

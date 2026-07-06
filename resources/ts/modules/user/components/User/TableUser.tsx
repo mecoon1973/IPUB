@@ -1,7 +1,7 @@
 import React from "react";
 import { Dropdown, Table } from "antd";
 import type { MenuProps, TableProps } from "antd";
-import type { User } from "../../type";
+import type { User } from "../../type/User";
 import { formatDateToString } from "../../../core/utils/helpersDayjs";
 import { UserApi } from "../../api/UserApi";
 

@@ -6,7 +6,7 @@ import React, { useState } from "react";
 import { useCallback } from "react";
 import { Col, Form, Input, Row } from "antd";
 import { ComponentTitleStore } from "../../../page/component/componentTitleStore";
-import type { Tusach } from "../../type";
+import type Tusach from "../../type/TuSach";
 import { TusachApi } from "../../api/TusachApi";
 import { LabelOpt, LabelReq } from "../../../page/component/componentLable";
 

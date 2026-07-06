@@ -2,7 +2,7 @@ import React, { useCallback, useEffect, useState } from "react";
 import dayjs from "dayjs";
 import { mountReactComponentOnReady, readRootDataProps } from "../../../core/utils/helpers";
 import { FilterQDIn } from "../../component/QDIn/FilterQDIn";
-import type { QDIn, QDInFilter } from "../../type";
+import type { QDIn, QDInFilter } from "../../type/QDIn";
 import { defaultPagiInfo, type PagiInfo } from "../../../page/type";
 import { QDInApi } from "../../api/QDInApi";
 import { TableQDIn } from "../../component/QDIn/TableQDIn";

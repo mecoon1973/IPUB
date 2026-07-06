@@ -2,14 +2,15 @@ import React, { useCallback, useEffect, useState } from "react";
 import { mountReactComponentOnReady, readRootDataProps } from "../../../core/utils/helpers";
 import { ComponentPagination } from "../../../page/component/pagination";
 import { defaultPagiInfo, type PagiInfo } from "../../../page/type";
-import type { FilterPhieuDkDetai, PhieuDkDetai } from "../../type";
+import type { FilterPhieuDkDetai, PhieuDkDetai } from "../../type/PhieuDkDetai";
 import { PhieuDkDetaiApi } from "../../api/PhieuDkDetaiApi";
 import { FilterPhieuDkDetaiComponent } from "../../component/PhieuDkDetai/FilterPhieuDkDetai";
 import { useManagePhieuDkDetaiStore } from "../../store/PhieuDkDetai/managePhieuDkDetaiStore";
 import { TablePhieuDkDetaiComponent } from "../../component/PhieuDkDetai/TablePhieuDkDetai";
 import { ModalInfoPhieuDkDetaiComponent } from "../../component/PhieuDkDetai/ModalInfoPhieuDkDetai";
-import type { DonVi } from "../../../user/type";
-import type { Doituong, Mangsach } from "../../../system/type";
+import type { DonVi } from "../../../user/type/DonVi";
+import type { Doituong } from "../../../system/type/DoiTuong";
+import type { Mangsach } from "../../../system/type/MangSach";
 import { ProcessStepInfoModalComponent } from "../../component/PhieuDkDetai/ProcessStepInfoModalPhieuDkDetai";
 import { useDataViewStore } from "../../../system/store/useDataViewStore";
 

@@ -1,5 +1,5 @@
 import type { PagiInfo, PagiResult } from "../../page/type";
-import type { Tusach } from "../type";
+import type { Tusach } from "../type/TuSach";
 
 
 export class TusachApi{

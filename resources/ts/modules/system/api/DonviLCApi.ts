@@ -1,5 +1,5 @@
 import type { PagiInfo, PagiResult } from "../../page/type";
-import type { DonviLC } from "../type";
+import type { DonviLC } from "../type/DonviLC";
 
 export class DonviLCApi{
 

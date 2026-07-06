@@ -1,5 +1,5 @@
 import {useEffect, useState } from "react";
-import type { Mangsach } from "../../type";
+import type Mangsach from "../../type/MangSach";
 import { MangsachApi } from "../../api/MangsachApi";
 
 export function useGetMangsach(conditions: Record<string, any> = MangsachApi.conditionDefault) {

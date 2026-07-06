@@ -2,7 +2,7 @@ import React, { useCallback } from "react";
 import { Checkbox, Input, Select } from "antd";
 import type { Dayjs } from "dayjs";
 import dayjs from "dayjs";
-import type { PhieuNhapLC } from "../../type";
+import type { PhieuNhapLC } from "../../type/PhieuNhapLC";
 import DatePicker from "../../../core/utils/DatePicker";
 import { convertValueToDayjs } from "../../../core/utils/helpersDayjs";
 import { InlineLabelOpt, InlineLabelReq } from "../../../topic/component/PhieuDkDetai/FromField/FormFieldPhieuDkDetai.ui";

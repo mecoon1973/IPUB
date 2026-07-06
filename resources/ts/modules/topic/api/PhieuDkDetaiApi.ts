@@ -1,5 +1,5 @@
 import type { PagiInfo, PagiResult } from "../../page/type";
-import type { FilterPhieuDkDetai, PhieuDkDetai } from '../type';
+import type { FilterPhieuDkDetai, PhieuDkDetai } from '../type/PhieuDkDetai';
 
 export class PhieuDkDetaiApi {
     static readonly conditionDefault : Partial<PhieuDkDetai> = {

@@ -3,7 +3,7 @@ import {
     readRootDataProps,
 } from "../../../core/utils/helpers";
 import React, { useCallback, useEffect, useMemo, useState } from "react";
-import type { DoituongSNV } from "../../type";
+import type DoituongSNV from "../../type/DoiTuongSNV";
 import { defaultPagiInfo, type PagiInfo } from "../../../page/type";
 import { ComponentPagination } from "../../../page/component/pagination";
 import { Button, Divider, Dropdown, Table } from "antd";

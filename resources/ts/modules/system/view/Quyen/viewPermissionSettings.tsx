@@ -5,7 +5,8 @@ import {
 import React, { useState } from "react";
 import { useCallback } from "react";
 import { Col, Form, Input, Row } from "antd";
-import type { ChucNang, Quyen } from "../../type";
+import type ChucNang from "../../type/ChucNang";
+import type Quyen from "../../type/Quyen";
 import { ComponentTitleStore } from "../../../page/component/componentTitleStore";
 import ComponentTree from '../../../page/component/componentTree';
 import { QuyenApi } from "../../api/QuyenApi";

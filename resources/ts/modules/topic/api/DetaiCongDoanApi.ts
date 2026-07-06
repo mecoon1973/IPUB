@@ -1,5 +1,5 @@
 import type { PagiInfo, PagiResult } from "../../page/type";
-import type { Detai_Congdoan, FilterDetaiCongdoan } from '../type';
+import type { Detai_Congdoan, FilterDetaiCongdoan } from '../type/Detai_Congdoan';
 
 export class DetaiCongDoanApi {
 

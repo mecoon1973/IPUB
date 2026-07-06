@@ -1,5 +1,5 @@
 import type { PagiInfo, PagiResult } from "../../page/type";
-import type { ToKhaiLuuChuyen } from "../type";
+import type { ToKhaiLuuChuyen } from "../type/ToKhaiLuuChuyen";
 export class ToKhaiLuuChuyenApi {
 
     static async getPaginate(data: Partial<ToKhaiLuuChuyen>, page = 'page-1'): Promise<PagiResult<ToKhaiLuuChuyen>> {

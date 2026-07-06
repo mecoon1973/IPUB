@@ -1,5 +1,5 @@
 import type { PagiInfo, PagiResult } from "../../page/type";
-import type { Congviecchebanin } from "../type";
+import type { Congviecchebanin } from "../type/CongViecCheBanIn";
 
 
 export class CongviecchebaninApi{

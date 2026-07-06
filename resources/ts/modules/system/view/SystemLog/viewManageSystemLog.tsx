@@ -4,7 +4,7 @@ import {
 } from "../../../core/utils/helpers";
 import React, { useCallback, useEffect, useMemo, useState } from "react";
 import { defaultPagiInfo, type PagiInfo } from "../../../page/type";
-import type { SystemLog, SystemLogFilter } from "../../type";
+import type SystemLog, type SystemLogFilter from "../../type/SystemLog";
 import { ComponentPagination } from "../../../page/component/pagination";
 import { Button, DatePicker, Divider, Input, Table } from "antd";
 import type { TableProps } from "antd";
@@ -12,7 +12,7 @@ import { SystemLogApi } from "../../api/SystemLogApi";
 import dayjs from "dayjs";
 import type { Dayjs } from "dayjs";
 import { ComponentModalTreeDonvi, ModalTreeDonvi } from "../../component/Donvi/ModalTreeDonvi";
-import type { DonVi } from "../../../user/type";
+import type { DonVi } from "../../../user/type/DonVi";
 const { RangePicker } = DatePicker;
 
 const TableSystemLog = React.memo((props: { listSystemLog: SystemLog[];}) => {

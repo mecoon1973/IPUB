@@ -1,4 +1,6 @@
-import type { Chucvu, Chuyenmon } from "../system/type";
+import type { Chucvu } from "../../system/type/ChucVu";
+import type { Chuyenmon } from "../../system/type/ChuyenMon";
+import type { DonVi } from "./DonVi";
 
 export interface User {
     id: number;
@@ -44,40 +46,4 @@ export interface User {
     chucvu?: Chucvu;
     donvi?: DonVi;
     chuyenmon?: Chuyenmon;
-}
-
-export interface DonVi {
-    id: number;
-    ParentID: number;
-    ThuTu: number;
-    MaDonVi: string;
-    TenDonVi: string;
-    DiaChi: string;
-    Website: string;
-    Email: string;
-    SoDienThoai: string;
-    SoFax: string;
-    NhaIn: boolean;
-    DauThau: boolean;
-    BienTap: boolean;
-    LienKet: boolean;
-    NoiBo: boolean;
-    MST: string;
-    SoTaiKhoan: string;
-    TaiNganHang: string;
-    MaSoPhu: string;
-    ID_Childs: string;
-    Active: boolean;
-    InUsed: boolean;
-    IsDeleted: boolean;
-    DaGui: boolean;
-    KhoaGuiNhan: string;
-    TinhThanh: string;
-    MaTinh: string;
-    LicenseKey: string;
-    NgayTTPQLXB: Date;
-    IsCreateQDXB: boolean;
-    KiHieuMoi: string;
-    KiHieuTaiBan: string;
-    KiHieuPhu: string;
 }

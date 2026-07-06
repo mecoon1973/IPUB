@@ -3,10 +3,11 @@ import {
     readRootDataProps,
 } from "../../../core/utils/helpers";
 import React, { useCallback, useMemo, useState } from "react";
-import type { User } from "../../../user/type";
+import type { User } from "../../../user/type/User";
 import { ComponentTitleStore } from "../../../page/component/componentTitleStore";
 import { Col, Divider, Row } from "antd";
-import type { Nhom, Quyen } from "../../../system/type";
+import type { Nhom } from "../../../system/type/Nhom";
+import type { Quyen } from "../../../system/type/Quyen";
 import ComponentTree from "../../../page/component/componentTree";
 import type { BaseTreeEntity, DataTree } from "../../../core/types/baseTreeEntity";
 import { UserApi } from "../../api/UserApi";

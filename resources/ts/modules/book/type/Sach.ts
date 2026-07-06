@@ -1,7 +1,7 @@
-import type { Relationships } from "../page/type";
-import type { Mangsach } from "../system/type";
-import type { KieuBanQuyen } from "../topic/type";
-import type { DonVi } from "../user/type";
+import type { Relationships } from "../../page/type";
+import type { Mangsach } from "../../system/type/MangSach";
+import type { KieuBanQuyen } from "../../topic/type/PhieuDkDetai";
+import type { DonVi } from "../../user/type/DonVi";
 
 export interface Sach {
     id: number;
@@ -104,57 +104,4 @@ export interface FilterSach extends Relationships {
     HTXB: number;
     NgayDK: Date[];
     IsDeleted: boolean;
-}
-
-export interface PhieuChuyenBanThao {
-    id: number;
-    BienTapVien: string;
-    CheBanCan: boolean;
-    CoAoBoc: boolean;
-    CreatedBy: number;
-    CreatedOn: string;
-    DaGui: boolean;
-    Dai: number;
-    DiaChiCungCap: string;
-    DinhDangTep: string;
-    DungLuongTep: string;
-    EditedBy: number;
-    EditedOn: string;
-    GhiChu: string;
-    ID_BTVNhan: number | null;
-    ID_DV: number | null;
-    ID_DeTai: number | null;
-    ID_LanhDaoKiBenGui: number | null;
-    ID_ListBienTapVien: string;
-    ID_MangSach: number | null;
-    ID_NguoiKy: number | null;
-    ID_PhieuChuyenGoc: number | null;
-    ID_Sach: number | null;
-    InUsed: boolean;
-    IsDeleted: boolean;
-    IsSachDienTu: boolean;
-    IsSubject: boolean;
-    KhoSach: string;
-    KhoaGuiNhan: string;
-    LanIn: number;
-    LoaiBia: boolean;
-    LoaiPhieu: boolean;
-    Locked: boolean;
-    MaDVIN: string;
-    MauInBia: number;
-    MauInRout: number;
-    NgayGiao: string;
-    NgayNhan: string;
-    NguoiGiao: string;
-    NguoiNhan: string;
-    Rong: number;
-    SoBo: number;
-    SoBoBanThao: number;
-    SoBoBiaMau: number;
-    SoBoPhimBia: number;
-    SoMauInBia: number | null;
-    SoTrang: number;
-    SoTrangPhuBan: number;
-    SoTrangRuotSach: number;
-    TacGia: string;
 }

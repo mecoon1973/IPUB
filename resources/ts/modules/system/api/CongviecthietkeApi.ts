@@ -1,5 +1,5 @@
 import type { PagiResult } from "../../page/type";
-import type { Congviecthietke } from "../type";
+import type { Congviecthietke } from "../type/CongViecThietKe";
 
 
 export class CongviecthietkeApi{

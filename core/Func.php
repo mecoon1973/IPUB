@@ -27,7 +27,7 @@ if (!function_exists('core_cursor_first_page')) {
      * @return boolean
      */
     function core_cursor_first_page() {
-        if (!request()->has(config("settings.key_cursor_id"))) {
+        if (!request()->has(config("settings.key_cursor_id", ""))) {
             return true;
         }
         return false;
@@ -47,7 +47,7 @@ if (!function_exists('core_decode_cursor')) {
         }
 
         try {
-            $offset = substr(base64_decode($cursor), strlen(config("settings.prefix_cursor_pagination")));
+            $offset = substr(base64_decode($cursor), strlen(config("settings.prefix_cursor_pagination", "")));
             $decodedOffset = unserialize($offset);
             return is_array($decodedOffset) ? $decodedOffset : $default;
         } catch (\Exception $e) {
@@ -245,4 +245,61 @@ if(!function_exists('core_normalize_type_value')){
         }
     }
 }
+if(!function_exists('assert_file_exists')){
+    /**
+     * Kiểm tra xem file có tồn tại và có định dạng phù hợp không
+     * @param string $path Đường dẫn file
+     * @param string|null $extension Định dạng file
+     * @throws InvalidArgumentException Nếu file không tồn tại hoặc định dạng không phù hợp
+     * @return void
+     */
+    function assert_file_exists(string $path, ?string $extension): void
+    {
+        if (!is_file($path)) {
+            throw new InvalidArgumentException("File không tồn tại: {$path}");
+        }
+
+        if($extension){
+            if (strtolower(pathinfo($path, PATHINFO_EXTENSION)) !== $extension) {
+                throw new InvalidArgumentException('File phải có định dạng .' . $extension);
+            }
+        }
+    }
+}
+
+if(!function_exists('assert_file_exists')){
+    /**
+     * Kiểm tra xem file có tồn tại và có định dạng phù hợp không
+     * @param string $path Đường dẫn file
+     * @param string|null $extension Định dạng file
+     * @throws InvalidArgumentException Nếu file không tồn tại hoặc định dạng không phù hợp
+     * @return void
+     */
+    function assert_file_exists(string $path, ?string $extension): void
+    {
+        if (!is_file($path)) {
+            throw new InvalidArgumentException("File không tồn tại: {$path}");
+        }
+
+        if($extension){
+            if (strtolower(pathinfo($path, PATHINFO_EXTENSION)) !== $extension) {
+                throw new InvalidArgumentException('File phải có định dạng .' . $extension);
+            }
+        }
+    }
+}
+if(!function_exists('core_normalize_path')){
+    /**
+     * Chuẩn hóa đường dẫn file
+     * @param string $path Đường dẫn file
+     * @return string Đường dẫn file chuẩn hóa
+     */
+    function core_normalize_path(string $path): string
+    {
+        $realPath = realpath($path);
+        return $realPath !== false ? $realPath : $path;
+    }
+
+}
+
 

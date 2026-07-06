@@ -1,6 +1,11 @@
 import { create } from "zustand";
-import type { DonVi } from "../../user/type";
-import type { Bosach, Doituong, Lop, Mangsach, Monhoc, Tusach } from "../type";
+import type { DonVi } from "../../user/type/DonVi";
+import type Bosach from "../type/BoSach";
+import type Doituong from "../type/DoiTuong";
+import type Lop from "../type/Lop";
+import type Mangsach from "../type/MangSach";
+import type Monhoc from "../type/MonHoc";
+import type Tusach from "../type/TuSach";
 
 
 export interface DataViewState {

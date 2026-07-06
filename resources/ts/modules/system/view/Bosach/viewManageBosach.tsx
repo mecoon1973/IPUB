@@ -3,7 +3,7 @@ import {
     readRootDataProps,
 } from "../../../core/utils/helpers";
 import React, { useCallback, useEffect, useMemo, useState } from "react";
-import type { Bosach } from "../../type";
+import type Bosach from "../../type/BoSach";
 import { defaultPagiInfo, type PagiInfo } from "../../../page/type";
 import { BosachApi } from "../../api/BosachApi";
 import { ComponentPagination } from "../../../page/component/pagination";

@@ -7,13 +7,13 @@ import { AppstoreOutlined, DeleteOutlined } from "@ant-design/icons";
 import { Button, Card, Col, Form, Input, Radio, Row, Table, type TableProps } from "antd";
 import { ComponentTitleStore } from "../../../page/component/componentTitleStore";
 import { LabelReq } from "../../../page/component/componentLable";
-import { TYPE_DOC_RA_SOAT_OPTIONS, type DSDocRaSoat, type TypeDSDocRaSoat, TYPE_IS_SACH_OPTIONS } from "../../type";
+import { TYPE_DOC_RA_SOAT_OPTIONS, type DSDocRaSoat, type TypeDSDocRaSoat, TYPE_IS_SACH_OPTIONS } from "../../type/DSDocRaSoat";
 import { DSDocRaSoatApi } from "../../api/DSDocRaSoatApi";
 import { ModalChooseDeTaiComponent } from "../../component/DSDocRaSoat/ModalChooseDeTaiComponent";
-import type { DonVi } from "../../../user/type";
-import type { Mangsach } from "../../../system/type";
+import type { DonVi } from "../../../user/type/DonVi";
+import type { Mangsach } from "../../../system/type/MangSach";
 import { useDataViewStore } from "../../../system/store/useDataViewStore";
-import type { PhieuDkDetai } from "../../../topic/type";
+import type { PhieuDkDetai } from "../../../topic/type/PhieuDkDetai";
 
 
 

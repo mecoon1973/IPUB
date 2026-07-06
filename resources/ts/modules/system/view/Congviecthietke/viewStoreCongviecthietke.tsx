@@ -6,7 +6,7 @@ import React, { useState } from "react";
 import { useCallback } from "react";
 import { Col, Form, Input, Row } from "antd";
 import { ComponentTitleStore } from "../../../page/component/componentTitleStore";
-import type { Congviecthietke } from "../../type";
+import type Congviecthietke from "../../type/CongViecThietKe";
 import { LabelReq } from "../../../page/component/componentLable";
 import { CongviecthietkeApi } from "../../api/CongviecthietkeApi";
 

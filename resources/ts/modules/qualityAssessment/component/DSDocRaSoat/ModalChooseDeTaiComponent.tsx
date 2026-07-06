@@ -2,8 +2,8 @@ import React, { forwardRef, useCallback, useEffect, useImperativeHandle, useMemo
 import { Button, Checkbox, Col, Input, Modal, Row, Select, Table } from "antd";
 import type { ColumnsType, TableProps } from "antd/es/table";
 import { PhieuDkDetaiApi } from "../../../topic/api/PhieuDkDetaiApi";
-import type { FilterPhieuDkDetai, PhieuDkDetai } from "../../../topic/type";
-import { defaultFilterPhieuDkDetai } from "../../../topic/type";
+import type { FilterPhieuDkDetai, PhieuDkDetai } from "../../../topic/type/PhieuDkDetai";
+import { defaultFilterPhieuDkDetai } from "../../../topic/type/PhieuDkDetai";
 import DatePicker from "../../../core/utils/DatePicker";
 import { convertValueToDayjs } from "../../../core/utils/helpersDayjs";
 import { ModalTree } from "../../../page/component/componentModalTree";

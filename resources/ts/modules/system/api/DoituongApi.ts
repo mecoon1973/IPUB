@@ -1,5 +1,5 @@
 import type { PagiInfo, PagiResult } from "../../page/type";
-import type { Doituong } from '../type';
+import type { Doituong } from '../type/DoiTuong';
 
 
 export class DoituongApi{

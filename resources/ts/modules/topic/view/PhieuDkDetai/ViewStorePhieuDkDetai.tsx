@@ -4,13 +4,19 @@ import {
 } from "../../../core/utils/helpers";
 import React, { useState } from "react";
 import { useCallback } from "react";
-import { KieuBanQuyen, type PhieuDkDetai } from "../../type";
+import { KieuBanQuyen, type PhieuDkDetai } from "../../type/PhieuDkDetai";
 import { PhieuDkDetaiApi } from "../../api/PhieuDkDetaiApi";
 import { ComponentTitleStore } from "../../../page/component/componentTitleStore";
 import { Col, Row } from "antd";
 import FormFieldPhieuDkDetai from "../../component/PhieuDkDetai/FromField/FormFieldPhieuDkDetai";
-import type { Bosach, Doituong, Lop, Mangsach, Monhoc, Tusach } from "../../../system/type";
-import type { DonVi, User } from "../../../user/type";
+import type { Bosach } from "../../../system/type/BoSach";
+import type { Doituong } from "../../../system/type/DoiTuong";
+import type { Lop } from "../../../system/type/Lop";
+import type { Mangsach } from "../../../system/type/MangSach";
+import type { Monhoc } from "../../../system/type/MonHoc";
+import type { Tusach } from "../../../system/type/TuSach";
+import type { DonVi } from "../../../user/type/DonVi";
+import type { User } from "../../../user/type/User";
 
 function emptyFormState(): Partial<PhieuDkDetai> {
     return {

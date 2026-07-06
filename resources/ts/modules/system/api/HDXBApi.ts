@@ -1,4 +1,4 @@
-import type { HDXB } from "../type";
+import type { HDXB } from "../type/HDXB";
 
 export class HDXBApi{
 

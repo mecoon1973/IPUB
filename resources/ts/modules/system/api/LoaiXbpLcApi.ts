@@ -1,5 +1,5 @@
 import type { PagiInfo, PagiResult } from "../../page/type";
-import type { LoaiXbpLc } from "../type";
+import type { LoaiXbpLc } from "../type/LoaiXbpLc";
 
 
 export class LoaiXbpLcApi{

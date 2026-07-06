@@ -6,7 +6,7 @@ import React, { useState } from "react";
 import { useCallback } from "react";
 import { Col, Form, Input, Row } from "antd";
 import { ComponentTitleStore } from "../../../page/component/componentTitleStore";
-import type { Chuyenmon } from "../../type";
+import type Chuyenmon from "../../type/ChuyenMon";
 import { ChuyenmonApi } from "../../api/ChuyenmonApi";
 import { LabelOpt, LabelReq } from "../../../page/component/componentLable";
 

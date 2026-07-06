@@ -2,7 +2,7 @@ import { Button, Col, DatePicker, Form, Input, Modal, Row, Typography } from "an
 import type { Dayjs } from "dayjs";
 import dayjs from "dayjs";
 import React, { useCallback, useEffect, useMemo } from "react";
-import type { ToKhaiLuuChuyen } from "../../type";
+import type { ToKhaiLuuChuyen } from "../../type/ToKhaiLuuChuyen";
 
 interface ModalUpdatTimeCXBProps {
     toKhaiLuuChuyen: ToKhaiLuuChuyen;

@@ -1,5 +1,5 @@
 import type { PagiInfo, PagiResult } from "../../page/type";
-import type { Chucvu } from "../type";
+import type { Chucvu } from "../type/ChucVu";
 
 
 export class ChucvuApi{

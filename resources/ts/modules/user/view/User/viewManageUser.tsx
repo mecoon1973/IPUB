@@ -2,7 +2,7 @@ import { mountReactComponentOnReady } from "../../../core/utils/helpers";
 import { ComponentPagination } from "../../../page/component/pagination";
 import { defaultPagiInfo, type PagiInfo } from "../../../page/type";
 import { UserApi } from "../../api/UserApi";
-import type { User } from "../../type";
+import type { User } from "../../type/User";
 import FilterUser from "../../components/User/FilterUser";
 import { TableUser } from "../../components/User/TableUser";
 import { useCallback, useEffect, useState } from "react";

@@ -6,7 +6,7 @@ import React, { useMemo, useState } from "react";
 import { useGetQuyen } from "../../hooks/Quyen/useGetQuyen";
 import { Button, Col, Row, Typography } from "antd";
 import ComponentTree from "../../../page/component/componentTree";
-import type { Quyen } from "../../type";
+import type Quyen from "../../type/Quyen";
 import type { DataTree } from "../../../core/types/baseTreeEntity";
 import { QuyenApi } from "../../api/QuyenApi";
 

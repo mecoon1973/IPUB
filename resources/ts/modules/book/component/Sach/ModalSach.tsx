@@ -1,11 +1,11 @@
 import { Button, Modal, Table } from "antd";
 import type { TableProps } from "antd";
-import type { Sach } from "../../type";
+import type { Sach } from "../../type/Sach";
 import React, { useEffect, useState } from "react";
 import { SachApi } from "../../api/SachApi";
 import DatePicker from "../../../core/utils/DatePicker";
 import { convertValueToDayjs, formatDateToIso8601UtcOffset, formatDateToString } from "../../../core/utils/helpersDayjs";
-import { KieuBanQuyen } from "../../../topic/type";
+import { KieuBanQuyen } from "../../../topic/type/PhieuDkDetai";
 
 interface ModalSachProps {
     sach: Sach| null,

@@ -1,7 +1,7 @@
 import React from "react";
 import { Dropdown, Table } from "antd";
 import type { MenuProps, TableProps } from "antd";
-import type { Nhom } from "../../type";
+import type Nhom from "../../type/Nhom";
 
 interface TableNhomProps {
     listNhom: Nhom[];

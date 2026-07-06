@@ -6,7 +6,7 @@ import React, { useState } from "react";
 import { useCallback } from "react";
 import { Col, Form, Input, Row } from "antd";
 import { ComponentTitleStore } from "../../../page/component/componentTitleStore";
-import type { Bosach } from "../../type";
+import type Bosach from "../../type/BoSach";
 import { BosachApi } from "../../api/BosachApi";
 import { LabelOpt, LabelReq } from "../../../page/component/componentLable";
 

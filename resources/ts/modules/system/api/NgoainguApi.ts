@@ -1,5 +1,5 @@
 import type { PagiInfo, PagiResult } from "../../page/type";
-import type { Ngoaingu } from "../type";
+import type { Ngoaingu } from "../type/NgoaiNgu";
 
 
 export class NgoainguApi{

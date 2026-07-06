@@ -1,6 +1,6 @@
 import type { PagiInfo, PagiResult } from "../../page/type";
 import { toIso8601UtcOffset } from "../../core/utils/helpersDayjs";
-import type { User } from "../type";
+import type { User } from "../type/User";
 
 function serializeUserPayloadForStore(data: Partial<User>): Record<string, unknown> {
     const payload: Record<string, unknown> = { ...data };

@@ -6,7 +6,7 @@ import React, { useState } from "react";
 import { useCallback } from "react";
 import { Col, Form, Input, Row } from "antd";
 import { ComponentTitleStore } from "../../../page/component/componentTitleStore";
-import type { BienMoiTruong } from "../../type";
+import type BienMoiTruong from "../../type/BienMoiTruong";
 import { LabelReq } from "../../../page/component/componentLable";
 import { BienMoiTruongApi } from "../../api/BienMoiTruongApi";
 

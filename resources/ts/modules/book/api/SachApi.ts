@@ -1,5 +1,5 @@
 import type { PagiInfo, PagiResult } from "../../page/type";
-import type { FilterSach, Sach } from "../type";
+import type { FilterSach, Sach } from "../type/Sach";
 
 export class SachApi {
     static readonly conditionDefault : Partial<Sach> = {

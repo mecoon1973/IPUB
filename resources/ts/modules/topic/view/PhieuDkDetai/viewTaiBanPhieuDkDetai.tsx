@@ -1,9 +1,9 @@
 import React, { forwardRef, useCallback, useEffect, useImperativeHandle, useMemo, useRef, useState } from "react";
 import { mountReactComponentOnReady, readRootDataProps } from "../../../core/utils/helpers";
 import { Button, Input, Modal, Select, Table } from "antd";
-import type { DonVi } from "../../../user/type";
-import type { Mangsach } from "../../../system/type";
-import { type PhieuDkDetai } from "../../type";
+import type { DonVi } from "../../../user/type/DonVi";
+import type { Mangsach } from "../../../system/type/MangSach";
+import { type PhieuDkDetai } from "../../type/PhieuDkDetai";
 import type { TableProps } from "antd";
 import { ComponentTitleStore } from "../../../page/component/componentTitleStore";
 import { PlusOutlined } from '@ant-design/icons';

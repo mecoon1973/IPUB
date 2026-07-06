@@ -1,5 +1,5 @@
 import { create } from "zustand";
-import { defaultFilterPhieuDkDetai, type FilterPhieuDkDetai, type PhieuDkDetai } from "../../type";
+import { defaultFilterPhieuDkDetai, type FilterPhieuDkDetai, type PhieuDkDetai } from "../../type/PhieuDkDetai";
 
 export interface PhieuDkDetaiStoreState {
     /** filter */
