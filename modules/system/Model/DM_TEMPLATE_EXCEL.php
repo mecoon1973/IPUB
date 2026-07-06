@@ -9,6 +9,7 @@ use DateTime;
  * Model DM_TEMPLATE_EXCEL
  * @property int $_id
  * @property string $key
+ * @property string $name
  * @property string $path_file_template
  * @property bool $IsDeleted
  * @property DateTime $CreatedOn
@@ -29,6 +30,7 @@ class DM_TEMPLATE_EXCEL extends Model {
     protected $fillable = [
         "_id",
         "key",
+        "name",
         "path_file_template",
         "IsDeleted",
         "CreatedOn",
@@ -40,6 +42,7 @@ class DM_TEMPLATE_EXCEL extends Model {
     protected $attributes = [
         "_id" => false,
         "key" => "",
+        "name" => "",
         "path_file_template" => "",
         "IsDeleted" => false,
     ];

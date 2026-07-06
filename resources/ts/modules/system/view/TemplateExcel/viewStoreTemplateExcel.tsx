@@ -11,6 +11,10 @@ import type { TemplateExcel } from "../../type/TemplateExcel";
 function emptyFormState(): Partial<any> {
     return {
         id: 0,
+        key: "",
+        name: "",
+        path_file_template: "",
+        IsDeleted: false,
 
     };
 }
@@ -22,15 +26,15 @@ interface ViewStoreTemplateExcelProps {
 
 export const ViewStoreTemplateExcel = React.memo((props: ViewStoreTemplateExcelProps) => {
     const { templateExcel } = props;
-    const [form, setForm] = useState<Partial<any>>(() => {
+    const [form, setForm] = useState<Partial<TemplateExcel>>(() => {
         let dataForm = emptyFormState();
         return dataForm;
     });
     const [submitting, setSubmitting] = useState(false);
 
 
-    const setField = useCallback(<K extends keyof any>(key: K, value: any[K]) => {
-        setForm((prev: Partial<any>) => ({ ...prev, [key]: value }));
+    const setField = useCallback(<K extends keyof TemplateExcel>(key: K, value: TemplateExcel[K]) => {
+        setForm((prev: Partial<TemplateExcel>) => ({ ...prev, [key]: value }));
     }, []);
 
 

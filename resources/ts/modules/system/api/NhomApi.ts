@@ -1,4 +1,4 @@
-import type { PagiInfo, PagiResult } from "../../page/type";
+import { defaultPagiInfo, type PagiResult } from "../../page/type";
 import type { Nhom } from "../type/Nhom";
 
 export class NhomApi{
@@ -30,15 +30,7 @@ export class NhomApi{
             console.error(err);
             return {
                 listResult: [],
-                pagiInfo: {
-                    pagi_number: [],
-                    last: 0,
-                    limit: 0,
-                    current_page: 0,
-                    total: 0,
-                    query: "",
-                    route: url,
-                },
+                pagiInfo: defaultPagiInfo,
             };
         }
     }

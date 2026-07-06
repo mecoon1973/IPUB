@@ -1,4 +1,4 @@
-import type { PagiInfo, PagiResult } from "../../page/type";
+import { defaultPagiInfo, type PagiResult } from "../../page/type";
 import type { SystemLog, SystemLogFilter } from "../type/SystemLog";
 
 
@@ -13,15 +13,7 @@ export class SystemLogApi{
             window._toastbox(err.responseJSON?.message || "Có lỗi xảy ra, vui lòng thử lại", "danger");
             return {
                 listResult: [],
-                pagiInfo: {
-                    pagi_number: [],
-                    last: 0,
-                    limit: 0,
-                    current_page: 0,
-                    total: 0,
-                    query: "",
-                    route: url,
-                },
+                pagiInfo: defaultPagiInfo,
             };
         }
     }
