@@ -2,7 +2,6 @@ import React, { useCallback, useMemo, useState } from "react";
 import { Button, Modal, Table, type TableProps } from "antd";
 import { useManageHDXBNXBGDVNStore, type HDXBNXBGDVNModalKey } from "../../store/HDXBNXBGDVN/manageHDXBNXBGDVN";
 import type { HDXBNXBGDVN } from "../../type";
-import { PhieuDkDetaiApi } from "../../api/PhieuDkDetaiApi";
 
 interface ModalConfig {
     key: HDXBNXBGDVNModalKey;
@@ -23,14 +22,6 @@ function ModalActionsHDXBNXBGDVN({ onSuccess }: { onSuccess?: () => void }) {
         () => listHDXBNXBGD.filter((item) => selectedRowKeys.includes(String(item.id))),
         [listHDXBNXBGD, selectedRowKeys],
     );
-
-    const handleXetDuyet = useCallback(async (items: HDXBNXBGDVN[]) => {
-        for (const item of items) {
-            const result = await PhieuDkDetaiApi.xetDuyetNxbgdvn(item.id);
-            if (!result) return false;
-        }
-        return true;
-    }, []);
 
     const modalConfig = useMemo<ModalConfig | null>(() => {
         switch (activeModal) {
@@ -56,14 +47,6 @@ function ModalActionsHDXBNXBGDVN({ onSuccess }: { onSuccess?: () => void }) {
                         return true;
                     },
                 };
-            case "xetDuyetDeTai":
-                return {
-                    key: "xetDuyetDeTai",
-                    title: "XÉT DUYỆT ĐỀ TÀI",
-                    description: "Xác nhận xét duyệt các đề tài đã chọn (chuyển sang HĐXB NXBGDVN đang xét duyệt).",
-                    confirmLabel: "Xét duyệt",
-                    onConfirm: handleXetDuyet,
-                };
             case "pheDuyetDiIn":
                 return {
                     key: "pheDuyetDiIn",
@@ -78,7 +61,7 @@ function ModalActionsHDXBNXBGDVN({ onSuccess }: { onSuccess?: () => void }) {
             default:
                 return null;
         }
-    }, [activeModal, handleXetDuyet]);
+    }, [activeModal]);
 
     const handleClose = useCallback(() => {
         setActiveModal(null);
@@ -93,9 +76,6 @@ function ModalActionsHDXBNXBGDVN({ onSuccess }: { onSuccess?: () => void }) {
 
         if (!ok) return;
 
-        if (modalConfig.key === "xetDuyetDeTai") {
-            window._toastbox("Xét duyệt đề tài thành công", "success");
-        }
         handleClose();
         onSuccess?.();
     }, [handleClose, modalConfig, onSuccess, selectedItems]);

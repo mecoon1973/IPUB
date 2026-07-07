@@ -46,7 +46,7 @@ function TableHDXBNXBGDVNComponent() {
                 key: "NguoiDocDuyet",
                 width: 160,
                 ellipsis: true,
-                render: (_, record) => record.NguoiDocDuyet || record.BienTapVien || "-",
+                render: (_, record) => record.NguoiDocDuyet || "-",
             },
             {
                 title: "Đơn vị tổ chức bản thảo",

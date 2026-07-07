@@ -13,6 +13,7 @@ export const TablePhieuDkDetaiComponent = React.memo(() => {
     const setShowModalInfoPhieuDkDetai = useManagePhieuDkDetaiStore((state) => state.setShowModalInfoPhieuDkDetai);
     const setShowProcessStepInfoModal = useManagePhieuDkDetaiStore((state) => state.setShowProcessStepInfoModal);
     const setShowModalXetDuyetNxbgdvn = useManagePhieuDkDetaiStore((state) => state.setShowModalXetDuyetNxbgdvn);
+    const setShowModalCapMaSoNxbgd = useManagePhieuDkDetaiStore((state) => state.setShowModalCapMaSoNxbgd);
 
     const columns: TableProps<PhieuDkDetai>["columns"] = [
         { title: "STT", key: "stt", width: 56, render: (_v, _r, i) => i + 1 },
@@ -62,7 +63,14 @@ export const TablePhieuDkDetaiComponent = React.memo(() => {
                             setShowModalXetDuyetNxbgdvn(true);
                         },
                     },
-                    { key: "ma", label: "Cấp mã số NXBDB" },
+                    {
+                        key: "ma",
+                        label: "Cấp mã số NXBGD",
+                        onClick: () => {
+                            setPhieuDkDetaiContext(phieuDkDetai);
+                            setShowModalCapMaSoNxbgd(true);
+                        },
+                    },
                     { key: "clone", label: "Nhân bản đề tài" },
                     { key: "cancel", label: <span className="text-danger">Hủy đề tài</span>, onClick: () => {} },
                 ];

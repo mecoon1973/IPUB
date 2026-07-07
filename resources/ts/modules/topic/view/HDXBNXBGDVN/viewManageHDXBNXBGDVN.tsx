@@ -6,6 +6,7 @@ import FilterHDXBNXBGDVNComponent from '../../component/HDXBNXBGD/FilterHDXBNXBG
 import TableHDXBNXBGDVNComponent from '../../component/HDXBNXBGD/TableHDXBNXBGDVNComponent';
 import ActionToolbarHDXBNXBGDVN from '../../component/HDXBNXBGD/ActionToolbarHDXBNXBGDVN';
 import ModalPhanCongDocDuyetHDXBNXBGDVN from '../../component/HDXBNXBGD/ModalPhanCongDocDuyetHDXBNXBGDVN';
+import ModalXetDuyetDeTaiHDXBNXBGDVN from '../../component/HDXBNXBGD/ModalXetDuyetDeTaiHDXBNXBGDVN';
 import ModalActionsHDXBNXBGDVN from '../../component/HDXBNXBGD/ModalActionsHDXBNXBGDVN';
 import { mountReactComponentOnReady, readRootDataProps } from '../../../core/utils/helpers';
 import { useManageHDXBNXBGDVNStore } from '../../store/HDXBNXBGDVN/manageHDXBNXBGDVN';
@@ -24,7 +25,6 @@ interface ViewManageHDXBNXBGDVNProps {
 
 export const ViewManageHDXBNXBGDVN = React.memo((props: ViewManageHDXBNXBGDVNProps) => {
     const { listDonvi, mapTrangThai, listBTV } = props;
-    console.log('mapTrangThai', mapTrangThai);
     const filter = useManageHDXBNXBGDVNStore((state) => state.filter);
     const setListHDXBNXBGD = useManageHDXBNXBGDVNStore((state) => state.setListHDXBNXBGD);
     const setIsLoadingSearch = useManageHDXBNXBGDVNStore((state) => state.setIsLoadingSearch);
@@ -57,6 +57,7 @@ export const ViewManageHDXBNXBGDVN = React.memo((props: ViewManageHDXBNXBGDVNPro
             <TableHDXBNXBGDVNComponent />
             <ComponentPagination pagiInfo={pagiInfo} callBack={getListHDXBNXBGD} />
             <ModalPhanCongDocDuyetHDXBNXBGDVN listBTV={listBTV} onSuccess={getListHDXBNXBGD} />
+            <ModalXetDuyetDeTaiHDXBNXBGDVN listDonvi={listDonvi} onSuccess={getListHDXBNXBGD} />
             <ModalActionsHDXBNXBGDVN onSuccess={getListHDXBNXBGD} />
         </div>
     );

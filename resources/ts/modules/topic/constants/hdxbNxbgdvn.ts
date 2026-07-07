@@ -24,3 +24,16 @@ export function getHDXBNXBGDVNTrangThaiLabel(
     }
     return HDXBNXBGDVN_TRANG_THAI_DISPLAY[trangThai] ?? mapTrangThai?.[trangThai] ?? "";
 }
+
+/** Giá trị trường Duyet trong ipub_nx_canbo_detai */
+export const NX_CANBO_DETAI_DUYET = {
+    CHUA_XET: 0,
+    DUYET: 1,
+    TRA_LAI: 2,
+} as const;
+
+export const NX_CANBO_DETAI_DUYET_OPTIONS = [
+    { value: NX_CANBO_DETAI_DUYET.CHUA_XET, label: "Chưa xử lý" },
+    { value: NX_CANBO_DETAI_DUYET.DUYET, label: "Duyệt" },
+    { value: NX_CANBO_DETAI_DUYET.TRA_LAI, label: "Trả lại" },
+] as const;
