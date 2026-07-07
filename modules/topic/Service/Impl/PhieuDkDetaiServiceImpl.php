@@ -15,6 +15,7 @@ use Modules\Topic\Model\PHIEU_DK_DETAI;
 
 use Exception;
 use Modules\System\Object\FilterTrangThai;
+use Modules\System\Service\DonviService;
 use Modules\System\Service\TrangThaiService;
 use Modules\Topic\Object\PhieuDkDetaiTrangThai;
 use Modules\Topic\Service\CT_Detai_CongDoanService;
@@ -155,6 +156,88 @@ class PhieuDkDetaiServiceImpl extends BaseService implements PhieuDkDetaiService
 
         return $phieuDkDetai;
     }
+
+    public function previewMaSoNxbgd(int $idDeTai, bool $isMa12KiTu): string
+    {
+        /** @var PHIEU_DK_DETAI|null $phieu */
+        $phieu = $this->baseRepo->get($idDeTai);
+        if (!$phieu) {
+            throw new Exception('Phiếu đăng ký đề tài không tồn tại');
+        }
+
+        return $this->generateMaSoNxbgd($phieu, $isMa12KiTu);
+    }
+
+    public function capMaSoNxbgd(int $idDeTai, string $maSo, bool $isMa12KiTu, int $idCanBo): PHIEU_DK_DETAI
+    {
+        /** @var PHIEU_DK_DETAI|null $phieu */
+        $phieu = $this->baseRepo->get($idDeTai);
+        if (!$phieu) {
+            throw new Exception('Phiếu đăng ký đề tài không tồn tại');
+        }
+
+        $maSo = strtoupper(trim($maSo));
+        if ($maSo === '') {
+            throw new Exception('Vui lòng nhập mã số muốn cấp');
+        }
+
+        $expectedLength = $isMa12KiTu ? 12 : 7;
+        if (strlen($maSo) !== $expectedLength) {
+            throw new Exception("Mã số phải có đúng {$expectedLength} ký tự");
+        }
+
+        $duplicate = $this->baseRepo->findOne([
+            'MaSo' => $maSo,
+            'IsDeleted' => false,
+            '_id' => ['$ne' => (int) $phieu->_id],
+        ]);
+        if ($duplicate) {
+            throw new Exception("Mã số [{$maSo}] đã được sử dụng");
+        }
+
+        $phieu->MaSo = $maSo;
+        $phieu->isMa12KiTu = $isMa12KiTu;
+        $phieu->EditedBy = $idCanBo;
+        $phieu->EditedOn = now();
+        $phieu->save();
+
+        return $phieu;
+    }
+
+    private function generateMaSoNxbgd(PHIEU_DK_DETAI $phieu, bool $isMa12KiTu): string
+    {
+        /** @var DonviService $donviService */
+        $donviService = app(DonviService::class);
+        $donvi = $donviService->findOne('no-cache', ['id' => (int) ($phieu->ID_DonVi ?? 0)]);
+        $maDonViRaw = strtoupper(preg_replace('/[^A-Z0-9]/', '', (string) ($donvi->MaDonVi ?? 'XXXX')));
+        $maDonVi4 = substr(str_pad($maDonViRaw, 4, 'X'), 0, 4);
+
+        $year = (int) date('y');
+        $namXb = (string) ($phieu->NamXuatBan ?? $phieu->NamTaiBan ?? '');
+        if ($namXb !== '' && preg_match('/(\d{2,4})$/', $namXb, $matches)) {
+            $yearPart = $matches[1];
+            $year = (int) substr($yearPart, -2);
+        }
+
+        $counterKey = 'ma_so_nxbgd_' . (int) ($phieu->ID_DonVi ?? 0) . '_' . $year . ($isMa12KiTu ? '_12' : '_7');
+        $seq = (int) $this->counterRepo->increment($counterKey, false);
+
+        do {
+            $candidate = $isMa12KiTu
+                ? sprintf('G0%s%03dY%02d', $maDonVi4, $seq % 1000, $year)
+                : sprintf('G0%s%03d', substr($maDonVi4, 0, 2), $seq % 1000);
+
+            $exists = $this->baseRepo->findOne([
+                'MaSo' => $candidate,
+                'IsDeleted' => false,
+            ]);
+            if (!$exists) {
+                return $candidate;
+            }
+            $seq = (int) $this->counterRepo->increment($counterKey, false);
+        } while (true);
+    }
+
     /** ghi công đoạn */
     private function ghiCongDoanXetDuyet(int $idDeTai, int $idCanBo, int $trangThaiCu, int $trangThaiMoi): void {
         if ($trangThaiCu === $trangThaiMoi) {

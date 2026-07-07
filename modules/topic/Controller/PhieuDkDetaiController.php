@@ -10,6 +10,8 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\View\View;
 use Modules\System\Service\DonviService;
 use Modules\System\Traits\TraitsGetData;
+use Modules\Topic\Request\FrmCapMaSoNxbgdRequest;
+use Modules\Topic\Request\FrmPreviewMaSoNxbgdRequest;
 use Modules\Topic\Request\FrmSearchPhieuDkDetaiRequest;
 use Modules\Topic\Request\FrmStorePhieuDkDetaiRequest;
 use Modules\Topic\Service\PhieuDkDetaiService;
@@ -150,6 +152,32 @@ class PhieuDkDetaiController extends Controller {
                 'message' => $exception->getMessage(),
             ], 500);
         }
+    }
+
+    public function previewMaSoNxbgd(FrmPreviewMaSoNxbgdRequest $request): JsonResponse {
+        /** @var PhieuDkDetaiService $phieuDkDetaiService */
+        $phieuDkDetaiService = app(PhieuDkDetaiService::class);
+
+        $maSo = $phieuDkDetaiService->previewMaSoNxbgd(
+            (int) $request->input('id'),
+            (bool) $request->input('isMa12KiTu')
+        );
+        return response()->json(['maSo' => $maSo], 200);
+
+    }
+
+    public function capMaSoNxbgd(FrmCapMaSoNxbgdRequest $request): JsonResponse {
+        /** @var PhieuDkDetaiService $phieuDkDetaiService */
+        $phieuDkDetaiService = app(PhieuDkDetaiService::class);
+        $validated = $request->validated();
+
+        $result = $phieuDkDetaiService->capMaSoNxbgd(
+            (int) $validated['id'],
+            (string) $validated['maSo'],
+            (bool) $validated['isMa12KiTu'],
+            $this->resolveIdCanBoNguoiDuyet()
+        );
+        return response()->json($result, 200);
     }
 
     private function resolveIdCanBoNguoiDuyet(): int {

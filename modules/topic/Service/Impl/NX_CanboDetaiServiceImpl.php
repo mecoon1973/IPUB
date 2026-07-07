@@ -6,9 +6,12 @@ use Core\Service\BaseService;
 use Exception;
 use Modules\Topic\Model\NX_CANBO_DETAI;
 use Modules\Topic\Model\PHIEU_DK_DETAI;
+use Modules\Topic\Object\FilterXetDuyetHDXBNXBGDVN;
+use Modules\Topic\Object\NxCanBoDetaiDuyet;
 use Modules\Topic\Object\PhieuDkDetaiTrangThai;
 use Modules\Topic\Repository\NX_CanboDetaiRepository;
 use Modules\Topic\Repository\PhieuDkDetaiRepository;
+use Modules\Topic\Service\CT_Detai_CongDoanService;
 use Modules\Topic\Service\NX_CanboDetaiService;
 use Modules\User\Model\User;
 use Modules\User\Service\UserService;
@@ -79,6 +82,7 @@ class NX_CanboDetaiServiceImpl extends BaseService implements NX_CanboDetaiServi
             PhieuDkDetaiTrangThai::HDXB_DON_VI_PHE_DUYET,
             PhieuDkDetaiTrangThai::HDXB_NXBGDVN_TRA_LAI,
             PhieuDkDetaiTrangThai::HDXB_NXBGDVN_DANG_XET,
+            PhieuDkDetaiTrangThai::HDXB_NXBGDVN_PHE_DUYET,
             PhieuDkDetaiTrangThai::HDXB_NXBGDVN_CHUA_XET,
         ];
 
@@ -134,6 +138,130 @@ class NX_CanboDetaiServiceImpl extends BaseService implements NX_CanboDetaiServi
 
         if ($count === 0) {
             throw new Exception('Không tìm thấy đề tài hợp lệ để phân công');
+        }
+
+        return $count;
+    }
+
+    public function getListXetDuyet(FilterXetDuyetHDXBNXBGDVN $filter): array
+    {
+        $conditions = $filter->buildNxPhanCongConditions();
+        $nxRows = $this->baseRepo->findAll($conditions);
+
+        if ($nxRows->isEmpty()) {
+            return [];
+        }
+
+        $phanCongMap = [];
+        foreach ($nxRows as $nx) {
+            $idDeTai = (int) ($nx->ID_DeTai ?? 0);
+            if ($idDeTai > 0 && !isset($phanCongMap[$idDeTai])) {
+                $phanCongMap[$idDeTai] = $nx;
+            }
+        }
+
+        $idsDeTai = array_keys($phanCongMap);
+        if (count($idsDeTai) === 0) {
+            return [];
+        }
+
+        /** @var PhieuDkDetaiRepository $phieuRepo */
+        $phieuRepo = app(PhieuDkDetaiRepository::class);
+        $conditionsPhieu = $filter->buildPhieuConditions($idsDeTai);
+        $phieuRows = $phieuRepo->findAll($conditionsPhieu, ['TenDeTai' => 1]);
+
+        $result = [];
+        foreach ($phieuRows as $phieu) {
+            $idDeTai = (int) ($phieu->_id ?? 0);
+            if ($idDeTai <= 0 || !isset($phanCongMap[$idDeTai])) {
+                continue;
+            }
+
+            /** @var NX_CANBO_DETAI $nx */
+            $nx = $phanCongMap[$idDeTai];
+
+            $result[] = [
+                'id' => $idDeTai,
+                'idNxCanBoDetai' => (int) ($nx->_id ?? 0),
+                'TenDeTai' => (string) ($phieu->TenDeTai ?? ''),
+                'YKienDocDuyet' => (string) ($nx->NhanXet ?? ''),
+                'YKienHDXB' => (string) ($phieu->YKHDDD ?? ''),
+                'Duyet' => (int) ($nx->Duyet ?? NxCanBoDetaiDuyet::CHUA_XET),
+                'YeuCauDocKiemDinh' => (bool) ($phieu->YeuCauDocKiemDinh ?? false),
+            ];
+        }
+
+        return $result;
+    }
+
+    public function luuXetDuyetDeTai(array $items, int $idCanBo): int
+    {
+        if ($idCanBo <= 0) {
+            throw new Exception('Người dùng chưa đăng nhập');
+        }
+        if (count($items) === 0) {
+            throw new Exception('Không có đề tài để lưu');
+        }
+
+        /** @var PhieuDkDetaiRepository $phieuRepo */
+        $phieuRepo = app(PhieuDkDetaiRepository::class);
+        /** @var CT_Detai_CongDoanService $congDoanService */
+        $congDoanService = app(CT_Detai_CongDoanService::class);
+
+        $count = 0;
+        $now = now();
+
+        foreach ($items as $item) {
+            /** @var NX_CANBO_DETAI|null $nx */
+            $nx = $this->baseRepo->get((int) ($item['idNxCanBoDetai'] ?? 0));
+            if (!$nx || (int) ($nx->ID_DeTai ?? 0) !== (int) ($item['idDeTai'] ?? 0)) {
+                continue;
+            }
+
+            /** @var PHIEU_DK_DETAI|null $phieu */
+            $phieu = $phieuRepo->get((int) $item['idDeTai']);
+            if (!$phieu) {
+                continue;
+            }
+
+            $trangThaiCu = (int) ($phieu->TrangThai ?? 0);
+            $duyet = (int) ($item['Duyet'] ?? NxCanBoDetaiDuyet::CHUA_XET);
+
+            $nx->NhanXet = (string) ($item['YKienDocDuyet'] ?? '');
+            $nx->Duyet = $duyet;
+            $nx->NgayNX = $now;
+            $nx->EditedBy = $idCanBo;
+            $nx->EditedOn = $now;
+            $nx->save();
+
+            $phieu->YKHDDD = (string) ($item['YKienHDXB'] ?? '');
+            $phieu->YeuCauDocKiemDinh = (bool) ($item['YeuCauDocKiemDinh'] ?? false);
+            $phieu->EditedBy = $idCanBo;
+            $phieu->EditedOn = $now;
+
+            if ($duyet === NxCanBoDetaiDuyet::DUYET) {
+                $phieu->TrangThai = PhieuDkDetaiTrangThai::HDXB_NXBGDVN_PHE_DUYET;
+            } elseif ($duyet === NxCanBoDetaiDuyet::TRA_LAI) {
+                $phieu->TrangThai = PhieuDkDetaiTrangThai::HDXB_NXBGDVN_TRA_LAI;
+            }
+
+            $phieu->save();
+
+            $trangThaiMoi = (int) ($phieu->TrangThai ?? 0);
+            if ($trangThaiCu !== $trangThaiMoi) {
+                $congDoanService->ghiCongDoanTrangThai(
+                    (int) $phieu->_id,
+                    $idCanBo,
+                    $trangThaiCu,
+                    $trangThaiMoi
+                );
+            }
+
+            $count++;
+        }
+
+        if ($count === 0) {
+            throw new Exception('Không tìm thấy đề tài hợp lệ để lưu');
         }
 
         return $count;

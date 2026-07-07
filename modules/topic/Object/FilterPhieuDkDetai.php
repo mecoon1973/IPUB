@@ -4,6 +4,7 @@ namespace Modules\Topic\Object;
 
 use Core\Object\BaseObject;
 use MongoDB\BSON\Regex;
+use Modules\Topic\Object\MaSoPatternHelper;
 
 /**
  * @property ?bool $IsDeleted
@@ -46,7 +47,13 @@ class FilterPhieuDkDetai extends BaseObject {
         }
 
         if(isset($this->MaSo) && $this->MaSo != "") {
-            $conditionsOr[] = ["MaSo" => ['$regex' => new Regex(preg_quote($this->MaSo, "/"), "ui")]];
+            if (MaSoPatternHelper::hasWildcard($this->MaSo)) {
+                $conditions["MaSo"] = [
+                    '$regex' => new Regex(MaSoPatternHelper::toRegex($this->MaSo), 'i'),
+                ];
+            } else {
+                $conditionsOr[] = ["MaSo" => ['$regex' => new Regex(preg_quote($this->MaSo, "/"), "ui")]];
+            }
         }
 
         if(isset($this->TenDeTai) && $this->TenDeTai != "") {

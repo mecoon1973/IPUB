@@ -25,4 +25,12 @@ interface NX_CanboDetaiService extends IBaseService
      * @param int[] $idsDeTai
      */
     public function phanCongDocDuyet(array $idsDeTai, int $idCanBoDoc, int $idCanBoPhanCong): int;
+
+    /** @return array<int, array<string, mixed>> */
+    public function getListXetDuyet(\Modules\Topic\Object\FilterXetDuyetHDXBNXBGDVN $filter): array;
+
+    /**
+     * @param array<int, array<string, mixed>> $items
+     */
+    public function luuXetDuyetDeTai(array $items, int $idCanBo): int;
 }

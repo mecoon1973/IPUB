@@ -13,7 +13,7 @@ const TOOLBAR_ACTIONS: ToolbarAction[] = [
     { key: "phanCongDocDuyet", label: "Phân công đọc duyệt", icon: <FileTextOutlined />, requireSelection: true },
     { key: "docDuyet", label: "Đọc duyệt", icon: <FileTextOutlined />, requireSelection: true },
     { key: "inPhieuTrinh", label: "In phiếu trình HĐXB NXBGDVN", icon: <PrinterOutlined />, requireSelection: true },
-    { key: "xetDuyetDeTai", label: "Xét duyệt đề tài", icon: <UnorderedListOutlined />, requireSelection: true },
+    { key: "xetDuyetDeTai", label: "Xét duyệt đề tài", icon: <UnorderedListOutlined />, requireSelection: false },
     { key: "pheDuyetDiIn", label: "Phê duyệt đi in", icon: <UnorderedListOutlined />, requireSelection: true },
 ];
 

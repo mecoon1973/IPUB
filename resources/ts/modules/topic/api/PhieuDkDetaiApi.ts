@@ -75,4 +75,30 @@ export class PhieuDkDetaiApi {
             return null;
         }
     }
+
+    static async previewMaSoNxbgd(id: number, isMa12KiTu: boolean): Promise<string> {
+        const url = "/api/topic/phieu-dk-detai/cap-ma-so/preview";
+        try {
+            const res = await window._apiGet(url, { id, isMa12KiTu: isMa12KiTu ? 1 : 0 });
+            return (res as { maSo?: string })?.maSo ?? "";
+        } catch (err: any) {
+            window._toastbox(err.responseJSON?.message || "Có lỗi xảy ra, vui lòng thử lại", "danger");
+            return "";
+        }
+    }
+
+    static async capMaSoNxbgd(id: number, maSo: string, isMa12KiTu: boolean): Promise<PhieuDkDetai | null> {
+        const url = "/api/topic/phieu-dk-detai/cap-ma-so";
+        try {
+            const res = await window._apiCreate(url, {
+                id,
+                maSo,
+                isMa12KiTu: isMa12KiTu ? 1 : 0,
+            });
+            return res as PhieuDkDetai;
+        } catch (err: any) {
+            window._toastbox(err.responseJSON?.message || "Có lỗi xảy ra, vui lòng thử lại", "danger");
+            return null;
+        }
+    }
 }

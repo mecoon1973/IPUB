@@ -1,5 +1,5 @@
 import type { PagiResult } from "../../page/type";
-import { defaultFilterHDXBNXBGDVN, type FilterHDXBNXBGDVN, type HDXBNXBGDVN } from "../type";
+import { defaultFilterHDXBNXBGDVN, type FilterHDXBNXBGDVN, type FilterXetDuyetHDXBNXBGDVN, type HDXBNXBGDVN, type HDXBNXBGDVNXetDuyetRow } from "../type";
 
 export class HDXBNXBGDVNApi {
     static readonly conditionDefault: FilterHDXBNXBGDVN = defaultFilterHDXBNXBGDVN;
@@ -46,6 +46,37 @@ export class HDXBNXBGDVNApi {
         const url = "/api/topic/hdxb-nxbgdvn/phan-cong-doc-duyet";
         try {
             await window._apiCreate(url, { ids, idCanBo });
+            return true;
+        } catch (err: any) {
+            window._toastbox(err.responseJSON?.message || "Có lỗi xảy ra, vui lòng thử lại", "danger");
+            return false;
+        }
+    }
+
+    static async getListXetDuyet(filter: import("../type").FilterXetDuyetHDXBNXBGDVN = {}): Promise<import("../type").HDXBNXBGDVNXetDuyetRow[]> {
+        const url = "/api/topic/hdxb-nxbgdvn/xet-duyet/list";
+        try {
+            const res = await window._apiGet(url, filter);
+            return res as import("../type").HDXBNXBGDVNXetDuyetRow[];
+        } catch (err: any) {
+            window._toastbox(err.responseJSON?.message || "Có lỗi xảy ra, vui lòng thử lại", "danger");
+            return [];
+        }
+    }
+
+    static async luuXetDuyetDeTai(items: import("../type").HDXBNXBGDVNXetDuyetRow[]): Promise<boolean> {
+        const url = "/api/topic/hdxb-nxbgdvn/xet-duyet";
+        try {
+            await window._apiCreate(url, {
+                items: items.map((row) => ({
+                    idDeTai: row.id,
+                    idNxCanBoDetai: row.idNxCanBoDetai,
+                    YKienDocDuyet: row.YKienDocDuyet,
+                    YKienHDXB: row.YKienHDXB,
+                    Duyet: row.Duyet,
+                    YeuCauDocKiemDinh: row.YeuCauDocKiemDinh ? 1 : 0,
+                })),
+            });
             return true;
         } catch (err: any) {
             window._toastbox(err.responseJSON?.message || "Có lỗi xảy ra, vui lòng thử lại", "danger");

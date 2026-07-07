@@ -286,4 +286,21 @@ export const defaultFilterHDXBNXBGDVN: FilterHDXBNXBGDVN = {
     TrangThai: -1,
 };
 
+export interface HDXBNXBGDVNXetDuyetRow {
+    id: number;
+    idNxCanBoDetai: number;
+    TenDeTai: string;
+    YKienDocDuyet: string;
+    YKienHDXB: string;
+    Duyet: number;
+    YeuCauDocKiemDinh: boolean;
+}
+
+export interface FilterXetDuyetHDXBNXBGDVN {
+    TuNgay?: string | null;
+    DenNgay?: string | null;
+    ID_DonVi?: number;
+    ids?: number[];
+}
+
 //

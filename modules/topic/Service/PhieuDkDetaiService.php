@@ -30,4 +30,8 @@ interface PhieuDkDetaiService extends IBaseService {
     public function xetDuyetDeTai(int $id, int $phanCong): PHIEU_DK_DETAI;
 
     public function xetDuyetNxbgdvn(int $id, int $idCanBo): PHIEU_DK_DETAI;
+
+    public function previewMaSoNxbgd(int $idDeTai, bool $isMa12KiTu): string;
+
+    public function capMaSoNxbgd(int $idDeTai, string $maSo, bool $isMa12KiTu, int $idCanBo): PHIEU_DK_DETAI;
 }

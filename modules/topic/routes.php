@@ -16,6 +16,8 @@ Route::group(['middleware' => ['web', 'auth.custom']], function () {
                 Route::post('/store', [PhieuDkDetaiController::class, 'store'])->name('phieu-dk-detai.store');
                 Route::post('/xet-duyet', [PhieuDkDetaiController::class, 'xetDuyetDeTai'])->name('phieu-dk-detai.xet-duyet');
                 Route::post('/xet-duyet-nxbgdvn', [PhieuDkDetaiController::class, 'xetDuyetNxbgdvn'])->name('phieu-dk-detai.xet-duyet-nxbgdvn');
+                Route::get('/cap-ma-so/preview', [PhieuDkDetaiController::class, 'previewMaSoNxbgd'])->name('phieu-dk-detai.cap-ma-so.preview');
+                Route::post('/cap-ma-so', [PhieuDkDetaiController::class, 'capMaSoNxbgd'])->name('phieu-dk-detai.cap-ma-so');
                 Route::delete('/delete/{id}', [PhieuDkDetaiController::class, 'delete'])->name('phieu-dk-detai.delete');
             });
             Route::group(['prefix' => 'detai-congdoan'], function () {
@@ -34,6 +36,8 @@ Route::group(['middleware' => ['web', 'auth.custom']], function () {
                 Route::get('/paginate/{page?}', [HDXBNXBGDVNController::class, 'getPaginate'])->name('hdxb-nxbgdvn.paginate')->where('page', regexRoute("page"));
                 Route::get('/list', [HDXBNXBGDVNController::class, 'getList'])->name('hdxb-nxbgdvn.list');
                 Route::post('/phan-cong-doc-duyet', [HDXBNXBGDVNController::class, 'phanCongDocDuyet'])->name('hdxb-nxbgdvn.phan-cong-doc-duyet');
+                Route::get('/xet-duyet/list', [HDXBNXBGDVNController::class, 'getListXetDuyet'])->name('hdxb-nxbgdvn.xet-duyet.list');
+                Route::post('/xet-duyet', [HDXBNXBGDVNController::class, 'luuXetDuyetDeTai'])->name('hdxb-nxbgdvn.xet-duyet');
             });
         });
     });
