@@ -6,7 +6,8 @@ import React, { useMemo, useState } from "react";
 import { useCallback } from "react";
 import { Col, Form, Input, InputNumber, Row, Select, Table, type TableProps } from "antd";
 import { ComponentTitleStore } from "../../../page/component/componentTitleStore";
-import type { DonviLC, LoaiXbpLc } from "../../type";
+import type { DonviLC } from "../../type/DonviLC";
+import type { LoaiXbpLc } from "../../type/LoaiXbpLc";
 import { LoaiXbpLcApi } from "../../api/LoaiXbpLcApi";
 import { LabelReq } from "../../../page/component/componentLable";
 

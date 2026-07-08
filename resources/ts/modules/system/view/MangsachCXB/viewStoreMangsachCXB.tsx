@@ -6,7 +6,7 @@ import React, { useState } from "react";
 import { useCallback } from "react";
 import { Col, Form, Input, Row } from "antd";
 import { ComponentTitleStore } from "../../../page/component/componentTitleStore";
-import type { MangsachCXB } from "../../type";
+import type { MangsachCXB } from "../../type/MangSachCXB";
 import { LabelOpt, LabelReq } from "../../../page/component/componentLable";
 import { MangsachCXBApi } from "../../api/MangsachCXBApi";
 

@@ -1,5 +1,5 @@
 import { create } from "zustand";
-import type { DonVi } from "../../../user/type";
+import type { DonVi } from "../../../user/type/DonVi";
 
 export interface ManageDonviState {
     listDonvi: DonVi[];

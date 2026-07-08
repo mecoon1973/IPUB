@@ -1,5 +1,5 @@
-import type { PagiInfo, PagiResult } from "../../page/type";
-import type { LoaiXBP } from "../type";
+import { defaultPagiInfo, type PagiResult } from "../../page/type";
+import type { LoaiXBP } from "../type/LoaiXBP";
 
 
 export class LoaiXBPApi{
@@ -17,15 +17,7 @@ export class LoaiXBPApi{
             window._toastbox(err.responseJSON?.message || "Có lỗi xảy ra, vui lòng thử lại", "danger");
             return {
                 listResult: [],
-                pagiInfo: {
-                    pagi_number: [],
-                    last: 0,
-                    limit: 0,
-                    current_page: 0,
-                    total: 0,
-                    query: "",
-                    route: url,
-                },
+                pagiInfo: defaultPagiInfo,
             };
         }
     }

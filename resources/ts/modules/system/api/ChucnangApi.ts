@@ -1,5 +1,5 @@
 
-import type { ChucNang } from "../type";
+import type { ChucNang } from "../type/ChucNang";
 
 /** Trùng key với `FrmStoreChucnangRequest` (PHP) — chỉ gửi các field này khi store. */
 export function buildChucnangStorePayload(form: Partial<ChucNang>): Record<string, string | number | boolean> {

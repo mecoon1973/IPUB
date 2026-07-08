@@ -1,6 +1,6 @@
 import {useEffect, useState } from "react";
 import { HDXBApi } from "../../api/HDXBApi";
-import type { Nhom } from "../../type";
+import type Nhom from "../../type/Nhom";
 import { NhomApi } from "../../api/NhomApi";
 
 export function useGetNhom(conditions: Partial<Nhom> = NhomApi.conditionDefault) {

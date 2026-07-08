@@ -1,5 +1,5 @@
-import type { PagiInfo, PagiResult } from "../../page/type";
-import type { FilterSach, Sach } from "../type";
+import { defaultPagiInfo, type PagiResult } from "../../page/type";
+import type { FilterSach, Sach } from "../type/Sach";
 
 export class SachApi {
     static readonly conditionDefault : Partial<Sach> = {
@@ -14,15 +14,7 @@ export class SachApi {
             window._toastbox(err.responseJSON?.message || "Có lỗi xảy ra, vui lòng thử lại", "danger");
             return {
                 listResult: [],
-                pagiInfo: {
-                    pagi_number: [],
-                    last: 0,
-                    limit: 0,
-                    current_page: 0,
-                    total: 0,
-                    query: "",
-                    route: url,
-                },
+                pagiInfo: defaultPagiInfo,
             };
         }
     }

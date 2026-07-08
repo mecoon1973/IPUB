@@ -1,7 +1,7 @@
 import React from "react";
 import { Button, Col, Modal, Row, Table } from "antd";
 import type { TableProps } from "antd";
-import type { User } from "../../type";
+import type { User } from "../../type/User";
 import { ComponentSelectAntObject } from "../../../page/component/componentSelectAnt";
 import { ComponentIcon } from "../../../page/component/componentIcon";
 

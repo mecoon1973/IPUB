@@ -10,9 +10,9 @@ import { Button, Col, Collapse, Divider, Dropdown, Input, Row, Select, Table, Ty
 import type { MenuProps, TableProps } from "antd";
 import DatePicker from "../../../core/utils/DatePicker";
 import { convertValueToDayjs, formatDateToString } from "../../../core/utils/helpersDayjs";
-import { TYPE_DOC_RA_SOAT_OPTIONS, type DSDocRaSoat, type FilterDSDocRaSoat, type TypeDSDocRaSoat, TYPE_IS_SACH_OPTIONS } from "../../type";
+import { TYPE_DOC_RA_SOAT_OPTIONS, type DSDocRaSoat, type FilterDSDocRaSoat, type TypeDSDocRaSoat, TYPE_IS_SACH_OPTIONS } from "../../type/DSDocRaSoat";
 import { DSDocRaSoatApi } from "../../api/DSDocRaSoatApi";
-import type { User } from "../../../user/type";
+import type { User } from "../../../user/type/User";
 
 const { RangePicker } = DatePicker;
 

@@ -1,6 +1,6 @@
 // import { Button, Col, Input, Modal, Row } from "antd";
 // import React, { useCallback, useEffect, useState } from "react";
-// import type { CT_QD_In } from "../../type";
+// import type { CT_QD_In } from "../../type/CT_QD_In";
 
 // function emptyCT_QD_InForm(): CT_QD_In {
 //     const y = String(new Date().getFullYear());

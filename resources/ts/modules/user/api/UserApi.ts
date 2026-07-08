@@ -1,6 +1,6 @@
-import type { PagiInfo, PagiResult } from "../../page/type";
+import { defaultPagiInfo, type PagiResult } from "../../page/type";
 import { toIso8601UtcOffset } from "../../core/utils/helpersDayjs";
-import type { User } from "../type";
+import type { User } from "../type/User";
 
 function serializeUserPayloadForStore(data: Partial<User>): Record<string, unknown> {
     const payload: Record<string, unknown> = { ...data };
@@ -29,15 +29,7 @@ export class UserApi{
             window._toastbox(err.responseJSON?.message || "Có lỗi xảy ra, vui lòng thử lại", "danger");
             return {
                 listResult: [],
-                pagiInfo: {
-                    pagi_number: [],
-                    last: 0,
-                    limit: 0,
-                    current_page: 0,
-                    total: 0,
-                    query: "",
-                    route: url,
-                },
+                pagiInfo: defaultPagiInfo,
             };
         }
     }

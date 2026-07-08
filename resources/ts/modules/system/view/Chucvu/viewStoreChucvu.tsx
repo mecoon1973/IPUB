@@ -6,7 +6,7 @@ import React, { useState } from "react";
 import { useCallback } from "react";
 import { Col, Form, Input, Row } from "antd";
 import { ComponentTitleStore } from "../../../page/component/componentTitleStore";
-import type { Chucvu } from "../../type";
+import type { Chucvu } from "../../type/ChucVu";
 import { ChucvuApi } from "../../api/ChucvuApi";
 import { LabelOpt, LabelReq } from "../../../page/component/componentLable";
 

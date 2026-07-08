@@ -55,8 +55,8 @@ class PagiInfo {
         if (!$this->query) {
             $query = [];
             $queryParams = request()->query();
-            $cursorId = config("settings.key_cursor_id");
-            $cursorSortPrefix = config("settings.prefix_key_cursor_sort");
+            $cursorId = config("settings.key_cursor_id", "");
+            $cursorSortPrefix = config("settings.prefix_key_cursor_sort", "");
 
             try {
                 foreach ($queryParams as $key => $value) {

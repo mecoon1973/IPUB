@@ -1,7 +1,7 @@
 import React from "react";
 import { Form, Input } from "antd";
 import { LabelReq } from "../../../page/component/componentLable";
-import type { Lop } from "../../type";
+import type { Lop } from "../../type/Lop";
 
 interface LopFormFieldsProps {
     form: Partial<Lop>;

@@ -4,7 +4,7 @@ import {
 } from "../../../core/utils/helpers";
 import React, { useCallback, useEffect, useMemo, useState } from "react";
 import { defaultPagiInfo, type PagiInfo } from "../../../page/type";
-import type { Ngoaingu } from "../../type";
+import type { Ngoaingu } from "../../type/NgoaiNgu";
 import { ComponentPagination } from "../../../page/component/pagination";
 import { NgoainguApi } from "../../api/NgoainguApi";
 import { Button, Divider, Dropdown, Table } from "antd";

@@ -1,5 +1,5 @@
-import type { PagiInfo, PagiResult, Relationships } from "../../page/type";
-import type { FilterPhieuNhapLC, PhieuNhapLC } from "../type";
+import { defaultPagiInfo, type PagiResult, type Relationships } from "../../page/type";
+import type { FilterPhieuNhapLC, PhieuNhapLC } from "../type/PhieuNhapLC";
 export class PhieuNhapLCApi {
     static readonly conditionDefault : Partial<PhieuNhapLC> = {
         IsDeleted : false,
@@ -13,15 +13,7 @@ export class PhieuNhapLCApi {
             window._toastbox(err.responseJSON?.message || "Có lỗi xảy ra, vui lòng thử lại", "danger");
             return {
                 listResult: [],
-                pagiInfo: {
-                    pagi_number: [],
-                    last: 0,
-                    limit: 0,
-                    current_page: 0,
-                    total: 0,
-                    query: "",
-                    route: url,
-                },
+                pagiInfo: defaultPagiInfo,
             };
         }
     }

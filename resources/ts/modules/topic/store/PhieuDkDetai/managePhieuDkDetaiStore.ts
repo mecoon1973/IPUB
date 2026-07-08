@@ -1,5 +1,6 @@
 import { create } from "zustand";
-import { defaultFilterPhieuDkDetai, type Detai_Congdoan, type FilterPhieuDkDetai, type PhieuDkDetai } from "../../type";
+import { defaultFilterPhieuDkDetai, type FilterPhieuDkDetai, type PhieuDkDetai } from "../../type/PhieuDkDetai";
+import type { Detai_Congdoan } from "../../type/Detai_Congdoan";
 import { defaultPagiInfo, type PagiInfo } from "../../../page/type";
 
 export interface ManagePhieuDkDetaiState {

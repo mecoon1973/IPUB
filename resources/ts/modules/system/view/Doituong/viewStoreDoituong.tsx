@@ -6,7 +6,7 @@ import React, { useState } from "react";
 import { useCallback } from "react";
 import { Col, Form, Input, Row } from "antd";
 import { ComponentTitleStore } from "../../../page/component/componentTitleStore";
-import type { Doituong } from "../../type";
+import type { Doituong } from "../../type/DoiTuong";
 import { DoituongApi } from "../../api/DoituongApi";
 import { LabelOpt, LabelReq } from "../../../page/component/componentLable";
 

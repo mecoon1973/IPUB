@@ -5,7 +5,7 @@ import { useDataViewStore } from "../../../system/store/useDataViewStore";
 import { ComponentSelectAntObject } from "../../../page/component/componentSelectAnt";
 import { convertValueToDayjs } from "../../../core/utils/helpersDayjs";
 import { useManageSachStore } from "../../store/useManageSachStore";
-import type { FilterSach } from "../../type";
+import type { FilterSach } from "../../type/Sach";
 
 interface FilterSachProps {
     getListSach: (page?: string) => void;

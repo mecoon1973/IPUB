@@ -1,7 +1,7 @@
 import React from "react";
 import { Dropdown, Table } from "antd";
 import type { MenuProps, TableProps } from "antd";
-import type { PhieuDkDetai } from "../../type";
+import type { PhieuDkDetai } from "../../type/PhieuDkDetai";
 import { useManagePhieuDkDetaiStore } from "../../store/PhieuDkDetai/managePhieuDkDetaiStore";
 import { useDataViewStore } from "../../../system/store/useDataViewStore";
 

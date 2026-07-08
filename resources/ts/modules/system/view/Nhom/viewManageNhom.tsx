@@ -5,8 +5,8 @@ import {
 import React, { useCallback, useEffect, useMemo, useState } from "react";
 import { useGetNhom } from "../../hooks/Nhom/useGetNhom";
 import { defaultPagiInfo, type PagiInfo } from "../../../page/type";
-import type { Nhom } from "../../type";
-import type { User } from "../../../user/type";
+import type { Nhom } from "../../type/Nhom";
+import type { User } from "../../../user/type/User";
 import { UserApi } from "../../../user/api/UserApi";
 import { NhomApi } from "../../api/NhomApi";
 import { TableNhom } from "../../component/Nhom/TableNhom";

@@ -3,7 +3,7 @@ import {
     readRootDataProps,
 } from "../../../core/utils/helpers";
 import React, { useState } from "react";
-import type { DonVi } from "../../../user/type";
+import type { DonVi } from "../../../user/type/DonVi";
 import { useCallback } from "react";
 import { DonviFormFields } from "../../component/Donvi/DonviFormFields";
 import { DonviApi } from "../../api/DonviApi";

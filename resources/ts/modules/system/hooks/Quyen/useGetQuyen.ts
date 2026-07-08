@@ -1,5 +1,6 @@
 import {useEffect, useState } from "react";
-import type { HDXB, Quyen } from "../../type";
+import type HDXB from "../../type/HDXB";
+import type Quyen from "../../type/Quyen";
 import { QuyenApi } from "../../api/QuyenApi";
 
 export function useGetQuyen(conditions: Partial<Quyen> = QuyenApi.conditionDefault) {

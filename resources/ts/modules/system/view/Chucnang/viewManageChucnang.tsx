@@ -3,7 +3,7 @@ import {
     readRootDataProps,
 } from "../../../core/utils/helpers";
 import React, { useCallback, useEffect, useMemo, useState } from "react";
-import type { ChucNang } from "../../type";
+import type { ChucNang } from "../../type/ChucNang";
 import { ChucnangApi } from "../../api/ChucnangApi";
 import ComponentTree from "../../../page/component/componentTree";
 import type { DataTree } from "../../../core/types/baseTreeEntity";

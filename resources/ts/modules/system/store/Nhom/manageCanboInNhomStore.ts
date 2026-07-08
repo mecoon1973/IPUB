@@ -1,7 +1,8 @@
 import { create } from "zustand";
-import type { DonVi, User } from "../../../user/type";
+import type { DonVi } from "../../../user/type/DonVi";
+import type { User } from "../../../user/type/User";
 import { defaultPagiInfo, type PagiInfo } from "../../../page/type";
-import type { Nhom } from '../../type';
+import type Nhom from "../../type/Nhom";
 
 export interface ManageCanboInNhomState {
     listCanbo: User[];

@@ -1,5 +1,5 @@
-import type { PagiInfo, PagiResult } from "../../page/type";
-import type { Chuyenmon } from "../type";
+import { defaultPagiInfo, type PagiResult } from "../../page/type";
+import type { Chuyenmon } from "../type/ChuyenMon";
 
 
 export class ChuyenmonApi{
@@ -17,15 +17,7 @@ export class ChuyenmonApi{
             window._toastbox(err.responseJSON?.message || "Có lỗi xảy ra, vui lòng thử lại", "danger");
             return {
                 listResult: [],
-                pagiInfo: {
-                    pagi_number: [],
-                    last: 0,
-                    limit: 0,
-                    current_page: 0,
-                    total: 0,
-                    query: "",
-                    route: url,
-                },
+                pagiInfo: defaultPagiInfo,
             };
         }
     }

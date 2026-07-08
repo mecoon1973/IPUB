@@ -1,5 +1,6 @@
 import type { PagiInfo } from "../../page/type";
-import type { DonVi, User } from "../../user/type";
+import type { DonVi } from "../../user/type/DonVi";
+import type { User } from "../../user/type/User";
 
 export class DonviApi{
 

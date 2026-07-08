@@ -1,4 +1,4 @@
-import type { Quyen } from "../type";
+import type { Quyen } from "../type/Quyen";
 
 export class QuyenApi{
 

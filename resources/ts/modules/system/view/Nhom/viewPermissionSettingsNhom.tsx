@@ -3,7 +3,8 @@ import {
     readRootDataProps,
 } from "../../../core/utils/helpers";
 import React, { useState, useCallback } from "react";
-import type { Nhom, Quyen } from "../../type";
+import type { Nhom } from "../../type/Nhom";
+import type { Quyen } from "../../type/Quyen";
 import { NhomApi } from "../../api/NhomApi";
 import { ComponentTitleStore } from "../../../page/component/componentTitleStore";
 import ComponentTree from "../../../page/component/componentTree";

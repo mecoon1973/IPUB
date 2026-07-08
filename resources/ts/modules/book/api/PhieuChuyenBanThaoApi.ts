@@ -1,5 +1,5 @@
-import type { PagiResult } from "../../page/type";
-import type { PhieuChuyenBanThao } from "../type";
+import { defaultPagiInfo, type PagiResult } from "../../page/type";
+import type { PhieuChuyenBanThao } from "../type/PhieuChuyenBanThao";
 
 export class PhieuChuyenBanThaoApi {
     static readonly conditionDefault : Partial<PhieuChuyenBanThao> = {
@@ -14,15 +14,7 @@ export class PhieuChuyenBanThaoApi {
             window._toastbox(err.responseJSON?.message || "Có lỗi xảy ra, vui lòng thử lại", "danger");
             return {
                 listResult: [],
-                pagiInfo: {
-                    pagi_number: [],
-                    last: 0,
-                    limit: 0,
-                    current_page: 0,
-                    total: 0,
-                    query: "",
-                    route: url,
-                },
+                pagiInfo: defaultPagiInfo,
             };
         }
     }

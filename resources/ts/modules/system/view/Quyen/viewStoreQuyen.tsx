@@ -6,7 +6,7 @@ import React, { useState } from "react";
 import { useCallback } from "react";
 import { Col, Form, Input, Row } from "antd";
 import { ComponentTitleStore } from "../../../page/component/componentTitleStore";
-import type { Quyen } from "../../type";
+import type { Quyen } from "../../type/Quyen";
 import { QuyenApi } from "../../api/QuyenApi";
 import { useGetQuyen } from "../../hooks/Quyen/useGetQuyen";
 import { ModalTree } from "../../../page/component/componentModalTree";

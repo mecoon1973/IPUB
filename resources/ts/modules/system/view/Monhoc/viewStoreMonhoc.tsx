@@ -6,7 +6,7 @@ import React, { useState } from "react";
 import { useCallback } from "react";
 import { Col, Form, Input, Row } from "antd";
 import { ComponentTitleStore } from "../../../page/component/componentTitleStore";
-import type { Monhoc } from "../../type";
+import type { Monhoc } from "../../type/MonHoc";
 import { MonhocApi } from "../../api/MonhocApi";
 import { LabelOpt, LabelReq } from "../../../page/component/componentLable";
 

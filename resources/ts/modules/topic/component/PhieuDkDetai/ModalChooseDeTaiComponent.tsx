@@ -5,9 +5,9 @@ import { ModalTree } from "../../../page/component/componentModalTree";
 import { Modal, Table } from "antd";
 import { Button, Input } from "antd";
 import SelectAntd from "../../../core/utils/SelectAntd";
-import type { PhieuDkDetai } from "../../type";
+import type { PhieuDkDetai } from "../../type/PhieuDkDetai";
 import type { ColumnsType } from "antd/es/table";
-import type { Mangsach } from "../../../system/type";
+import type { Mangsach } from "../../../system/type/MangSach";
 import { useDataViewStore } from "../../../system/store/useDataViewStore";
 
 const MODAL_CHON_DETAI_COLUMNS: ColumnsType<PhieuDkDetai> = [

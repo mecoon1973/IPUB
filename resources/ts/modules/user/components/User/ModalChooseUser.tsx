@@ -1,6 +1,7 @@
 import React, { useCallback, useState } from "react";
 import { Button, Flex, Input, Modal } from "antd";
-import type { DonVi, User } from "../../type";
+import type { DonVi } from "../../type/DonVi";
+import type { User } from "../../type/User";
 import { ModalTreeDonvi } from "../../../system/component/Donvi/ModalTreeDonvi";
 import { UserApi } from "../../api/UserApi";
 import { TableSelectUser } from "./TableSelectUser";

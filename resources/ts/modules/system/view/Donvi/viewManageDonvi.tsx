@@ -3,7 +3,7 @@ import { mountReactComponentOnReady } from "../../../core/utils/helpers";
 import FilterDonvi from "../../component/Donvi/filterDonvi";
 import { useManageDonviStore } from "../../store/Donvi/manageDonviStore";
 import { DonviApi } from "../../api/DonviApi";
-import type { DonVi } from "../../../user/type";
+import type { DonVi } from "../../../user/type/DonVi";
 import TreeDonvi from "../../component/Donvi/TreeDonvi";
 import { Col, Row } from "antd";
 import { useSearchTextDonvi } from "../../hooks/Donvi/useSearchTextDonvi";

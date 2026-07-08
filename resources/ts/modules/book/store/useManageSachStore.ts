@@ -1,5 +1,5 @@
 import { create } from "zustand";
-import type { FilterSach, Sach } from "../type";
+import type { FilterSach, Sach } from "../type/Sach";
 import { defaultPagiInfo, type PagiInfo } from "../../page/type";
 
 export interface ManageSachState {

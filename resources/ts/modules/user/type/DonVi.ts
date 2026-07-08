@@ -1,0 +1,35 @@
+export interface DonVi {
+    id: number;
+    ParentID: number;
+    ThuTu: number;
+    MaDonVi: string;
+    TenDonVi: string;
+    DiaChi: string;
+    Website: string;
+    Email: string;
+    SoDienThoai: string;
+    SoFax: string;
+    NhaIn: boolean;
+    DauThau: boolean;
+    BienTap: boolean;
+    LienKet: boolean;
+    NoiBo: boolean;
+    MST: string;
+    SoTaiKhoan: string;
+    TaiNganHang: string;
+    MaSoPhu: string;
+    ID_Childs: string;
+    Active: boolean;
+    InUsed: boolean;
+    IsDeleted: boolean;
+    DaGui: boolean;
+    KhoaGuiNhan: string;
+    TinhThanh: string;
+    MaTinh: string;
+    LicenseKey: string;
+    NgayTTPQLXB: Date;
+    IsCreateQDXB: boolean;
+    KiHieuMoi: string;
+    KiHieuTaiBan: string;
+    KiHieuPhu: string;
+}

@@ -1,6 +1,7 @@
 import { mountReactComponentOnReady, readRootDataProps } from "../../../core/utils/helpers";
 import React, { useCallback, useState } from "react";
-import type { DonVi, User } from "../../../user/type";
+import type { DonVi } from "../../../user/type/DonVi";
+import type { User } from "../../../user/type/User";
 import { Col, Input, Row } from "antd";
 import { useGetDonVi } from "../../../system/hooks/Donvi/useGetDonVi";
 import { ModalTreeDonvi } from "../../../system/component/Donvi/ModalTreeDonvi";

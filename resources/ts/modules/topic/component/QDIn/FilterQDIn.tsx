@@ -2,7 +2,7 @@ import React, { useCallback, useState } from "react";
 import type { Dayjs } from "dayjs";
 import DatePickerAntd from "../../../core/utils/DatePicker";
 import { convertValueToDayjs } from "../../../core/utils/helpersDayjs";
-import type { QDInFilter } from "../../type";
+import type { QDInFilter } from "../../type/QDIn";
 
 const { RangePicker } = DatePickerAntd;
 

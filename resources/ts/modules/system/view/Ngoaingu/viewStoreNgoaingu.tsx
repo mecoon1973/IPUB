@@ -6,7 +6,7 @@ import React, { useState } from "react";
 import { useCallback } from "react";
 import { Col, Form, Input, InputNumber, Row } from "antd";
 import { ComponentTitleStore } from "../../../page/component/componentTitleStore";
-import type { Ngoaingu } from "../../type";
+import type { Ngoaingu } from "../../type/NgoaiNgu";
 import { LabelOpt, LabelReq } from "../../../page/component/componentLable";
 import { NgoainguApi } from "../../api/NgoainguApi";
 

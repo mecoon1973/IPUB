@@ -25,14 +25,9 @@ use Modules\System\Controller\LoaiXBPLCController;
 use Modules\System\Controller\MangsachCXBController;
 use Modules\System\Controller\NgoainguController;
 use Modules\System\Controller\SystemLogController;
+use Modules\System\Controller\TemplateExcelController;
 use ExportFile\phpWord\ExportWord;
 
-Route::get('/test', function () {
-    $html = '<figure class="table"><table style="border-width:0px;"><tbody><tr><td style="border-width:0px;"><p style="text-align:center;"><span style="font-size:14px;">BỘ GIÁO DỤC VÀ ĐÀO TẠO</span></p><p style="text-align:center;"><span style="font-size:14px;">NHÀ XUẤT BẢN GIÁO DỤC VIỆT NAM</span></p></td><td style="border-width:0px;"><p style="text-align:center;"><span style="font-size:14px;">CỘNG HÒA XÃ HỘI CHỦ NGHĨA VIỆT NAM</span></p><p style="text-align:center;"><span style="font-size:14px;">Độc lập - Tự do - Hạnh phúc</span></p></td></tr></tbody></table></figure><p style="text-align:center;">&nbsp;</p><p style="text-align:center;"><span style="font-size:14px;"><strong>TÌNH HÌNH THỰC HIỆN XUẤT BẢN</strong></span></p><p style="line-height:1;text-align:center;"><span style="font-size:12px;">Từ ngày 01/05/2026 đến ngày 29/05/2026</span></p><p style="line-height:1;text-align:center;">&nbsp;</p><p>&nbsp;</p><figure class="table"><table><tbody><tr><td><p style="text-align:center;"><span style="font-size:12px;"><strong>TT</strong></span></p></td><td><p style="text-align:center;"><span style="font-size:12px;"><strong>Mảng sách</strong></span></p></td><td><p style="text-align:center;"><span style="font-size:12px;"><strong>Đơn vị tính</strong></span></p></td><td><p style="text-align:center;"><span style="font-size:12px;"><strong>Mới</strong></span></p></td><td><p style="text-align:center;"><span style="font-size:12px;"><strong>Tái bản&nbsp;</strong></span></p></td><td><p style="text-align:center;"><span style="font-size:12px;"><strong>Tổng cộng</strong></span></p></td><td><p style="text-align:center;"><span style="font-size:12px;"><strong>Ghi chú</strong></span></p></td></tr><tr><td><p style="text-align:center;"><span style="font-size:12px;">(1)</span></p></td><td><p style="text-align:center;"><span style="font-size:12px;">(2)</span></p></td><td><p style="text-align:center;"><span style="font-size:12px;">(3)</span></p></td><td><p style="text-align:center;"><span style="font-size:12px;">(4)</span></p></td><td><p style="text-align:center;"><span style="font-size:12px;">(5)</span></p></td><td><p style="text-align:center;"><span style="font-size:12px;">(6)</span></p></td><td><p style="text-align:center;"><span style="font-size:12px;">(7)</span></p></td></tr><tr><td><p style="text-align:center;"><span style="font-size:12px;"><strong>1</strong></span></p></td><td colspan="6"><span style="font-size:12px;"><strong>SÁCH GIÁO KHOA</strong></span></td></tr><tr><td rowspan="2"><p style="text-align:center;"><span style="font-size:12px;">1</span></p></td><td rowspan="2"><span style="font-size:12px;">SGK Ô ĐẠI</span></td><td><span style="font-size:12px;">Số cuốn</span></td><td><span style="font-size:12px;">0</span></td><td><span style="font-size:12px;">0</span></td><td><span style="font-size:12px;">0</span></td><td><span style="font-size:12px;">0</span></td></tr><tr><td><span style="font-size:12px;">Số bản &nbsp;</span></td><td><span style="font-size:12px;">0</span></td><td><span style="font-size:12px;">0</span></td><td><span style="font-size:12px;">0</span></td><td><span style="font-size:12px;">0</span></td></tr><tr><td rowspan="2"><p style="text-align:center;"><span style="font-size:12px;">2</span></p></td><td rowspan="2"><span style="font-size:12px;">SÁCH BỔ TRỢ ĐỂ LÀM ĐĂNG KÝ</span></td><td><span style="font-size:12px;">Số cuốn</span></td><td><span style="font-size:12px;">0</span></td><td><span style="font-size:12px;">0</span></td><td><span style="font-size:12px;">0</span></td><td><span style="font-size:12px;">0</span></td></tr><tr><td><span style="font-size:12px;">Số bản&nbsp;</span></td><td><span style="font-size:12px;">0</span></td><td><span style="font-size:12px;">0</span></td><td><span style="font-size:12px;">0</span></td><td><span style="font-size:12px;">0</span></td></tr><tr><td rowspan="2"><p style="text-align:center;"><span style="font-size:12px;">3</span></p></td><td rowspan="2"><span style="font-size:12px;">SÁCH GIÁO VIÊN</span></td><td><span style="font-size:12px;">Số cuốn</span></td><td><span style="font-size:12px;">0</span></td><td><span style="font-size:12px;">0</span></td><td><span style="font-size:12px;">0</span></td><td><span style="font-size:12px;">0</span></td></tr><tr><td><span style="font-size:12px;">Số bản&nbsp;</span></td><td><span style="font-size:12px;">0</span></td><td><span style="font-size:12px;">0</span></td><td><span style="font-size:12px;">0</span></td><td><span style="font-size:12px;">0</span></td></tr><tr><td rowspan="2"><p style="text-align:center;"><span style="font-size:12px;">4</span></p></td><td rowspan="2"><span style="font-size:12px;">SÁCH BỔ TRỢ</span></td><td><span style="font-size:12px;">Số cuốn</span></td><td><span style="font-size:12px;">0</span></td><td><span style="font-size:12px;">0</span></td><td><span style="font-size:12px;">0</span></td><td><span style="font-size:12px;">0</span></td></tr><tr><td><span style="font-size:12px;">Số bản&nbsp;</span></td><td><span style="font-size:12px;">0</span></td><td><span style="font-size:12px;">0</span></td><td><span style="font-size:12px;">0</span></td><td><span style="font-size:12px;">0</span></td></tr><tr><td rowspan="2"><p style="text-align:center;"><span style="font-size:12px;">5</span></p></td><td rowspan="2"><span style="font-size:12px;">SÁCH BỔ TRỢ&nbsp;</span></td><td><span style="font-size:12px;">Số cuốn</span></td><td><span style="font-size:12px;">0</span></td><td><span style="font-size:12px;">0</span></td><td><span style="font-size:12px;">0</span></td><td><span style="font-size:12px;">0</span></td></tr><tr><td><span style="font-size:12px;">Số bản&nbsp;</span></td><td><span style="font-size:12px;">0</span></td><td><span style="font-size:12px;">0</span></td><td><span style="font-size:12px;">0</span></td><td><span style="font-size:12px;">0</span></td></tr></tbody></table></figure><p>&nbsp;</p>';
-    $filename = 'test-' . uniqid() . '.docx';
-    $path = (new ExportWord($html))->readHTML()->export($filename);
-    return response()->download($path);
-});
 Route::group(['middleware' => ['web', 'auth.custom']], function () {
 
     Route::group(['prefix' => 'api'], function () {
@@ -173,13 +168,26 @@ Route::group(['middleware' => ['web', 'auth.custom']], function () {
                 Route::post('/store', [LoaiXBPLCController::class, 'store'])->name('loaiXbpLc.store');
                 Route::delete('/delete/{id}', [LoaiXBPLCController::class, 'delete'])->name('loaiXbpLc.delete');
             });
+            Route::group(['prefix' => 'template-excel'], function () {
+                Route::get('/get-list', [TemplateExcelController::class, 'getList'])->name('templateExcel.get-list');
+                Route::get('/paginate/{page?}', [TemplateExcelController::class, 'getPaginate'])->name('templateExcel.get-paginate');
+                Route::post('/upload', [TemplateExcelController::class, 'uploadTemplate'])->name('templateExcel.upload');
+                Route::post('/store', [TemplateExcelController::class, 'store'])->name('templateExcel.store');
+                Route::delete('/delete/{id}', [TemplateExcelController::class, 'delete'])->name('templateExcel.delete');
+            });
         });
     });
 
 });
 
+
 Route::group(['middleware' => ['web', 'auth.custom']], function () {
     Route::group(['prefix' => 'he-thong'], function () {
+        Route::group(['prefix' => 'template-excel'], function () {
+            Route::get('/', [TemplateExcelController::class, 'viewManageTemplateExcel'])->name('templateExcel.manage');
+            Route::get('/cap-nhat/{id?}', [TemplateExcelController::class, 'viewStoreTemplateExcel'])->name('templateExcel.store');
+
+        });
         Route::group(['prefix' => 'don-vi'], function () {
             Route::get('/quan-ly', [DonviController::class, 'viewManageDonvi'])->name('donvi.manage');
             Route::get('/cap-nhat/{id?}', [DonviController::class, 'viewStoreDonvi'])->name('donvi.store');

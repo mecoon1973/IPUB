@@ -1,5 +1,5 @@
 import { Dropdown, Table, type MenuProps, type TableProps } from "antd";
-import type { QDIn } from "../../type";
+import type { QDIn } from "../../type/QDIn";
 import React from "react";
 import { formatDateToString } from "../../../core/utils/helpersDayjs";
 

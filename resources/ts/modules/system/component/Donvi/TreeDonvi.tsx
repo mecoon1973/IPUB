@@ -1,5 +1,5 @@
 import React, { useMemo, useState } from "react";
-import type { DonVi } from "../../../user/type";
+import type { DonVi } from "../../../user/type/DonVi";
 import ComponentTree from "../../../page/component/componentTree";
 
 interface TreeDonviProps {

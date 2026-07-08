@@ -1,6 +1,6 @@
 import React, { useCallback } from "react";
 import { Input } from "antd";
-import type { PhieuDkDetai } from "../../../type";
+import type { PhieuDkDetai } from "../../../type/PhieuDkDetai";
 
 /**
  * Các ô nhập tách file + `React.memo` để **chỉ nhánh ô đó** reconcile khi `value` đổi.

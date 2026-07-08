@@ -7,7 +7,7 @@ import { defaultPagiInfo, type PagiInfo } from "../../../page/type";
 import { ComponentPagination } from "../../../page/component/pagination";
 import { Button, Divider, Dropdown, Table } from "antd";
 import type { MenuProps, TableProps } from "antd";
-import type { Chucvu } from "../../type";
+import type { Chucvu } from "../../type/ChucVu";
 import { ChucvuApi } from "../../api/ChucvuApi";
 
 const TableChucvu = React.memo((props: { listChucvu: Chucvu[]; handleDeleteChucvu: (id: number) => void }) => {

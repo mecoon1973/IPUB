@@ -1,5 +1,5 @@
-import type { PagiInfo, PagiResult } from "../../page/type";
-import type { ToKhaiLuuChuyen } from "../type";
+import { defaultPagiInfo, type PagiResult } from "../../page/type";
+import type { ToKhaiLuuChuyen } from "../type/ToKhaiLuuChuyen";
 export class ToKhaiLuuChuyenApi {
 
     static async getPaginate(data: Partial<ToKhaiLuuChuyen>, page = 'page-1'): Promise<PagiResult<ToKhaiLuuChuyen>> {
@@ -11,15 +11,7 @@ export class ToKhaiLuuChuyenApi {
             window._toastbox(err.responseJSON?.message || "Có lỗi xảy ra, vui lòng thử lại", "danger");
             return {
                 listResult: [],
-                pagiInfo: {
-                    pagi_number: [],
-                    last: 0,
-                    limit: 0,
-                    current_page: 0,
-                    total: 0,
-                    query: "",
-                    route: url,
-                },
+                pagiInfo: defaultPagiInfo,
             };
         }
     }

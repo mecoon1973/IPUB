@@ -1,5 +1,5 @@
-import type { PagiInfo } from "../../page/type";
-import type { DSDocRaSoat, FilterDSDocRaSoat } from "../type";
+import { defaultPagiInfo, type PagiInfo } from "../../page/type";
+import type { DSDocRaSoat, FilterDSDocRaSoat } from "../type/DSDocRaSoat";
 export class DSDocRaSoatApi {
 
     static async getPaginate(data: Partial<DSDocRaSoat> | FilterDSDocRaSoat, page = 'page-1'): Promise<{listResult: DSDocRaSoat[], pagiInfo: PagiInfo}> {
@@ -11,15 +11,7 @@ export class DSDocRaSoatApi {
             window._toastbox(err.responseJSON?.message || "Có lỗi xảy ra, vui lòng thử lại", "danger");
             return {
                 listResult: [],
-                pagiInfo: {
-                    pagi_number: [],
-                    last: 0,
-                    limit: 0,
-                    current_page: 0,
-                    total: 0,
-                    query: "",
-                    route: url,
-                },
+                pagiInfo: defaultPagiInfo,
             };
         }
     }

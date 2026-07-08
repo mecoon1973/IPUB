@@ -3,7 +3,7 @@ import {
     readRootDataProps,
 } from "../../../core/utils/helpers";
 import React, { useCallback, useEffect, useMemo, useState } from "react";
-import type { Doituong } from "../../type";
+import type { Doituong } from "../../type/DoiTuong";
 import { defaultPagiInfo, type PagiInfo } from "../../../page/type";
 import { DoituongApi } from "../../api/DoituongApi";
 import { ComponentPagination } from "../../../page/component/pagination";

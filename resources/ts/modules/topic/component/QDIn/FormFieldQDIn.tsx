@@ -2,7 +2,7 @@ import React, { useCallback, useState } from "react";
 import { Col, Input, Row } from "antd";
 import DatePickerAntd from "../../../core/utils/DatePicker";
 import { convertValueToDayjs } from "../../../core/utils/helpersDayjs";
-import type { QDIn } from "../../type";
+import type { QDIn } from "../../type/QDIn";
 
 interface FormFieldProps {
     form: Partial<QDIn>;
