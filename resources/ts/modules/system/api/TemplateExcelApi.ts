@@ -48,6 +48,21 @@ export class TemplateExcelApi{
         }
     }
 
+    /** upload file template Excel — đặt tên file theo key để ghi đè khi cập nhật */
+    static async uploadTemplateFile(file: File, key: string): Promise<string | null> {
+        const url = "/api/system/template-excel/upload";
+        const formData = new FormData();
+        formData.append("file", file);
+        formData.append("key", key);
+        try {
+            const res = await window._apiUpload(url, formData);
+            return res?.path_file_template ?? null;
+        } catch (err: any) {
+            window._toastbox(err.responseJSON?.message || "Có lỗi xảy ra khi tải file lên, vui lòng thử lại", "danger");
+            return null;
+        }
+    }
+
     /** xóa Template Excel */
     static async delete(id: number) : Promise<boolean>{
         const url = `/api/system/template-excel/delete/${id}`;

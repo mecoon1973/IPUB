@@ -1,10 +1,10 @@
 <?php
 
-namespace Modules\Book\Repository;
+namespace Modules\Topic\Repository;
 
 use Core\Repository\IBaseRepository;
 
-use Modules\Book\Model\DM_PHIEU_CHUYEN_BAN_THAO;
+use Modules\Topic\Model\DM_PHIEU_CHUYEN_BAN_THAO;
 
 /**
  * @extends IBaseRepository<DM_PHIEU_CHUYEN_BAN_THAO>

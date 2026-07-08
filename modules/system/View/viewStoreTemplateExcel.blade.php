@@ -1,7 +1,7 @@
 @extends('page::layout')
 @php
     $pageProps = [
-        "TemplateExcel" => $TemplateExcel,
+        "templateExcel" => $TemplateExcel,
     ];
 @endphp
 

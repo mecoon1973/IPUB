@@ -1,5 +1,5 @@
 <?php
-namespace Modules\Book\Object;
+namespace Modules\Topic\Object;
 use Core\Object\BaseObject;
 /**
  *

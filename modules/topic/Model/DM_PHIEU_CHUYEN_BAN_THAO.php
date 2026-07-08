@@ -1,11 +1,16 @@
 <?php
 
-namespace Modules\Book\Model;
+namespace Modules\Topic\Model;
 
 use Core\Model\Model;
 use DateTime;
+use Modules\Book\Model\DM_SACH;
+use Modules\System\Model\DM_DONVI;
+use Modules\User\Model\User;
 
 /**
+ * Model DM_PHIEU_CHUYEN_BAN_THAO — Phiếu chuyển bản thảo
+ *
  * @property int $_id
  * @property string $BienTapVien
  * @property bool $CheBanCan
@@ -42,8 +47,8 @@ use DateTime;
  * @property string $MaDVIN
  * @property int $MauInBia
  * @property int $MauInRout
- * @property DateTime $NgayGiao
- * @property DateTime $NgayNhan
+ * @property DateTime|null $NgayGiao
+ * @property DateTime|null $NgayNhan
  * @property string $NguoiGiao
  * @property string $NguoiNhan
  * @property int $Rong
@@ -56,18 +61,25 @@ use DateTime;
  * @property int $SoTrangPhuBan
  * @property int $SoTrangRuotSach
  * @property string $TacGia
+ *
+ *
+ * @property DM_SACH|null $sach
+ * @property User|null $nguoiKy
+ * @property DM_DONVI|null $donvi
+ *
  */
 class DM_PHIEU_CHUYEN_BAN_THAO extends Model {
     protected $connection = "olm";
 
-    protected $table = "ipub_dm_phieu_chuyen_ban_thao";
-	public $timestamps = false;
+    protected $table = "ipub_phieu_chuyenbanthao_sx";
+    public $timestamps = false;
     protected $primaryKey = "_id";
 
     public $incrementing = true;
-	public $timestamps2 = true;
+    public $timestamps2 = true;
 
     protected $fillable = [
+        "_id",
         "BienTapVien",
         "CheBanCan",
         "CoAoBoc",
@@ -120,47 +132,74 @@ class DM_PHIEU_CHUYEN_BAN_THAO extends Model {
     ];
 
     protected $attributes = [
+        "_id" => 0,
+        "BienTapVien" => "",
+        "CheBanCan" => false,
+        "CoAoBoc" => false,
+        "CreatedBy" => 0,
+        "CreatedOn" => null,
+        "DaGui" => false,
+        "Dai" => 0,
+        "DiaChiCungCap" => "",
+        "DinhDangTep" => "",
+        "DungLuongTep" => "",
+        "EditedBy" => 0,
+        "EditedOn" => null,
+        "GhiChu" => "",
+        "ID_BTVNhan" => null,
+        "ID_DV" => null,
+        "ID_DeTai" => null,
+        "ID_LanhDaoKiBenGui" => null,
+        "ID_ListBienTapVien" => "",
+        "ID_MangSach" => null,
+        "ID_NguoiKy" => null,
+        "ID_PhieuChuyenGoc" => null,
+        "ID_Sach" => null,
+        "InUsed" => true,
+        "IsDeleted" => false,
+        "IsSachDienTu" => false,
+        "IsSubject" => false,
+        "KhoSach" => "",
+        "KhoaGuiNhan" => "",
+        "LanIn" => 1,
+        "LoaiBia" => false,
+        "LoaiPhieu" => false,
+        "Locked" => false,
+        "MaDVIN" => "",
+        "MauInBia" => 0,
+        "MauInRout" => 0,
+        "NgayGiao" => null,
+        "NgayNhan" => null,
+        "NguoiGiao" => "",
+        "NguoiNhan" => "",
+        "Rong" => 0,
+        "SoBo" => 0,
+        "SoBoBanThao" => 0,
+        "SoBoBiaMau" => 0,
+        "SoBoPhimBia" => 0,
+        "SoMauInBia" => null,
+        "SoTrang" => 0,
+        "SoTrangPhuBan" => 0,
+        "SoTrangRuotSach" => 0,
+        "TacGia" => "",
     ];
 
     protected $casts = [
-        "CheBanCan" => "boolean",
-        "CoAoBoc" => "boolean",
-        "CreatedBy" => "integer",
         "CreatedOn" => "datetime",
-        "DaGui" => "boolean",
-        "Dai" => "integer",
-        "EditedBy" => "integer",
         "EditedOn" => "datetime",
-        "ID_BTVNhan" => "integer",
-        "ID_DV" => "integer",
-        "ID_DeTai" => "integer",
-        "ID_LanhDaoKiBenGui" => "integer",
-        "ID_MangSach" => "integer",
-        "ID_NguoiKy" => "integer",
-        "ID_PhieuChuyenGoc" => "integer",
-        "ID_Sach" => "integer",
-        "InUsed" => "boolean",
-        "IsDeleted" => "boolean",
-        "IsSachDienTu" => "boolean",
-        "IsSubject" => "boolean",
-        "LanIn" => "integer",
-        "LoaiBia" => "boolean",
-        "LoaiPhieu" => "boolean",
-        "Locked" => "boolean",
-        "MauInBia" => "integer",
-        "MauInRout" => "integer",
         "NgayGiao" => "datetime",
         "NgayNhan" => "datetime",
-        "Rong" => "integer",
-        "SoBo" => "integer",
-        "SoBoBanThao" => "integer",
-        "SoBoBiaMau" => "integer",
-        "SoBoPhimBia" => "integer",
-        "SoMauInBia" => "integer",
-        "SoTrang" => "integer",
-        "SoTrangPhuBan" => "integer",
-        "SoTrangRuotSach" => "integer",
     ];
 
     protected $customCasts = [];
+
+    public function sach() {
+        return $this->belongsTo(DM_SACH::class, "ID_Sach");
+    }
+    public function nguoiKy() {
+        return $this->belongsTo(User::class, "ID_NguoiKy");
+    }
+    public function donvi() {
+        return $this->belongsTo(DM_DONVI::class, "ID_DV");
+    }
 }

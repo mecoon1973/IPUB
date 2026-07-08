@@ -1,27 +1,27 @@
 <?php
 
-namespace Modules\Book\Controller;
+namespace Modules\Topic\Controller;
 
 use App\Http\Controllers\Controller;
 use Exception;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\View\View;
-use Modules\Book\Request\FrmSearchPhieuChuyenBanThaoRequest;
-use Modules\Book\Request\FrmStorePhieuChuyenBanThaoRequest;
-use Modules\Book\Service\PhieuChuyenBanThaoService;
+use Modules\Topic\Request\FrmSearchPhieuChuyenBanThaoRequest;
+use Modules\Topic\Request\FrmStorePhieuChuyenBanThaoRequest;
+use Modules\Topic\Service\PhieuChuyenBanThaoService;
 
 class PhieuChuyenBanThaoController extends Controller {
 
     public function viewManagePhieuChuyenBanThao(Request $request): View {
-        return view("book::viewManagePhieuChuyenBanThao");
+        return view("topic::viewManagePhieuChuyenBanThao");
     }
 
     public function viewStorePhieuChuyenBanThao(Request $request, ?int $id = null): View {
         /** @var PhieuChuyenBanThaoService $PhieuChuyenBanThaoService */
         $PhieuChuyenBanThaoService = app(PhieuChuyenBanThaoService::class);
         $PhieuChuyenBanThao = $id ? $PhieuChuyenBanThaoService->findOne("no-cache",["id" => $id]) : null;
-        return view("book::viewStorePhieuChuyenBanThao", [
+        return view("topic::viewStorePhieuChuyenBanThao", [
             "PhieuChuyenBanThao" => $PhieuChuyenBanThao,
         ]);
     }

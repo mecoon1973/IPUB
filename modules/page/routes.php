@@ -20,4 +20,5 @@ Route::middleware(['web', 'auth.custom'])->group(function () {
         return view('page::home');
     });
     Route::get('/test', [ExportController::class, 'test']);
+    Route::get('/test-foreach', [ExportController::class, 'testForeach']);
 });

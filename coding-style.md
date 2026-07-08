@@ -6,9 +6,6 @@ in `AGENTS.md` and `docs/*.md`.
 ---
 
 # General
-
-- Use English for code names: files, classes, functions, variables, props,
-  stores, hooks, and constants.
 - Keep comments short and useful. Explain why, not what the next line already
   says.
 - Prefer readable code over clever code.
@@ -66,10 +63,12 @@ Frontend source is split into:
 
 - `resources/ts`: shared UI, hooks, utilities, types, constants, root helpers.
 - `resources/modules/<domain>`: feature-specific React/TypeScript code.
-- `tailwind`: OLM Tailwind tokens and component plugins.
+- `tailwind`: component plugins.
 
 Shared backend foundation:
 - `core`: OLM framework primitives shared across modules.
+Shared component:
+- `page/component`: Check if the component already exists; if it does, reuse it. If not, create a new one.
 
 Preferred feature shape:
 

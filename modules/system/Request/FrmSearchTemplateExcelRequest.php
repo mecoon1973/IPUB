@@ -8,6 +8,10 @@ use Modules\System\Object\FilterTemplateExcel;
 class FrmSearchTemplateExcelRequest extends FormRequest
 {
     protected $casts = [
+        'id' => 'int',
+        'key' => 'string',
+        'name' => 'string',
+        'path_file_template' => 'string',
     ];
 
     /**
@@ -27,11 +31,17 @@ class FrmSearchTemplateExcelRequest extends FormRequest
      */
     public function rules() {
         return [
+            'key' => 'sometimes|string',
+            'name' => 'sometimes|string',
+            'path_file_template' => 'sometimes|string',
         ];
     }
 
     public function messages() {
         return [
+            'key.string' => 'Key phải là chuỗi',
+            'name.string' => 'Tên phải là chuỗi',
+            'path_file_template.string' => 'Đường dẫn file template phải là chuỗi',
         ];
     }
 

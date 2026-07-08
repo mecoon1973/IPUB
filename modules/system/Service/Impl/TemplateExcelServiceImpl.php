@@ -10,9 +10,12 @@ use Core\Service\BaseService;
 use Exception;
 use Modules\System\Model\DM_TEMPLATE_EXCEL;
 use Modules\System\Object\FilterTemplateExcel;
+use Modules\System\Traits\ManagesPublicTemplateExcelFiles;
 
 class TemplateExcelServiceImpl extends BaseService implements TemplateExcelService
 {
+    use ManagesPublicTemplateExcelFiles;
+
     /** @var TemplateExcelRepository */
     protected $baseRepo;
 
@@ -39,10 +42,12 @@ class TemplateExcelServiceImpl extends BaseService implements TemplateExcelServi
     }
 
     public function store(array $data): DM_TEMPLATE_EXCEL {
+
         if(data_get($data, "id", 0) != 0) {
             /** @var DM_TEMPLATE_EXCEL $templateExcel */
             $templateExcel = $this->baseRepo->get($data["id"]);
             if($templateExcel) {
+                $this->cleanupObsoleteTemplateFilesOnUpdate($templateExcel, $data);
                 $templateExcel->update($data);
                 return $templateExcel;
             }

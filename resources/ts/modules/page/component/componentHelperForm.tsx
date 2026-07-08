@@ -11,7 +11,7 @@ export function FormSection({
     children: React.ReactNode;
 }) {
     return (
-        <section className="overflow-hidden rounded-lg border border-gray-200 bg-white shadow-sm">
+        <section className="overflow-hidden rounded-lg border border-gray-200 bg-white shadow-sm mb-2">
             <header className="border-b border-gray-200 bg-gray-50 px-4 py-2.5 text-[11px] font-semibold uppercase tracking-wider text-gray-500">
                 {title}
             </header>

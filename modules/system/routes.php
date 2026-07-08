@@ -170,7 +170,8 @@ Route::group(['middleware' => ['web', 'auth.custom']], function () {
             });
             Route::group(['prefix' => 'template-excel'], function () {
                 Route::get('/get-list', [TemplateExcelController::class, 'getList'])->name('templateExcel.get-list');
-                Route::get('/get-paginate/{page?}', [TemplateExcelController::class, 'getPaginate'])->name('templateExcel.get-paginate');
+                Route::get('/paginate/{page?}', [TemplateExcelController::class, 'getPaginate'])->name('templateExcel.get-paginate');
+                Route::post('/upload', [TemplateExcelController::class, 'uploadTemplate'])->name('templateExcel.upload');
                 Route::post('/store', [TemplateExcelController::class, 'store'])->name('templateExcel.store');
                 Route::delete('/delete/{id}', [TemplateExcelController::class, 'delete'])->name('templateExcel.delete');
             });

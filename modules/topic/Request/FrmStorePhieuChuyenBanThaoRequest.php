@@ -1,11 +1,11 @@
 <?php
-namespace Modules\Book\Request;
+namespace Modules\Topic\Request;
 
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Support\Facades\Auth;
-use Modules\Book\Object\FilterPhieuChuyenBanThao;
 
-class FrmSearchPhieuChuyenBanThaoRequest extends FormRequest
+class FrmStorePhieuChuyenBanThaoRequest extends FormRequest
+
 {
     protected $casts = [
     ];
@@ -30,6 +30,9 @@ class FrmSearchPhieuChuyenBanThaoRequest extends FormRequest
         ];
     }
 
+    /**
+     * @return array<string, string>
+     */
     public function messages() {
         return [
         ];
@@ -37,11 +40,13 @@ class FrmSearchPhieuChuyenBanThaoRequest extends FormRequest
 
     protected function prepareForValidation(): void
     {
+        // Một số cột trong DB có thể là số nhưng phía client gửi lên (hoặc server trả về) dạng number,
+        // trong khi rule đang yêu cầu string -> cần chuẩn hoá number/bool thành string.
         $normalized = [];
-        foreach ($this->casts as $field => $type) {
+         foreach ($this->casts as $field => $type) {
             if (!$this->has($field)) {
-                    continue;
-                }
+                continue;
+            }
             $normalized[$field] = core_normalize_type_value($type, $this->input($field));
         }
         if (!empty($normalized)) {
@@ -50,20 +55,12 @@ class FrmSearchPhieuChuyenBanThaoRequest extends FormRequest
     }
 
     /**
-     * Chuyển đổi dữ liệu đầu vào thành đối tượng FilterPhieuChuyenBanThao.
+     * Dữ liệu an toàn để ghi DB (chỉ field đã rule).
      *
-     * @return FilterPhieuChuyenBanThao
+     * @return array<string, mixed>
      */
-    public function toFilter() : FilterPhieuChuyenBanThao {
-        $validated = $this->validated();
-        $filter = new FilterPhieuChuyenBanThao();
-        foreach ($this->casts as $key => $type) {
-            if (!array_key_exists($key, $validated)) {
-                continue;
-            }
-            settype($validated[$key], $type);
-            $filter->{$key} = $validated[$key];
-        }
-        return $filter;
+    public function toPayload(): array
+    {
+        return $this->validated();
     }
 }

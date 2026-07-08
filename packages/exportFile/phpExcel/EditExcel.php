@@ -75,6 +75,44 @@ class EditExcel {
         return $spreadsheet;
     }
 
+    /**
+     * Thêm nội dung vào sheet
+     * @param array $mapPlaceholderValue
+     */
+    public function appendContentToSheet(array $mapPlaceholderValue): void
+    {
+        foreach($mapPlaceholderValue as $placeholder => $value){
+            $this->replacePlaceholderValue($this->sheet, $placeholder, $value);
+        }
+    }
+
+    /**
+     * Nhân bản hàng template (theo danh sách ô) và chèn các bản sao xuống phía dưới.
+     *
+     * Dùng cho map_foreach: hàng gốc giữ placeholder, các hàng bên dưới là bản sao
+     * để điền dữ liệu từng phần tử trong mảng.
+     *
+     * @param array $templateCellCoordinates Các ô trên cùng một hàng template, vd: ["A9", "B9", "C9"]
+     * @param int   $duplicateCount          Số hàng bản sao chèn thêm bên dưới (không tính hàng gốc).
+     *                                       Ví dụ mảng 10 phần tử → $duplicateCount = 9.
+     */
+    public function duplicateRowCellsBelow(array $templateCellCoordinates, int $duplicateCount): void
+    {
+        $resolvedCoordinates = $this->resolveColumnKeysToCoordinates($this->sheet, $templateCellCoordinates);
+        $this->performDuplicateRowCellsBelow($this->sheet, $resolvedCoordinates, $duplicateCount);
+    }
+
+    /**
+     * Ghi dữ liệu vào các hàng đã nhân bản từ template (map_foreach).
+     *
+     * @param array $columnKeys       Key từ map_foreach: ô "A9" hoặc placeholder "[!a!]"
+     * @param array $rowValuesMatrix  Mỗi phần tử là 1 hàng, thứ tự cột khớp $columnKeys
+     */
+    public function fillDuplicatedRowValues(array $columnKeys, array $rowValuesMatrix): void
+    {
+        $this->performFillDuplicatedRowValues($this->sheet, $columnKeys, $rowValuesMatrix);
+    }
+
     public function save(string $path): void
     {
         $writer = IOFactory::createWriter($this->spreadsheet, 'Xlsx');
