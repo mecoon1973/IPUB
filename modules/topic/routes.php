@@ -4,6 +4,7 @@ use Illuminate\Support\Facades\Route;
 use Modules\Topic\Controller\DetaiCongDoanController;
 use Modules\Topic\Controller\HDXBNXBGDVNController;
 use Modules\Topic\Controller\PhieuDkDetaiController;
+use Modules\Topic\Controller\PhieuDkKhxbCxbController;
 use Modules\Topic\Controller\QDInController;
 
 Route::group(['middleware' => ['web', 'auth.custom']], function () {
@@ -39,6 +40,14 @@ Route::group(['middleware' => ['web', 'auth.custom']], function () {
                 Route::get('/xet-duyet/list', [HDXBNXBGDVNController::class, 'getListXetDuyet'])->name('hdxb-nxbgdvn.xet-duyet.list');
                 Route::post('/xet-duyet', [HDXBNXBGDVNController::class, 'luuXetDuyetDeTai'])->name('hdxb-nxbgdvn.xet-duyet');
             });
+            Route::group(['prefix' => 'phieu-dk-khxb-cxb'], function () {
+                Route::get('/paginate/{page?}', [PhieuDkKhxbCxbController::class, 'getPaginate'])->name('phieu-dk-khxb-cxb.paginate')->where('page', regexRoute("page"));
+                Route::get('/list', [PhieuDkKhxbCxbController::class, 'getList'])->name('phieu-dk-khxb-cxb.list');
+                Route::get('/ma-so/preview', [PhieuDkKhxbCxbController::class, 'previewMaSo'])->name('phieu-dk-khxb-cxb.ma-so.preview');
+                Route::get('/cap-ma-cxb/preview', [PhieuDkKhxbCxbController::class, 'previewMaSoCxb'])->name('phieu-dk-khxb-cxb.cap-ma-cxb.preview');
+                Route::post('/cap-ma-cxb', [PhieuDkKhxbCxbController::class, 'capMaSoCxb'])->name('phieu-dk-khxb-cxb.cap-ma-cxb');
+                Route::post('/store', [PhieuDkKhxbCxbController::class, 'store'])->name('phieu-dk-khxb-cxb.store');
+            });
         });
     });
 
@@ -57,5 +66,9 @@ Route::group(['middleware' => ['web', 'auth.custom']], function () {
     });
     Route::group(['prefix' => 'hdxb-nxbgdvn'], function () {
         Route::get('/quan-ly', [HDXBNXBGDVNController::class, 'viewManageHDXBNXBGDVN'])->name('hdxb-nxbgdvn.manage');
+    });
+    Route::group(['prefix' => 'phieu-dk-khxb-cxb'], function () {
+        Route::get('/quan-ly', [PhieuDkKhxbCxbController::class, 'viewManagePhieuDkKhxbCxb'])->name('phieu-dk-khxb-cxb.manage');
+        Route::get('/cap-nhat/{id?}', [PhieuDkKhxbCxbController::class, 'viewStorePhieuDkKhxbCxb'])->name('phieu-dk-khxb-cxb.store');
     });
 });

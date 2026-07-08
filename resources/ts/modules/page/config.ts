@@ -35,7 +35,7 @@ export const dashboard: NodeDashboard[] = [
                         type: "link",
                         routes: "/hdxb-nxbgdvn/quan-ly",
                     },
-                    { title: "2.1.4 Cục xuất bản", type: "link", routes: "" },
+                    { title: "2.1.4 Cục xuất bản", type: "link", routes: "/phieu-dk-khxb-cxb/quan-ly" },
                     {
                         title: "2.1.5 Phiếu trình CXB tăng số lượng",
                         type: "link",

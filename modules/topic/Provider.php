@@ -27,6 +27,12 @@ use Modules\Topic\Service\NX_CanboDetaiService;
 use Modules\Topic\Service\QDInService;
 use Modules\Topic\Service\HDXBNXBGDVNService;
 use Modules\Topic\Service\Impl\HDXBNXBGDVNServiceImpl;
+use Modules\Topic\Repository\PhieuDkKhxbCxbRepository;
+use Modules\Topic\Repository\Impl\PhieuDkKhxbCxbRepositoryImpl;
+use Modules\Topic\Repository\CT_PhieuDkKhxbCxbRepository;
+use Modules\Topic\Repository\Impl\CT_PhieuDkKhxbCxbRepositoryImpl;
+use Modules\Topic\Service\PhieuDkKhxbCxbService;
+use Modules\Topic\Service\Impl\PhieuDkKhxbCxbServiceImpl;
 
 class Provider extends ServiceProvider {
     /**
@@ -58,6 +64,9 @@ class Provider extends ServiceProvider {
         $this->app->bind(HDXBNXBGDVNRepository::class, HDXBNXBGDVNRepositoryImpl::class);
         $this->app->bind(NX_CanboDetaiService::class, NX_CanboDetaiServiceImpl::class);
         $this->app->bind(NX_CanboDetaiRepository::class, NX_CanboDetaiRepositoryImpl::class);
+        $this->app->bind(PhieuDkKhxbCxbService::class, PhieuDkKhxbCxbServiceImpl::class);
+        $this->app->bind(PhieuDkKhxbCxbRepository::class, PhieuDkKhxbCxbRepositoryImpl::class);
+        $this->app->bind(CT_PhieuDkKhxbCxbRepository::class, CT_PhieuDkKhxbCxbRepositoryImpl::class);
         // Gate::define('update-user', 'Modules\User\Policy\UserPolicy@isPermission');
 
     }

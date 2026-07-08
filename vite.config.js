@@ -101,6 +101,9 @@ export default defineConfig({
 
                 'resources/ts/modules/topic/view/HDXBNXBGDVN/viewManageHDXBNXBGDVN.tsx',
 
+                'resources/ts/modules/topic/view/PhieuDkKhxbCxb/viewManagePhieuDkKhxbCxb.tsx',
+                'resources/ts/modules/topic/view/PhieuDkKhxbCxb/viewStorePhieuDkKhxbCxb.tsx',
+
                 'resources/ts/modules/legalDeposit/view/PhieuNhapLC/viewManagePhieuNhapLC.tsx',
                 'resources/ts/modules/legalDeposit/view/PhieuNhapLC/viewStorePhieuNhapLC.tsx',
                 'resources/ts/modules/legalDeposit/view/PhieuNhapLC/viewManageTokhaiLuuChuyen.tsx',
