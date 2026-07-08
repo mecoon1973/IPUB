@@ -303,4 +303,61 @@ export interface FilterXetDuyetHDXBNXBGDVN {
     ids?: number[];
 }
 
+// Phiếu đăng ký kế hoạch xuất bản — Cục xuất bản
+export interface PhieuDkKhxbCxb {
+    id: number;
+    MaSo: string;
+    TieuDe: string;
+    NoiDung: string;
+    NoiNhan2: string;
+    PhanDauMaSo: string;
+    SoCvNXBGD: string;
+    SoGiayPhep: string;
+    NgayDK: Date;
+    NgayCapPhep: Date;
+    ID_NguoiKi: number | null;
+    KiThay: boolean;
+    DaGui: boolean;
+    InUsed: boolean;
+    IsDeleted: boolean;
+    KhoaGuiNhan: string;
+    CreatedBy: number;
+    CreatedOn: Date;
+    EditedBy: number;
+    EditedOn: Date;
+}
+
+export interface FilterPhieuDkKhxbCxb {
+    TuKhoa?: string;
+    startDate?: Date | null;
+    endDate?: Date | null;
+}
+
+export const defaultFilterPhieuDkKhxbCxb: FilterPhieuDkKhxbCxb = {
+    TuKhoa: "",
+    startDate: null,
+    endDate: null,
+};
+
+export interface StorePhieuDkKhxbCxbPayload {
+    id?: number;
+    MaSo?: string;
+    TieuDe: string;
+    NoiDung: string;
+    NoiNhan2?: string;
+    NgayDK?: Date | null;
+    ID_NguoiKi?: number | null;
+    KiThay?: boolean;
+    listIdDeTai?: number[];
+}
+
+export interface CapMaSoCxbPayload {
+    idPhieu: number;
+    SoCvCxb: string;
+    SoCvNxbgd: string;
+    NgayCap?: Date | null;
+    NamCap?: string;
+    MaSoCxb: string;
+}
+
 //
