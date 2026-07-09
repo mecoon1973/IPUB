@@ -303,6 +303,46 @@ export interface FilterXetDuyetHDXBNXBGDVN {
     ids?: number[];
 }
 
+export interface PheDuyetDiInRow {
+    id: number;
+    ID_DeTai: number;
+    MaSo: string;
+    TenSach: string;
+    NamTaiBan?: string;
+    NamXuatBan?: string;
+    TenDonVi?: string;
+    TrangThaiDocBanThao?: number;
+    YKienDocBanThao?: string;
+    XetDuyetBanThao?: boolean;
+    DaPheDuyetDiIn: boolean;
+    TenTrangThai?: string;
+}
+
+export interface FilterPheDuyetDiIn {
+    TenSach?: string;
+    MaSo?: string;
+    NamXBTB?: string;
+    ID_DonVi?: number;
+    LocTheo?: number;
+    TrangThai?: number;
+    idsDeTai?: number[];
+}
+
+export const defaultFilterPheDuyetDiIn: FilterPheDuyetDiIn = {
+    TenSach: "",
+    MaSo: "",
+    NamXBTB: "",
+    ID_DonVi: 0,
+    LocTheo: -1,
+    TrangThai: -1,
+};
+
+export interface PheDuyetDiInLuuItem {
+    id: number;
+    YKienDocBanThao: string;
+    XetDuyetBanThao: boolean;
+}
+
 // Phiếu đăng ký kế hoạch xuất bản — Cục xuất bản
 export interface PhieuDkKhxbCxb {
     id: number;
@@ -358,6 +398,21 @@ export interface CapMaSoCxbPayload {
     NgayCap?: Date | null;
     NamCap?: string;
     MaSoCxb: string;
+}
+
+export interface CapMaIsbnItem {
+    id: number;
+    ISBNCode: string;
+}
+
+export interface CapMaIsbnPayload {
+    idPhieu: number;
+    listIsbn: CapMaIsbnItem[];
+}
+
+export interface KetChuyenThanhSachPayload {
+    idPhieu: number;
+    listIdDeTai: number[];
 }
 
 //

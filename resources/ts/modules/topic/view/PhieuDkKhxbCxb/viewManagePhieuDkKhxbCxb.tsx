@@ -7,6 +7,7 @@ import { PhieuDkKhxbCxbApi } from "../../api/PhieuDkKhxbCxbApi";
 import { FilterPhieuDkKhxbCxbComponent } from "../../component/PhieuDkKhxbCxb/FilterPhieuDkKhxbCxb";
 import { TablePhieuDkKhxbCxbComponent } from "../../component/PhieuDkKhxbCxb/TablePhieuDkKhxbCxb";
 import { ModalCapMaSoCxb } from "../../component/PhieuDkKhxbCxb/ModalCapMaSoCxb";
+import { ModalKetChuyenThanhSach } from "../../component/PhieuDkKhxbCxb/ModalKetChuyenThanhSach";
 import { useManagePhieuDkKhxbCxbStore } from "../../store/PhieuDkKhxbCxb/managePhieuDkKhxbCxbStore";
 import type { FilterPhieuDkKhxbCxb, PhieuDkKhxbCxb } from "../../type";
 
@@ -45,6 +46,7 @@ export const ViewManagePhieuDkKhxbCxb = React.memo((props: ViewManagePhieuDkKhxb
             <TablePhieuDkKhxbCxbComponent listUsers={listUsers} />
             <ComponentPagination pagiInfo={pagiInfo} callBack={getListPhieuDkKhxbCxb} />
             <ModalCapMaSoCxb onSuccess={() => getListPhieuDkKhxbCxb()} />
+            <ModalKetChuyenThanhSach onSuccess={() => getListPhieuDkKhxbCxb()} />
         </div>
     );
 });

@@ -102,7 +102,9 @@ function TableHDXBNXBGDVNComponent() {
                         {
                             key: "pheDuyetDiIn",
                             label: "Phê duyệt đi in",
-                            onClick: () => openRowModal("pheDuyetDiIn", record),
+                            onClick: () => {
+                                window.location.href = `/hdxb-nxbgdvn/phe-duyet-di-in?idsDeTai=${record.id}`;
+                            },
                         },
                         { type: "divider" },
                         {

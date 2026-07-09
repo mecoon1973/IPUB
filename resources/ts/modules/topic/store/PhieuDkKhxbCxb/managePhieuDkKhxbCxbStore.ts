@@ -10,6 +10,8 @@ export interface ManagePhieuDkKhxbCxbState {
     isLoadingSearch: boolean;
     showModalCapMaCxb: boolean;
     phieuCapMaCxbContext: PhieuDkKhxbCxb | null;
+    showModalKetChuyen: boolean;
+    phieuKetChuyenContext: PhieuDkKhxbCxb | null;
 }
 
 interface ManagePhieuDkKhxbCxbActions {
@@ -24,6 +26,8 @@ interface ManagePhieuDkKhxbCxbActions {
     resetFilter: () => void;
     openModalCapMaCxb: (phieu: PhieuDkKhxbCxb) => void;
     setShowModalCapMaCxb: (show: boolean) => void;
+    openModalKetChuyen: (phieu: PhieuDkKhxbCxb) => void;
+    setShowModalKetChuyen: (show: boolean) => void;
 }
 
 export type ManagePhieuDkKhxbCxbStore = ManagePhieuDkKhxbCxbState & ManagePhieuDkKhxbCxbActions;
@@ -41,6 +45,8 @@ export const useManagePhieuDkKhxbCxbStore = create<ManagePhieuDkKhxbCxbStore>((s
     isLoadingSearch: false,
     showModalCapMaCxb: false,
     phieuCapMaCxbContext: null,
+    showModalKetChuyen: false,
+    phieuKetChuyenContext: null,
 
     setListPhieuDkKhxbCxb: (listPhieuDkKhxbCxb) => set((state) => ({
         listPhieuDkKhxbCxb: typeof listPhieuDkKhxbCxb === "function"
@@ -61,4 +67,8 @@ export const useManagePhieuDkKhxbCxbStore = create<ManagePhieuDkKhxbCxbStore>((s
     openModalCapMaCxb: (phieu) => set({ showModalCapMaCxb: true, phieuCapMaCxbContext: phieu }),
 
     setShowModalCapMaCxb: (showModalCapMaCxb) => set({ showModalCapMaCxb }),
+
+    openModalKetChuyen: (phieu) => set({ showModalKetChuyen: true, phieuKetChuyenContext: phieu }),
+
+    setShowModalKetChuyen: (showModalKetChuyen) => set({ showModalKetChuyen }),
 }));

@@ -12,6 +12,7 @@ interface TablePhieuDkKhxbCxbProps {
 export const TablePhieuDkKhxbCxbComponent = React.memo(({ listUsers }: TablePhieuDkKhxbCxbProps) => {
     const listPhieuDkKhxbCxb = useManagePhieuDkKhxbCxbStore((state) => state.listPhieuDkKhxbCxb);
     const openModalCapMaCxb = useManagePhieuDkKhxbCxbStore((state) => state.openModalCapMaCxb);
+    const openModalKetChuyen = useManagePhieuDkKhxbCxbStore((state) => state.openModalKetChuyen);
 
     const mapUserName = useMemo(() => {
         const map = new Map<number, string>();
@@ -71,9 +72,12 @@ export const TablePhieuDkKhxbCxbComponent = React.memo(({ listUsers }: TablePhie
             render: (_, record) => {
                 const items: MenuProps["items"] = [
                     { key: "masocxb", label: "Cấp mã số CXB", onClick: () => openModalCapMaCxb(record) },
+                    { key: "maISBN", label: <a href={`/phieu-dk-khxb-cxb/cap-ma-isbn/${record.id}`}>Cấp mã ISBN</a> },
                     { key: "detail", label: "Xem chi tiết", onClick: () => {} },
                     { key: "edit", label: <a href={`/phieu-dk-khxb-cxb/cap-nhat/${record.id}`}>Chỉnh sửa</a> },
                     { key: "print", label: "In phiếu", onClick: () => {} },
+                    { key: "xetduyet", label: "Xét duyệt", onClick: () => {} },
+                    { key: "ketchuuyendetai", label: "Kết chuyển đề tài", onClick: () => openModalKetChuyen(record) },
                 ];
                 return (
                     <Dropdown menu={{ items }} trigger={["click"]}>

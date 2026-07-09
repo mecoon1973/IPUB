@@ -6,8 +6,7 @@ export type HDXBNXBGDVNModalKey =
     | "phanCongDocDuyet"
     | "docDuyet"
     | "inPhieuTrinh"
-    | "xetDuyetDeTai"
-    | "pheDuyetDiIn";
+    | "xetDuyetDeTai";
 
 export interface ManageHDXBNXBGDVNState {
     listHDXBNXBGD: HDXBNXBGDVN[];

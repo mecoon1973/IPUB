@@ -37,3 +37,49 @@ export const NX_CANBO_DETAI_DUYET_OPTIONS = [
     { value: NX_CANBO_DETAI_DUYET.DUYET, label: "Duyệt" },
     { value: NX_CANBO_DETAI_DUYET.TRA_LAI, label: "Trả lại" },
 ] as const;
+
+/** Trạng thái đọc duyệt bản thảo — ipub_dm_sach.TrangThaiDocBanThao */
+export const TRANG_THAI_DOC_BAN_THAO = {
+    CHUA_DOC_DUYET: 0,
+    DANG_DOC_DUYET: 1,
+    DA_DOC_DUYET: 2,
+} as const;
+
+/** Kết luận trên modal phê duyệt đi in — map tới XetDuyetBanThao */
+export const PHE_DUYET_DI_IN_KET_LUAN_OPTIONS = [
+    { value: 0, label: "Chưa duyệt" },
+    { value: 1, label: "Duyệt" },
+] as const;
+
+export const PHE_DUYET_DI_IN_TRANG_THAI_OPTIONS = [
+    { value: -1, label: "Tất cả" },
+    { value: TRANG_THAI_DOC_BAN_THAO.CHUA_DOC_DUYET, label: "Chưa đọc duyệt" },
+    { value: TRANG_THAI_DOC_BAN_THAO.DA_DOC_DUYET, label: "Đã đọc duyệt" },
+    { value: TRANG_THAI_DOC_BAN_THAO.DANG_DOC_DUYET, label: "Đang đọc duyệt" },
+] as const;
+
+/** Lọc theo phân công đọc duyệt */
+export const PHE_DUYET_DI_IN_LOC_THEO_OPTIONS = [
+    { value: -1, label: "Tất cả" },
+    { value: 1, label: "Được phân công" },
+] as const;
+
+const TRANG_THAI_DOC_BAN_THAO_LABEL: Record<number, string> = {
+    [TRANG_THAI_DOC_BAN_THAO.CHUA_DOC_DUYET]: "Chưa đọc duyệt",
+    [TRANG_THAI_DOC_BAN_THAO.DANG_DOC_DUYET]: "Đang đọc duyệt",
+    [TRANG_THAI_DOC_BAN_THAO.DA_DOC_DUYET]: "Đã đọc duyệt",
+};
+
+export function getTrangThaiDocBanThaoLabel(trangThai: number, tenTrangThai?: string): string {
+    if (tenTrangThai) {
+        return tenTrangThai;
+    }
+    return TRANG_THAI_DOC_BAN_THAO_LABEL[trangThai] ?? String(trangThai);
+}
+
+export function getPheDuyetDiInTrangThaiLabel(daPheDuyet: boolean, tenTrangThai?: string): string {
+    if (tenTrangThai) {
+        return tenTrangThai;
+    }
+    return daPheDuyet ? "Đã phê duyệt đi in" : "Chưa phê duyệt đi in";
+}
