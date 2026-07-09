@@ -4,6 +4,7 @@ use Illuminate\Support\Facades\Route;
 use Modules\Topic\Controller\DetaiCongDoanController;
 use Modules\Topic\Controller\HDXBNXBGDVNController;
 use Modules\Topic\Controller\PhieuDkDetaiController;
+use Modules\Topic\Controller\PhieuChuyenBanThaoController;
 use Modules\Topic\Controller\PhieuDkKhxbCxbController;
 use Modules\Topic\Controller\QDInController;
 
@@ -39,14 +40,25 @@ Route::group(['middleware' => ['web', 'auth.custom']], function () {
                 Route::post('/phan-cong-doc-duyet', [HDXBNXBGDVNController::class, 'phanCongDocDuyet'])->name('hdxb-nxbgdvn.phan-cong-doc-duyet');
                 Route::get('/xet-duyet/list', [HDXBNXBGDVNController::class, 'getListXetDuyet'])->name('hdxb-nxbgdvn.xet-duyet.list');
                 Route::post('/xet-duyet', [HDXBNXBGDVNController::class, 'luuXetDuyetDeTai'])->name('hdxb-nxbgdvn.xet-duyet');
+                Route::get('/phe-duyet-di-in/paginate/{page?}', [HDXBNXBGDVNController::class, 'getPaginatePheDuyetDiIn'])->name('hdxb-nxbgdvn.phe-duyet-di-in.paginate')->where('page', regexRoute("page"));
+                Route::post('/phe-duyet-di-in', [HDXBNXBGDVNController::class, 'luuPheDuyetDiIn'])->name('hdxb-nxbgdvn.phe-duyet-di-in');
             });
             Route::group(['prefix' => 'phieu-dk-khxb-cxb'], function () {
                 Route::get('/paginate/{page?}', [PhieuDkKhxbCxbController::class, 'getPaginate'])->name('phieu-dk-khxb-cxb.paginate')->where('page', regexRoute("page"));
                 Route::get('/list', [PhieuDkKhxbCxbController::class, 'getList'])->name('phieu-dk-khxb-cxb.list');
+                Route::get('/detail/{id}', [PhieuDkKhxbCxbController::class, 'getDetail'])->name('phieu-dk-khxb-cxb.detail')->where('id', '[0-9]+');
                 Route::get('/ma-so/preview', [PhieuDkKhxbCxbController::class, 'previewMaSo'])->name('phieu-dk-khxb-cxb.ma-so.preview');
                 Route::get('/cap-ma-cxb/preview', [PhieuDkKhxbCxbController::class, 'previewMaSoCxb'])->name('phieu-dk-khxb-cxb.cap-ma-cxb.preview');
                 Route::post('/cap-ma-cxb', [PhieuDkKhxbCxbController::class, 'capMaSoCxb'])->name('phieu-dk-khxb-cxb.cap-ma-cxb');
+                Route::post('/cap-ma-isbn', [PhieuDkKhxbCxbController::class, 'capMaIsbn'])->name('phieu-dk-khxb-cxb.cap-ma-isbn');
+                Route::post('/ket-chuyen-thanh-sach', [PhieuDkKhxbCxbController::class, 'ketChuyenThanhSach'])->name('phieu-dk-khxb-cxb.ket-chuyen-thanh-sach');
                 Route::post('/store', [PhieuDkKhxbCxbController::class, 'store'])->name('phieu-dk-khxb-cxb.store');
+            });
+            Route::group(['prefix' => 'phieu-chuyen-ban-thao'], function () {
+                Route::get('/paginate/{page?}', [PhieuChuyenBanThaoController::class, 'getPaginate'])->name('phieu-chuyen-ban-thao.paginate')->where('page', regexRoute("page"));
+                Route::get('/list', [PhieuChuyenBanThaoController::class, 'getList'])->name('phieu-chuyen-ban-thao.list');
+                Route::post('/store', [PhieuChuyenBanThaoController::class, 'store'])->name('phieu-chuyen-ban-thao.store');
+                Route::delete('/delete/{id}', [PhieuChuyenBanThaoController::class, 'delete'])->name('phieu-chuyen-ban-thao.delete');
             });
         });
     });
@@ -66,9 +78,15 @@ Route::group(['middleware' => ['web', 'auth.custom']], function () {
     });
     Route::group(['prefix' => 'hdxb-nxbgdvn'], function () {
         Route::get('/quan-ly', [HDXBNXBGDVNController::class, 'viewManageHDXBNXBGDVN'])->name('hdxb-nxbgdvn.manage');
+        Route::get('/phe-duyet-di-in', [HDXBNXBGDVNController::class, 'viewPheDuyetDiIn'])->name('hdxb-nxbgdvn.phe-duyet-di-in');
     });
     Route::group(['prefix' => 'phieu-dk-khxb-cxb'], function () {
         Route::get('/quan-ly', [PhieuDkKhxbCxbController::class, 'viewManagePhieuDkKhxbCxb'])->name('phieu-dk-khxb-cxb.manage');
         Route::get('/cap-nhat/{id?}', [PhieuDkKhxbCxbController::class, 'viewStorePhieuDkKhxbCxb'])->name('phieu-dk-khxb-cxb.store');
+        Route::get('/cap-ma-isbn/{id}', [PhieuDkKhxbCxbController::class, 'viewCapMaIsbnPhieuDkKhxbCxb'])->name('phieu-dk-khxb-cxb.cap-ma-isbn')->where('id', '[0-9]+');
+    });
+    Route::group(['prefix' => 'phieu-chuyen-ban-thao'], function () {
+        Route::get('/quan-ly', [PhieuChuyenBanThaoController::class, 'viewManagePhieuChuyenBanThao'])->name('phieu-chuyen-ban-thao.manage');
+        Route::get('/cap-nhat/{id?}', [PhieuChuyenBanThaoController::class, 'viewStorePhieuChuyenBanThao'])->name('phieu-chuyen-ban-thao.store');
     });
 });

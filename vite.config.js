@@ -102,9 +102,13 @@ export default defineConfig({
                 'resources/ts/modules/topic/view/PhieuDkDetai/viewChuyenKeHoachPhieuDkDetai.tsx',
 
                 'resources/ts/modules/topic/view/HDXBNXBGDVN/viewManageHDXBNXBGDVN.tsx',
+                'resources/ts/modules/topic/view/HDXBNXBGDVN/viewPheDuyetDiInHDXBNXBGDVN.tsx',
 
                 'resources/ts/modules/topic/view/PhieuDkKhxbCxb/viewManagePhieuDkKhxbCxb.tsx',
                 'resources/ts/modules/topic/view/PhieuDkKhxbCxb/viewStorePhieuDkKhxbCxb.tsx',
+                'resources/ts/modules/topic/view/PhieuDkKhxbCxb/viewCapMaIsbnPhieuDkKhxbCxb.tsx',
+                'resources/ts/modules/topic/view/PhieuChuyenBanThao/viewStorePhieuChuyenBanThao.tsx',
+                'resources/ts/modules/topic/view/PhieuChuyenBanThao/viewManagePhieuChuyenBanThao.tsx',
 
                 'resources/ts/modules/legalDeposit/view/PhieuNhapLC/viewManagePhieuNhapLC.tsx',
                 'resources/ts/modules/legalDeposit/view/PhieuNhapLC/viewStorePhieuNhapLC.tsx',

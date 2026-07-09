@@ -9,7 +9,9 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\View\View;
 use Modules\System\Traits\TraitsGetData;
+use Modules\Topic\Request\FrmCapMaIsbnRequest;
 use Modules\Topic\Request\FrmCapMaSoCxbRequest;
+use Modules\Topic\Request\FrmKetChuyenThanhSachRequest;
 use Modules\Topic\Request\FrmSearchPhieuDkKhxbCxbRequest;
 use Modules\Topic\Request\FrmStorePhieuDkKhxbCxbRequest;
 use Modules\Topic\Service\PhieuDkKhxbCxbService;
@@ -50,6 +52,24 @@ class PhieuDkKhxbCxbController extends Controller
         }
 
         return view('topic::viewStorePhieuDkKhxbCxb', $dataView);
+    }
+
+    public function viewCapMaIsbnPhieuDkKhxbCxb(Request $request, int $id): View
+    {
+        /** @var UserService $userService */
+        $userService = app(UserService::class);
+        /** @var PhieuDkKhxbCxbService $phieuDkKhxbCxbService */
+        $phieuDkKhxbCxbService = app(PhieuDkKhxbCxbService::class);
+
+        $detail = $phieuDkKhxbCxbService->getDetail($id);
+
+        $dataView = [
+            'listUsers' => $userService->getListBTV(),
+            'phieuDkKhxbCxb' => $detail['phieu'],
+            'listDeTai' => $detail['listDeTai'],
+        ];
+
+        return view('topic::viewCapMaIsbnPhieuDkKhxbCxb', $dataView);
     }
 
     public function getPaginate(FrmSearchPhieuDkKhxbCxbRequest $request, string $page = 'page-1'): JsonResponse
@@ -120,6 +140,21 @@ class PhieuDkKhxbCxbController extends Controller
     /**
      * Xem trước mã số CXB.
      */
+    public function getDetail(Request $request, int $id): JsonResponse
+    {
+        /** @var PhieuDkKhxbCxbService $phieuDkKhxbCxbService */
+        $phieuDkKhxbCxbService = app(PhieuDkKhxbCxbService::class);
+        try {
+            $result = $phieuDkKhxbCxbService->getDetail($id);
+
+            return response()->json($result, 200);
+        } catch (Exception $exception) {
+            return response()->json([
+                'message' => $exception->getMessage(),
+            ], 500);
+        }
+    }
+
     public function previewMaSoCxb(Request $request): JsonResponse
     {
         /** @var PhieuDkKhxbCxbService $phieuDkKhxbCxbService */
@@ -146,6 +181,42 @@ class PhieuDkKhxbCxbController extends Controller
 
         $payload = $request->toPayload();
         $result = $phieuDkKhxbCxbService->capMaSoCxb((int) $payload['idPhieu'], $payload, (int) $user->_id);
+
+        return response()->json($result, 200);
+
+    }
+
+    public function capMaIsbn(FrmCapMaIsbnRequest $request): JsonResponse
+    {
+        /** @var User $user */
+        $user = Auth::user();
+        /** @var PhieuDkKhxbCxbService $phieuDkKhxbCxbService */
+        $phieuDkKhxbCxbService = app(PhieuDkKhxbCxbService::class);
+
+        $payload = $request->toPayload();
+        $result = $phieuDkKhxbCxbService->capMaIsbn(
+            (int) $payload['idPhieu'],
+            $payload['listIsbn'],
+            (int) $user->_id
+        );
+
+        return response()->json($result, 200);
+
+    }
+
+    public function ketChuyenThanhSach(FrmKetChuyenThanhSachRequest $request): JsonResponse
+    {
+        /** @var User $user */
+        $user = Auth::user();
+        /** @var PhieuDkKhxbCxbService $phieuDkKhxbCxbService */
+        $phieuDkKhxbCxbService = app(PhieuDkKhxbCxbService::class);
+
+        $payload = $request->toPayload();
+        $result = $phieuDkKhxbCxbService->ketChuyenThanhSach(
+            (int) $payload['idPhieu'],
+            $payload['listIdDeTai'],
+            (int) $user->_id
+        );
 
         return response()->json($result, 200);
 

@@ -15,6 +15,7 @@ final class PhieuDkDetaiTrangThai
     public const HDXB_NXBGDVN_DANG_XET = 5;
     public const HDXB_NXBGDVN_PHE_DUYET = 6;
     public const HDXB_NXBGDVN_CHUA_XET = 16;
+    public const DA_PHE_DUYET_DI_IN = 18;
 
     private function __construct() {}
 }

@@ -13,6 +13,8 @@ use MongoDB\BSON\Regex;
  *  @property string $NamTaiBan
  *  @property int $HTXB
  *  @property array $NgayDK
+ *  @property bool $IsDeleted
+ *  @property bool $KetChuyenThanhSach
  */
 class FilterSach extends BaseObject {
 
@@ -24,6 +26,8 @@ class FilterSach extends BaseObject {
     public string $NamTaiBan = "";
     public int $HTXB = 0;
     public array $NgayDK = [];
+    public ?bool $IsDeleted = null;
+    public bool $KetChuyenThanhSach = false;
 
     public function __construct($input = []) {
         parent::__construct($input);
@@ -64,6 +68,12 @@ class FilterSach extends BaseObject {
         }
         if (is_array($this->NgayDK) && count($this->NgayDK) >= 2) {
             $conditions["NgayDK"] = ['$gte' => $this->NgayDK[0], '$lte' => $this->NgayDK[1]];
+        }
+        if ($this->IsDeleted !== null) {
+            $conditions['IsDeleted'] = (bool) $this->IsDeleted;
+        }
+        if ($this->KetChuyenThanhSach) {
+            $conditions['ID_DeTai'] = ['$gt' => 0];
         }
         return $conditions;
     }

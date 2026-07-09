@@ -10,6 +10,9 @@ use Modules\Book\Object\FilterSach;
  */
 interface SachService extends IBaseService {
     public function getPaginate(FilterSach $filter, string $page = 'page-1') : array;
+
+    public function paginateWithConditions(array $conditions, string $page = 'page-1', int $limit = 100): array;
+
     public function getList(FilterSach $filter);
     public function store(array $data) : DM_SACH;
     public function delete(int $id) : bool;
