@@ -10,6 +10,8 @@ use MongoDB\BSON\Regex;
 use Modules\Topic\Model\PHIEU_DK_KHXB_CXB;
 use Modules\Topic\Model\PHIEU_DK_DETAI;
 use Modules\Topic\Object\FilterPhieuDkKhxbCxb;
+use Modules\Book\Repository\SachRepository;
+use Modules\Book\Service\SachService;
 use Modules\Topic\Repository\CT_PhieuDkKhxbCxbRepository;
 use Modules\Topic\Repository\PhieuDkDetaiRepository;
 use Modules\Topic\Repository\PhieuDkKhxbCxbRepository;
@@ -20,6 +22,8 @@ class PhieuDkKhxbCxbServiceImpl extends BaseService implements PhieuDkKhxbCxbSer
     private const MA_SO_COUNTER_KEY = 'ma_so_phieu_dk_khxb_cxb';
 
     private const MA_SO_CXB_COUNTER_KEY = 'ma_so_cxb_iph';
+
+    private const TRANG_THAI_KET_CHUYEN_THANH_SACH = 17;
 
     /** @var PhieuDkKhxbCxbRepository */
     protected $baseRepo;
@@ -165,6 +169,230 @@ class PhieuDkKhxbCxbServiceImpl extends BaseService implements PhieuDkKhxbCxbSer
     private function buildMaSoCxbHoanChinh(string $maSoBase, string $namCap, int $soThuTu, string $soCvNxbgd): string
     {
         return sprintf('%s-%s/CXBIPH/%d-%s/GD', $maSoBase, $namCap, $soThuTu, $soCvNxbgd);
+    }
+
+    /**
+     * Cấp mã ISBN cho từng đề tài thuộc phiếu trình CXB.
+     * $isbnList: mảng [['id' => idDeTai, 'ISBNCode' => '...'], ...]
+     */
+    public function capMaIsbn(int $idPhieu, array $isbnList, int $idCanBo): array
+    {
+        /** @var PHIEU_DK_KHXB_CXB|null $phieu */
+        $phieu = $this->baseRepo->get($idPhieu);
+        if (!$phieu || $phieu->IsDeleted) {
+            throw new Exception('Phiếu trình CXB không tồn tại');
+        }
+
+        $listIdDeTai = $this->loadListIdDeTaiFromChiTiet($idPhieu);
+        $deTaiMap = $this->loadDeTaiMapByIds($listIdDeTai);
+
+        // Validate toàn bộ trước, sai bất kỳ mã nào thì không lưu gì cả
+        $updates = [];
+        foreach ($isbnList as $item) {
+            $idDeTai = (int) ($item['id'] ?? 0);
+            if (!isset($deTaiMap[$idDeTai])) {
+                continue;
+            }
+            $isbn = trim((string) ($item['ISBNCode'] ?? ''));
+            if ($isbn !== '' && !$this->isValidIsbn($isbn)) {
+                /** @var PHIEU_DK_DETAI $deTai */
+                $deTai = $deTaiMap[$idDeTai];
+                throw new Exception(sprintf('Mã ISBN [%s] của đề tài "%s" không hợp lệ', $isbn, (string) ($deTai->TenDeTai ?? $idDeTai)));
+            }
+            $updates[$idDeTai] = $isbn;
+        }
+
+        foreach ($updates as $idDeTai => $isbn) {
+            /** @var PHIEU_DK_DETAI $deTai */
+            $deTai = $deTaiMap[$idDeTai];
+            $deTai->ISBNCode = $isbn;
+            $deTai->EditedBy = $idCanBo;
+            $deTai->EditedOn = now();
+            $deTai->save();
+        }
+
+        return [
+            'phieu' => $phieu,
+            'listDeTai' => $this->loadDeTaiByIds($listIdDeTai),
+        ];
+    }
+
+    /**
+     * Kết chuyển các đề tài đã chọn thành sách (ipub_dm_sach) và cập nhật trạng thái đề tài.
+     */
+    public function ketChuyenThanhSach(int $idPhieu, array $listIdDeTai, int $idCanBo): array
+    {
+        /** @var PHIEU_DK_KHXB_CXB|null $phieu */
+        $phieu = $this->baseRepo->get($idPhieu);
+        if (!$phieu || $phieu->IsDeleted) {
+            throw new Exception('Phiếu trình CXB không tồn tại');
+        }
+
+        $listIdDeTai = $this->normalizeListIdDeTai($listIdDeTai);
+        if (count($listIdDeTai) === 0) {
+            throw new Exception('Vui lòng chọn ít nhất một đề tài để kết chuyển');
+        }
+
+        $idDeTaiTrongPhieu = array_flip($this->loadListIdDeTaiFromChiTiet($idPhieu));
+        $deTaiMap = $this->loadDeTaiMapByIds($listIdDeTai);
+
+        /** @var SachService $sachService */
+        $sachService = app(SachService::class);
+        /** @var SachRepository $sachRepo */
+        $sachRepo = app(SachRepository::class);
+
+        $countKetChuyen = 0;
+        foreach ($listIdDeTai as $idDeTai) {
+            if (!isset($idDeTaiTrongPhieu[$idDeTai]) || !isset($deTaiMap[$idDeTai])) {
+                continue;
+            }
+
+            /** @var PHIEU_DK_DETAI $deTai */
+            $deTai = $deTaiMap[$idDeTai];
+
+            $daKetChuyen = $sachRepo->findOne([
+                'ID_DeTai' => $idDeTai,
+                'IsDeleted' => false,
+            ]);
+            if ($daKetChuyen) {
+                continue;
+            }
+
+            $sachService->store($this->mapDeTaiToSach($deTai, $idCanBo));
+
+            $deTai->TrangThai = self::TRANG_THAI_KET_CHUYEN_THANH_SACH;
+            $deTai->EditedBy = $idCanBo;
+            $deTai->EditedOn = now();
+            $deTai->save();
+
+            $countKetChuyen++;
+        }
+
+        if ($countKetChuyen === 0) {
+            throw new Exception('Các đề tài đã chọn đều đã được kết chuyển trước đó');
+        }
+
+        return [
+            'phieu' => $phieu,
+            'countKetChuyen' => $countKetChuyen,
+            'listDeTai' => $this->loadDeTaiByIds($this->loadListIdDeTaiFromChiTiet($idPhieu)),
+        ];
+    }
+
+    /**
+     * Map dữ liệu đề tài sang bản ghi sách.
+     *
+     * @return array<string, mixed>
+     */
+    private function mapDeTaiToSach(PHIEU_DK_DETAI $deTai, int $idCanBo): array
+    {
+        return [
+            'ID_DeTai' => (int) $deTai->_id,
+            'MaSoGoc' => (string) ($deTai->MaSo ?? ''),
+            'MaSo' => (string) ($deTai->MaSo ?? ''),
+            'MaSoCXB' => (string) ($deTai->MaSoCXB ?? ''),
+            'NgayDK' => $deTai->NgayDk,
+            'NgayCapPhep' => $deTai->NgayCapPhep,
+            'TenSach' => (string) ($deTai->TenDeTai ?? ''),
+            'BienTapVien' => (string) ($deTai->BienTapVien ?? ''),
+            'LaSachDich' => (bool) ($deTai->LaDeTaiDich ?? false),
+            'TenNguyenBan' => (string) ($deTai->TenNguyenBan ?? ''),
+            'NguDuocDich' => (string) ($deTai->NguDuocDich ?? ''),
+            'NguXuatBan' => (string) ($deTai->NguXuatBan ?? ''),
+            'ThongTinSachDich' => (string) ($deTai->ThongTinSachDich ?? ''),
+            'TacGia' => (string) ($deTai->TacGia ?? ''),
+            'DichGia' => (string) ($deTai->DichGia ?? ''),
+            'DeTaiTuongTu' => (string) ($deTai->DeTaiTuongTu ?? ''),
+            'DeCuong' => (string) ($deTai->DeCuong ?? ''),
+            'ID_MangSach_CXB' => (int) ($deTai->ID_MangSach_CXB ?? 0),
+            'ID_LoaiXBP' => (int) ($deTai->ID_LoaiXBP ?? 0),
+            'ID_TuSach' => (int) ($deTai->ID_TuSach ?? 0),
+            'ID_DonVi' => (int) ($deTai->ID_DonVi ?? 0),
+            'ID_DVLK' => (int) ($deTai->ID_DonViLK ?? 0),
+            'ID_MonHoc' => (int) ($deTai->ID_MonHoc ?? 0),
+            'ID_MangSach' => (int) ($deTai->ID_MangSach ?? 0),
+            'ID_Lop' => (int) ($deTai->ID_Lop ?? 0),
+            'ID_Cap' => (int) ($deTai->ID_Cap ?? 0),
+            'HTXB' => (bool) ($deTai->HTXB ?? false),
+            'PTXB' => (bool) ($deTai->PTXB ?? false),
+            'ThoiDiemCoDuBT' => (string) ($deTai->ThoiDiemCoDuBT ?? ''),
+            'ThoiDiemRaSach' => (string) ($deTai->ThoiDiemRaSach ?? ''),
+            'SoTrang' => (int) ($deTai->SoTrangDK ?? 0),
+            'Dai' => (string) ($deTai->Dai ?? ''),
+            'Rong' => (string) ($deTai->Rong ?? ''),
+            'GiaBia' => (int) ($deTai->GiaBia ?? 0),
+            'NamXuatBan' => (string) ($deTai->NamXuatBan ?? ''),
+            'NamTaiBan' => (string) ($deTai->NamTaiBan ?? ''),
+            'LanTaiBan' => (int) ($deTai->LanTaiBan ?? 0),
+            'SoLuong' => (int) ($deTai->SoLuongDK ?? 0),
+            'MauInRuot' => (int) ($deTai->MauInRuot ?? 0),
+            'MauBia' => (int) ($deTai->MauInBia ?? 0),
+            'NoiDung' => (string) ($deTai->NoiDung ?? ''),
+            'GhiChu' => (string) ($deTai->GhiChu ?? ''),
+            'ISBNCode' => (string) ($deTai->ISBNCode ?? ''),
+            'MaSoQTG' => (string) ($deTai->MaSoQTG ?? ''),
+            'VongThau' => (int) ($deTai->VongThau ?? 0),
+            'LaDeTaiCKH' => (bool) ($deTai->LaDeTaiCKH ?? false),
+            'ThongTinLienQuan' => (string) ($deTai->ThongTinLienQuan ?? ''),
+            'FMAVACH' => (string) ($deTai->FMAVACH ?? ''),
+            'BanQuyen' => (bool) ($deTai->BanQuyen ?? false),
+            'CoMSISBN' => (bool) ($deTai->CoMSISBN ?? false),
+            'IsSachDienTu' => (bool) ($deTai->IsSachDienTu ?? false),
+            'DinhDangTep' => (string) ($deTai->DinhDangTep ?? ''),
+            'DungLuongTep' => (string) ($deTai->DungLuongTep ?? ''),
+            'DiaChiCungCap' => (string) ($deTai->DiaChiCungCap ?? ''),
+            'LuaTuoi' => (string) ($deTai->LuaTuoi ?? ''),
+            'TypeLuaTuoi' => (int) ($deTai->TypeLuaTuoi ?? 0),
+            'HoanThanh' => false,
+            'IsDeleted' => false,
+            'DaGui' => false,
+            'CreatedBy' => $idCanBo,
+            'CreatedOn' => now(),
+            'EditedBy' => $idCanBo,
+            'EditedOn' => now(),
+        ];
+    }
+
+    /**
+     * Kiểm tra mã ISBN hợp lệ theo chuẩn ISBN-13 hoặc ISBN-10 (bỏ qua dấu gạch nối / khoảng trắng).
+     */
+    private function isValidIsbn(string $isbn): bool
+    {
+        $code = strtoupper(preg_replace('/[\s-]+/', '', $isbn));
+
+        if (preg_match('/^\d{13}$/', $code)) {
+            return $this->isValidIsbn13($code);
+        }
+
+        if (preg_match('/^\d{9}[\dX]$/', $code)) {
+            return $this->isValidIsbn10($code);
+        }
+
+        return false;
+    }
+
+    private function isValidIsbn13(string $code): bool
+    {
+        $sum = 0;
+        for ($i = 0; $i < 12; $i++) {
+            $digit = (int) $code[$i];
+            $sum += ($i % 2 === 0) ? $digit : $digit * 3;
+        }
+        $check = (10 - ($sum % 10)) % 10;
+
+        return $check === (int) $code[12];
+    }
+
+    private function isValidIsbn10(string $code): bool
+    {
+        $sum = 0;
+        for ($i = 0; $i < 9; $i++) {
+            $sum += ((int) $code[$i]) * (10 - $i);
+        }
+        $last = $code[9];
+        $sum += ($last === 'X') ? 10 : (int) $last;
+
+        return $sum % 11 === 0;
     }
 
     private function resolveNextCxbSeq(bool $allocate): int

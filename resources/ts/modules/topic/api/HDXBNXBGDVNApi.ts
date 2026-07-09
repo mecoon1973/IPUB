@@ -1,5 +1,5 @@
 import type { PagiResult } from "../../page/type";
-import { defaultFilterHDXBNXBGDVN, type FilterHDXBNXBGDVN, type FilterXetDuyetHDXBNXBGDVN, type HDXBNXBGDVN, type HDXBNXBGDVNXetDuyetRow } from "../type";
+import { defaultFilterHDXBNXBGDVN, defaultFilterPheDuyetDiIn, type FilterHDXBNXBGDVN, type FilterPheDuyetDiIn, type FilterXetDuyetHDXBNXBGDVN, type HDXBNXBGDVN, type HDXBNXBGDVNXetDuyetRow, type PheDuyetDiInLuuItem, type PheDuyetDiInRow } from "../type";
 
 export class HDXBNXBGDVNApi {
     static readonly conditionDefault: FilterHDXBNXBGDVN = defaultFilterHDXBNXBGDVN;
@@ -64,7 +64,7 @@ export class HDXBNXBGDVNApi {
         }
     }
 
-    static async luuXetDuyetDeTai(items: import("../type").HDXBNXBGDVNXetDuyetRow[]): Promise<boolean> {
+    static async luuXetDuyetDeTai(items: HDXBNXBGDVNXetDuyetRow[]): Promise<boolean> {
         const url = "/api/topic/hdxb-nxbgdvn/xet-duyet";
         try {
             await window._apiCreate(url, {
@@ -77,6 +77,42 @@ export class HDXBNXBGDVNApi {
                     YeuCauDocKiemDinh: row.YeuCauDocKiemDinh ? 1 : 0,
                 })),
             });
+            return true;
+        } catch (err: any) {
+            window._toastbox(err.responseJSON?.message || "Có lỗi xảy ra, vui lòng thử lại", "danger");
+            return false;
+        }
+    }
+
+    static async getPaginatePheDuyetDiIn(
+        data: FilterPheDuyetDiIn = defaultFilterPheDuyetDiIn,
+        page = "page-1",
+    ): Promise<PagiResult<PheDuyetDiInRow>> {
+        const url = "/api/topic/hdxb-nxbgdvn/phe-duyet-di-in/paginate/";
+        try {
+            const res = await window._apiGet(url + page, data);
+            return res;
+        } catch (err: any) {
+            window._toastbox(err.responseJSON?.message || "Có lỗi xảy ra, vui lòng thử lại", "danger");
+            return {
+                listResult: [],
+                pagiInfo: {
+                    pagi_number: [],
+                    last: 0,
+                    limit: 0,
+                    current_page: 0,
+                    total: 0,
+                    query: "",
+                    route: url,
+                },
+            };
+        }
+    }
+
+    static async luuPheDuyetDiIn(items: PheDuyetDiInLuuItem[]): Promise<boolean> {
+        const url = "/api/topic/hdxb-nxbgdvn/phe-duyet-di-in";
+        try {
+            await window._apiCreate(url, { items });
             return true;
         } catch (err: any) {
             window._toastbox(err.responseJSON?.message || "Có lỗi xảy ra, vui lòng thử lại", "danger");

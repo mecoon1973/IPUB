@@ -97,11 +97,13 @@ export interface Sach {
 
 export interface FilterSach extends Relationships {
     title: string;
+    MaSo?: string;
     ID_MangSach: number;
     ID_DonVi: number;
     NamXuatBan: string;
     NamTaiBan: string;
     HTXB: number;
     NgayDK: Date[];
-    IsDeleted: boolean;
+    IsDeleted?: boolean;
+    KetChuyenThanhSach?: boolean;
 }

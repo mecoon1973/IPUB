@@ -24,4 +24,8 @@ interface PhieuDkKhxbCxbService extends IBaseService
     public function previewMaSoCxbSeq(): int;
 
     public function capMaSoCxb(int $idPhieu, array $data, int $idCanBo): array;
+
+    public function capMaIsbn(int $idPhieu, array $isbnList, int $idCanBo): array;
+
+    public function ketChuyenThanhSach(int $idPhieu, array $listIdDeTai, int $idCanBo): array;
 }

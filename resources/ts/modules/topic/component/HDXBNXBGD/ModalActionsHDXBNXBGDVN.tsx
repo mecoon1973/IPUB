@@ -47,17 +47,6 @@ function ModalActionsHDXBNXBGDVN({ onSuccess }: { onSuccess?: () => void }) {
                         return true;
                     },
                 };
-            case "pheDuyetDiIn":
-                return {
-                    key: "pheDuyetDiIn",
-                    title: "PHÊ DUYỆT ĐI IN",
-                    description: "Xác nhận phê duyệt đi in cho các đề tài đã chọn.",
-                    confirmLabel: "Phê duyệt",
-                    onConfirm: async () => {
-                        window._toastbox("Chức năng phê duyệt đi in đang được hoàn thiện", "info");
-                        return true;
-                    },
-                };
             default:
                 return null;
         }

@@ -1,5 +1,5 @@
 import type { PagiResult } from "../../page/type";
-import type { CapMaSoCxbPayload, FilterPhieuDkKhxbCxb, PhieuDkDetai, PhieuDkKhxbCxb, StorePhieuDkKhxbCxbPayload } from "../type";
+import type { CapMaIsbnPayload, CapMaSoCxbPayload, FilterPhieuDkKhxbCxb, KetChuyenThanhSachPayload, PhieuDkDetai, PhieuDkKhxbCxb, StorePhieuDkKhxbCxbPayload } from "../type";
 import { formatDateToIso8601UtcOffset } from "../../core/utils/helpersDayjs";
 
 export class PhieuDkKhxbCxbApi {
@@ -77,6 +77,19 @@ export class PhieuDkKhxbCxbApi {
         }
     }
 
+    static async getDetail(id: number): Promise<{ phieu: PhieuDkKhxbCxb; listDeTai: PhieuDkDetai[] } | null> {
+        const url = `/api/topic/phieu-dk-khxb-cxb/detail/${id}`;
+        try {
+            const res = await window._apiGet(url);
+            return res as { phieu: PhieuDkKhxbCxb; listDeTai: PhieuDkDetai[] };
+        } catch (err: unknown) {
+            const message = (err as { responseJSON?: { message?: string } })?.responseJSON?.message
+                || "Có lỗi xảy ra, vui lòng thử lại";
+            window._toastbox(message, "danger");
+            return null;
+        }
+    }
+
     static async previewMaSoCxb(): Promise<number> {
         const url = "/api/topic/phieu-dk-khxb-cxb/cap-ma-cxb/preview";
         try {
@@ -100,6 +113,36 @@ export class PhieuDkKhxbCxbApi {
                 NgayCap: formatDateToIso8601UtcOffset(data.NgayCap ?? null),
             });
             return res as { phieu: PhieuDkKhxbCxb; MaSoCXB: string; listDeTai: PhieuDkDetai[] };
+        } catch (err: unknown) {
+            const message = (err as { responseJSON?: { message?: string } })?.responseJSON?.message
+                || "Có lỗi xảy ra, vui lòng thử lại";
+            window._toastbox(message, "danger");
+            return null;
+        }
+    }
+
+    static async capMaIsbn(
+        data: CapMaIsbnPayload,
+    ): Promise<{ phieu: PhieuDkKhxbCxb; listDeTai: PhieuDkDetai[] } | null> {
+        const url = "/api/topic/phieu-dk-khxb-cxb/cap-ma-isbn";
+        try {
+            const res = await window._apiCreate(url, data);
+            return res as { phieu: PhieuDkKhxbCxb; listDeTai: PhieuDkDetai[] };
+        } catch (err: unknown) {
+            const message = (err as { responseJSON?: { message?: string } })?.responseJSON?.message
+                || "Có lỗi xảy ra, vui lòng thử lại";
+            window._toastbox(message, "danger");
+            return null;
+        }
+    }
+
+    static async ketChuyenThanhSach(
+        data: KetChuyenThanhSachPayload,
+    ): Promise<{ phieu: PhieuDkKhxbCxb; countKetChuyen: number; listDeTai: PhieuDkDetai[] } | null> {
+        const url = "/api/topic/phieu-dk-khxb-cxb/ket-chuyen-thanh-sach";
+        try {
+            const res = await window._apiCreate(url, data);
+            return res as { phieu: PhieuDkKhxbCxb; countKetChuyen: number; listDeTai: PhieuDkDetai[] };
         } catch (err: unknown) {
             const message = (err as { responseJSON?: { message?: string } })?.responseJSON?.message
                 || "Có lỗi xảy ra, vui lòng thử lại";

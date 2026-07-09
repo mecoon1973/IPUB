@@ -27,7 +27,8 @@ class PhieuChuyenBanThaoServiceImpl extends BaseService implements PhieuChuyenBa
         $paginate = new Paginate([
             "conditions" => $conditions,
             "limit" => 15,
-            "page" => $page
+            "page" => $page,
+            "loadRelations" => $filter->relations ?? ['sach', 'donvi'],
         ]);
 
         $result = $this->pagination($paginate);
@@ -48,6 +49,7 @@ class PhieuChuyenBanThaoServiceImpl extends BaseService implements PhieuChuyenBa
             $phieuChuyenBanThao = $this->baseRepo->get($data["id"]);
             if($phieuChuyenBanThao) {
                 $phieuChuyenBanThao->update($data);
+                $phieuChuyenBanThao->load(['sach', 'donvi', 'nguoiKy']);
                 return $phieuChuyenBanThao;
             }
         }
@@ -56,6 +58,7 @@ class PhieuChuyenBanThaoServiceImpl extends BaseService implements PhieuChuyenBa
         if(!$phieuChuyenBanThao){
             throw new Exception("Có lỗi xảy ra, vui lòng thử lại");
         }
+        $phieuChuyenBanThao->load(['sach', 'donvi', 'nguoiKy']);
         return $phieuChuyenBanThao;
     }
 
