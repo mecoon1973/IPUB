@@ -105,6 +105,13 @@ function emptyFormState(): Partial<PhieuDkDetai> {
     };
 }
 
+function resolveDonviId(donvi: DonVi | null | undefined): number {
+    if (!donvi) return 0;
+    if (donvi.id) return donvi.id;
+    const legacyId = (donvi as DonVi & { _id?: number })._id;
+    return legacyId ? Number(legacyId) : 0;
+}
+
 interface ViewStorePhieuDkDetaiProps {
     phieuDkDetai?: PhieuDkDetai | null;
     mapTrangThai : Record<number, string>;
@@ -114,19 +121,21 @@ interface ViewStorePhieuDkDetaiProps {
     listMonhoc: Monhoc[];
     listBosach: Bosach[];
     listTusach: Tusach[];
+    listDonvi: DonVi[];
     Donvi: DonVi | null;
     listBTV: User[];
 }
 
 export const ViewStorePhieuDkDetai = React.memo((props: ViewStorePhieuDkDetaiProps) => {
-    const { phieuDkDetai, mapTrangThai, listMangsach, listDoituong, listLop, listMonhoc, listBosach, listTusach, Donvi, listBTV } = props;
+    const { phieuDkDetai, mapTrangThai, listMangsach, listDoituong, listLop, listMonhoc, listBosach, listTusach, listDonvi, Donvi, listBTV } = props;
     const [form, setForm] = useState<Partial<PhieuDkDetai>>(() => {
         if (phieuDkDetai) {
             return phieuDkDetai;
         }
+        const idDonVi = resolveDonviId(Donvi);
         return {
             ...emptyFormState(),
-            ID_DonVi: Donvi?.id ?? 0,
+            ID_DonVi: idDonVi,
         };
     });
     const [submitting, setSubmitting] = useState(false);
@@ -134,6 +143,7 @@ export const ViewStorePhieuDkDetai = React.memo((props: ViewStorePhieuDkDetaiPro
 
     const isEmptyValue = useCallback((v: unknown) => {
         if (v === null || v === undefined) return true;
+        if (v instanceof Date) return Number.isNaN(v.getTime());
         if (typeof v === "string") return v.trim() === "";
         if (typeof v === "number") return Number.isNaN(v) || v === 0;
         if (Array.isArray(v)) return v.length === 0;
@@ -261,7 +271,7 @@ export const ViewStorePhieuDkDetai = React.memo((props: ViewStorePhieuDkDetaiPro
                         listMonhoc={listMonhoc}
                         listBosach={listBosach}
                         listTusach={listTusach}
-                        Donvi={Donvi}
+                        listDonvi={listDonvi}
                         listBTV={listBTV}
                     />
                 </Col>
@@ -280,6 +290,7 @@ const bladeProps: ViewStorePhieuDkDetaiProps = {
     listLop: [],
     listBosach: [],
     listTusach: [],
+    listDonvi: [],
     phieuDkDetai : null,
     Donvi: null,
     listBTV: [],

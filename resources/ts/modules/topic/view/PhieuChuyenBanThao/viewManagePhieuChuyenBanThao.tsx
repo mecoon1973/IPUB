@@ -36,6 +36,23 @@ export const ViewManagePhieuChuyenBanThao = React.memo((props: ViewManagePhieuCh
         });
     }, [filter, setIsLoadingSearch, setListPhieuChuyenBanThao, setPagiInfo]);
 
+    const handleDeletePhieuChuyenBanThao = useCallback((record: PhieuChuyenBanThao) => {
+        if (!record.id) {
+            return;
+        }
+        const isConfirmed = window.confirm("Bạn có chắc chắn muốn xóa phiếu chuyển bản thảo này không?");
+        if (!isConfirmed) {
+            return;
+        }
+        PhieuChuyenBanThaoApi.delete(record.id).then((ok) => {
+            if (!ok) {
+                return;
+            }
+            window._toastbox("Xóa phiếu chuyển bản thảo thành công", "success");
+            setListPhieuChuyenBanThao((prev) => prev.filter((item) => item.id !== record.id));
+        });
+    }, [setListPhieuChuyenBanThao]);
+
     useEffect(() => {
         getListPhieuChuyenBanThao();
     }, []);
@@ -43,7 +60,7 @@ export const ViewManagePhieuChuyenBanThao = React.memo((props: ViewManagePhieuCh
     return (
         <div className="px-2">
             <FilterPhieuChuyenBanThaoComponent listDonvi={listDonvi} onSearch={getListPhieuChuyenBanThao} />
-            <TablePhieuChuyenBanThaoComponent />
+            <TablePhieuChuyenBanThaoComponent onDelete={handleDeletePhieuChuyenBanThao} />
             <ComponentPagination pagiInfo={pagiInfo} callBack={getListPhieuChuyenBanThao} />
         </div>
     );

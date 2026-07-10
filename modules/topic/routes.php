@@ -52,6 +52,8 @@ Route::group(['middleware' => ['web', 'auth.custom']], function () {
                 Route::post('/cap-ma-cxb', [PhieuDkKhxbCxbController::class, 'capMaSoCxb'])->name('phieu-dk-khxb-cxb.cap-ma-cxb');
                 Route::post('/cap-ma-isbn', [PhieuDkKhxbCxbController::class, 'capMaIsbn'])->name('phieu-dk-khxb-cxb.cap-ma-isbn');
                 Route::post('/ket-chuyen-thanh-sach', [PhieuDkKhxbCxbController::class, 'ketChuyenThanhSach'])->name('phieu-dk-khxb-cxb.ket-chuyen-thanh-sach');
+                Route::get('/xet-duyet/{id}', [PhieuDkKhxbCxbController::class, 'getXetDuyet'])->name('phieu-dk-khxb-cxb.xet-duyet.get')->where('id', '[0-9]+');
+                Route::post('/xet-duyet', [PhieuDkKhxbCxbController::class, 'luuXetDuyet'])->name('phieu-dk-khxb-cxb.xet-duyet');
                 Route::post('/store', [PhieuDkKhxbCxbController::class, 'store'])->name('phieu-dk-khxb-cxb.store');
             });
             Route::group(['prefix' => 'phieu-chuyen-ban-thao'], function () {

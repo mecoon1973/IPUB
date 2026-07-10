@@ -415,4 +415,20 @@ export interface KetChuyenThanhSachPayload {
     listIdDeTai: number[];
 }
 
+export interface XetDuyetPhieuDkKhxbCxbRow {
+    id: number;
+    idCt: number;
+    TenDeTai: string;
+    TenDonVi: string;
+    TrangThai: number;
+}
+
+export interface LuuXetDuyetPhieuDkKhxbCxbPayload {
+    idPhieu: number;
+    items: Array<{
+        idDeTai: number;
+        TrangThai: number;
+    }>;
+}
+
 //

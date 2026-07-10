@@ -3,6 +3,7 @@
 @php
     $pageProps = [
         'listDonvi' => $listDonvi,
+        'listLop' => $listLop ?? [],
     ];
 @endphp
 

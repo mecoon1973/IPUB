@@ -9,6 +9,7 @@ export interface Sach {
     BanQuyenTuNgay: string;
     BanQuyenDenNgay: string;
     BienTapBien: string;
+    BienTapVien?: string;
     CanhBao: boolean;
     CoMSISBN: boolean;
     CreateBy: number;

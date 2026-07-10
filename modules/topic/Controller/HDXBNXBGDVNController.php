@@ -30,7 +30,7 @@ class HDXBNXBGDVNController extends Controller {
     }
 
     public function viewPheDuyetDiIn(Request $request): View {
-        $dataView = $this->getDataView(["listDonvi"]);
+        $dataView = $this->getDataView(["listDonvi", "listLop"]);
         return view('topic::viewPheDuyetDiInHDXBNXBGDVN', $dataView);
     }
 

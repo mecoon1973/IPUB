@@ -15,6 +15,7 @@ use MongoDB\BSON\Regex;
  *  @property array $NgayDK
  *  @property bool $IsDeleted
  *  @property bool $KetChuyenThanhSach
+ *  @property int $id
  */
 class FilterSach extends BaseObject {
 
@@ -28,12 +29,16 @@ class FilterSach extends BaseObject {
     public array $NgayDK = [];
     public ?bool $IsDeleted = null;
     public bool $KetChuyenThanhSach = false;
+    public int $id = 0;
 
     public function __construct($input = []) {
         parent::__construct($input);
     }
     public function buildConditions() {
         $conditions = [];
+        if ($this->id !== null && $this->id !== 0) {
+            $conditions['_id'] = (int) $this->id;
+        }
         if ($this->title !== null && $this->title !== "") {
             $conditions['$or'] = [
                 ["MaSo" => ['$regex' => new Regex(preg_quote($this->title, "/"), "ui")]],

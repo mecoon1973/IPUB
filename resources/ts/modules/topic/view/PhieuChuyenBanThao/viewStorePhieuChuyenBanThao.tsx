@@ -139,11 +139,13 @@ export const ViewStorePhieuChuyenBanThao = React.memo((props: ViewStorePhieuChuy
         setSubmitting(false);
         if (!res) return;
 
-        setForm(initFormState(res));
         window._toastbox(`${isEdit ? "Cập nhật" : "Thêm mới"} phiếu chuyển bản thảo thành công`, "success");
-        if (!isEdit && res.id) {
-            window.history.replaceState(null, "", `/phieu-chuyen-ban-thao/cap-nhat/${res.id}`);
+        if (!isEdit) {
+            window.location.href = "/phieu-chuyen-ban-thao/quan-ly";
+            return;
         }
+
+        setForm(initFormState(res));
     }, [form, isEdit]);
 
     return (

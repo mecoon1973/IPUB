@@ -19,6 +19,7 @@ class FrmSearchSachRequest extends FormRequest
         'relations' => 'array',
         'IsDeleted' => 'boolean',
         'KetChuyenThanhSach' => 'boolean',
+        'id' => 'int',
     ];
 
     /**
@@ -50,6 +51,7 @@ class FrmSearchSachRequest extends FormRequest
             'relations' => 'sometimes|array',
             'IsDeleted' => 'sometimes|boolean',
             'KetChuyenThanhSach' => 'sometimes|boolean',
+            'id' => 'sometimes|int',
         ];
     }
 
@@ -67,6 +69,7 @@ class FrmSearchSachRequest extends FormRequest
             'relations.array' => config("label.INPUT_ERROR"),
             'IsDeleted.boolean' => config("label.INPUT_ERROR"),
             'KetChuyenThanhSach.boolean' => config("label.INPUT_ERROR"),
+            'id.int' => config("label.INPUT_ERROR"),
         ];
     }
 

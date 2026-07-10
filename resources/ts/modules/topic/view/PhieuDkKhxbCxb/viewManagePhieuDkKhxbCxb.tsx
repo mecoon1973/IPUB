@@ -8,15 +8,17 @@ import { FilterPhieuDkKhxbCxbComponent } from "../../component/PhieuDkKhxbCxb/Fi
 import { TablePhieuDkKhxbCxbComponent } from "../../component/PhieuDkKhxbCxb/TablePhieuDkKhxbCxb";
 import { ModalCapMaSoCxb } from "../../component/PhieuDkKhxbCxb/ModalCapMaSoCxb";
 import { ModalKetChuyenThanhSach } from "../../component/PhieuDkKhxbCxb/ModalKetChuyenThanhSach";
+import { ModalXetDuyetPhieuDkKhxbCxb } from "../../component/PhieuDkKhxbCxb/ModalXetDuyetPhieuDkKhxbCxb";
 import { useManagePhieuDkKhxbCxbStore } from "../../store/PhieuDkKhxbCxb/managePhieuDkKhxbCxbStore";
 import type { FilterPhieuDkKhxbCxb, PhieuDkKhxbCxb } from "../../type";
 
 interface ViewManagePhieuDkKhxbCxbProps {
     listUsers: User[];
+    mapTrangThai: Record<number, string>;
 }
 
 export const ViewManagePhieuDkKhxbCxb = React.memo((props: ViewManagePhieuDkKhxbCxbProps) => {
-    const { listUsers } = props;
+    const { listUsers, mapTrangThai } = props;
     const filter = useManagePhieuDkKhxbCxbStore((state) => state.filter);
     const pagiInfo = useManagePhieuDkKhxbCxbStore((state) => state.pagiInfo);
     const setPagiInfo = useManagePhieuDkKhxbCxbStore((state) => state.setPagiInfo);
@@ -47,6 +49,7 @@ export const ViewManagePhieuDkKhxbCxb = React.memo((props: ViewManagePhieuDkKhxb
             <ComponentPagination pagiInfo={pagiInfo} callBack={getListPhieuDkKhxbCxb} />
             <ModalCapMaSoCxb onSuccess={() => getListPhieuDkKhxbCxb()} />
             <ModalKetChuyenThanhSach onSuccess={() => getListPhieuDkKhxbCxb()} />
+            <ModalXetDuyetPhieuDkKhxbCxb mapTrangThai={mapTrangThai} onSuccess={() => getListPhieuDkKhxbCxb()} />
         </div>
     );
 });
@@ -54,6 +57,7 @@ export const ViewManagePhieuDkKhxbCxb = React.memo((props: ViewManagePhieuDkKhxb
 const ROOT_ID = "root-manage-phieu-dk-khxb-cxb";
 const bladeProps: ViewManagePhieuDkKhxbCxbProps = {
     listUsers: [] as User[],
+    mapTrangThai: {} as Record<number, string>,
     ...readRootDataProps<ViewManagePhieuDkKhxbCxbProps>(ROOT_ID),
 };
 mountReactComponentOnReady(ROOT_ID, <ViewManagePhieuDkKhxbCxb {...bladeProps} />);

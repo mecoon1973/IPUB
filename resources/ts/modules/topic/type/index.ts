@@ -9,6 +9,8 @@ export type {
     CapMaIsbnItem,
     CapMaIsbnPayload,
     KetChuyenThanhSachPayload,
+    XetDuyetPhieuDkKhxbCxbRow,
+    LuuXetDuyetPhieuDkKhxbCxbPayload,
     HDXBNXBGDVN,
     FilterHDXBNXBGDVN,
     FilterXetDuyetHDXBNXBGDVN,

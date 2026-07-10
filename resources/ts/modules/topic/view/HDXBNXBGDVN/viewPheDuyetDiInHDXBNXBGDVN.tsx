@@ -11,11 +11,13 @@ import { ComponentPagination } from "../../../page/component/pagination";
 import type { PagiInfo } from "../../../page/type";
 
 import type { DonVi } from "../../../user/type";
+import type { Lop } from "../../../system/type/Lop";
 
 import { HDXBNXBGDVNApi } from "../../api/HDXBNXBGDVNApi";
 
 import FilterPheDuyetDiInComponent from "../../component/HDXBNXBGD/FilterPheDuyetDiIn";
 
+import ModalChiTietPheDuyetDiIn from "../../component/HDXBNXBGD/ModalChiTietPheDuyetDiIn";
 import ModalPheDuyetDiInHDXBNXBGDVN from "../../component/HDXBNXBGD/ModalPheDuyetDiInHDXBNXBGDVN";
 
 import TablePheDuyetDiInComponent from "../../component/HDXBNXBGD/TablePheDuyetDiIn";
@@ -29,6 +31,8 @@ import { defaultFilterPheDuyetDiIn, type FilterPheDuyetDiIn, type PheDuyetDiInRo
 interface ViewPheDuyetDiInHDXBNXBGDVNProps {
 
     listDonvi: DonVi[];
+
+    listLop: Lop[];
 
 }
 
@@ -60,7 +64,7 @@ function parseIdsDeTaiFromUrl(): number[] {
 
 export const ViewPheDuyetDiInHDXBNXBGDVN = React.memo((props: ViewPheDuyetDiInHDXBNXBGDVNProps) => {
 
-    const { listDonvi } = props;
+    const { listDonvi, listLop } = props;
 
     const initialIdsDeTai = useMemo(() => parseIdsDeTaiFromUrl(), []);
 
@@ -87,6 +91,10 @@ export const ViewPheDuyetDiInHDXBNXBGDVN = React.memo((props: ViewPheDuyetDiInHD
     const [modalOpen, setModalOpen] = useState(false);
 
     const [modalItems, setModalItems] = useState<PheDuyetDiInRow[]>([]);
+
+    const [detailModalOpen, setDetailModalOpen] = useState(false);
+
+    const [detailRow, setDetailRow] = useState<PheDuyetDiInRow | null>(null);
 
 
 
@@ -132,17 +140,17 @@ export const ViewPheDuyetDiInHDXBNXBGDVN = React.memo((props: ViewPheDuyetDiInHD
 
     const openApproveModal = useCallback((rows: PheDuyetDiInRow[]) => {
 
-        const eligibleRows = rows.filter((row) => !row.DaPheDuyetDiIn);
+        // const eligibleRows = rows.filter((row) => !row.DaPheDuyetDiIn);
 
-        if (eligibleRows.length === 0) {
+        // if (eligibleRows.length === 0) {
 
-            window._toastbox("Vui lòng chọn ít nhất một sách chưa phê duyệt đi in", "danger");
+        //     window._toastbox("Vui lòng chọn ít nhất một sách chưa phê duyệt đi in", "danger");
 
-            return;
+        //     return;
 
-        }
+        // }
 
-        setModalItems(eligibleRows);
+        setModalItems(rows);
 
         setModalOpen(true);
 
@@ -167,6 +175,26 @@ export const ViewPheDuyetDiInHDXBNXBGDVN = React.memo((props: ViewPheDuyetDiInHD
         openApproveModal([row]);
 
     }, [openApproveModal]);
+
+
+
+    const handleViewDetail = useCallback((row: PheDuyetDiInRow) => {
+
+        setDetailRow(row);
+
+        setDetailModalOpen(true);
+
+    }, []);
+
+
+
+    const handleDetailModalClose = useCallback(() => {
+
+        setDetailModalOpen(false);
+
+        setDetailRow(null);
+
+    }, []);
 
 
 
@@ -232,7 +260,7 @@ export const ViewPheDuyetDiInHDXBNXBGDVN = React.memo((props: ViewPheDuyetDiInHD
 
             </div>
 
-            <TablePheDuyetDiInComponent onApproveRow={handleApproveRow} />
+            <TablePheDuyetDiInComponent onApproveRow={handleApproveRow} onViewDetail={handleViewDetail} />
 
             <ComponentPagination pagiInfo={pagiInfo} callBack={getListPheDuyetDiIn} />
 
@@ -245,6 +273,18 @@ export const ViewPheDuyetDiInHDXBNXBGDVN = React.memo((props: ViewPheDuyetDiInHD
                 onClose={handleModalClose}
 
                 onSuccess={handleModalSuccess}
+
+            />
+
+            <ModalChiTietPheDuyetDiIn
+
+                open={detailModalOpen}
+
+                row={detailRow}
+
+                listLop={listLop}
+
+                onClose={handleDetailModalClose}
 
             />
 
@@ -261,6 +301,8 @@ const ROOT_ID = "root-phe-duyet-di-in-hdxb-nxbgdvn";
 const bladeProps: ViewPheDuyetDiInHDXBNXBGDVNProps = {
 
     listDonvi: [] as DonVi[],
+
+    listLop: [] as Lop[],
 
     ...readRootDataProps<ViewPheDuyetDiInHDXBNXBGDVNProps>(ROOT_ID),
 

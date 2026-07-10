@@ -12,6 +12,8 @@ export interface ManagePhieuDkKhxbCxbState {
     phieuCapMaCxbContext: PhieuDkKhxbCxb | null;
     showModalKetChuyen: boolean;
     phieuKetChuyenContext: PhieuDkKhxbCxb | null;
+    showModalXetDuyet: boolean;
+    phieuXetDuyetContext: PhieuDkKhxbCxb | null;
 }
 
 interface ManagePhieuDkKhxbCxbActions {
@@ -28,6 +30,8 @@ interface ManagePhieuDkKhxbCxbActions {
     setShowModalCapMaCxb: (show: boolean) => void;
     openModalKetChuyen: (phieu: PhieuDkKhxbCxb) => void;
     setShowModalKetChuyen: (show: boolean) => void;
+    openModalXetDuyet: (phieu: PhieuDkKhxbCxb) => void;
+    setShowModalXetDuyet: (show: boolean) => void;
 }
 
 export type ManagePhieuDkKhxbCxbStore = ManagePhieuDkKhxbCxbState & ManagePhieuDkKhxbCxbActions;
@@ -47,6 +51,8 @@ export const useManagePhieuDkKhxbCxbStore = create<ManagePhieuDkKhxbCxbStore>((s
     phieuCapMaCxbContext: null,
     showModalKetChuyen: false,
     phieuKetChuyenContext: null,
+    showModalXetDuyet: false,
+    phieuXetDuyetContext: null,
 
     setListPhieuDkKhxbCxb: (listPhieuDkKhxbCxb) => set((state) => ({
         listPhieuDkKhxbCxb: typeof listPhieuDkKhxbCxb === "function"
@@ -71,4 +77,8 @@ export const useManagePhieuDkKhxbCxbStore = create<ManagePhieuDkKhxbCxbStore>((s
     openModalKetChuyen: (phieu) => set({ showModalKetChuyen: true, phieuKetChuyenContext: phieu }),
 
     setShowModalKetChuyen: (showModalKetChuyen) => set({ showModalKetChuyen }),
+
+    openModalXetDuyet: (phieu) => set({ showModalXetDuyet: true, phieuXetDuyetContext: phieu }),
+
+    setShowModalXetDuyet: (showModalXetDuyet) => set({ showModalXetDuyet }),
 }));

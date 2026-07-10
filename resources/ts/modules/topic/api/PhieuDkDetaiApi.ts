@@ -1,5 +1,15 @@
 import { defaultPagiInfo, type PagiResult } from "../../page/type";
-import type { FilterPhieuDkDetai, PhieuDkDetai } from '../type/PhieuDkDetai';
+import { formatDateToIso8601UtcOffset } from "../../core/utils/helpersDayjs";
+import type { FilterPhieuDkDetai, PhieuDkDetai, PhieuDkDetaiDateKey } from '../type/PhieuDkDetai';
+
+const STORE_DATE_KEYS: PhieuDkDetaiDateKey[] = [
+    "NgayDK",
+    "BanQuyenTuNgay",
+    "BanQuyenDenNgay",
+    "NgayKyHDBS",
+    "TuNgayHDBS",
+    "DenNgayHDBS",
+];
 
 export class PhieuDkDetaiApi {
     static readonly conditionDefault : Partial<PhieuDkDetai> = {
@@ -8,6 +18,12 @@ export class PhieuDkDetaiApi {
 
     static readonly serializePayloadForStore = (data: Partial<PhieuDkDetai>): Record<string, unknown> => {
         const payload: Record<string, unknown> = { ...data };
+        for (const key of STORE_DATE_KEYS) {
+            if (!(key in payload) || payload[key] == null) {
+                continue;
+            }
+            payload[key] = formatDateToIso8601UtcOffset(payload[key] as Date);
+        }
         return payload;
     };
 
@@ -38,7 +54,7 @@ export class PhieuDkDetaiApi {
     static async upsert(data: Partial<PhieuDkDetai>): Promise<PhieuDkDetai|null> {
         const url = "/api/topic/phieu-dk-detai/store";
         try {
-            const res = await window._apiCreate(url, data);
+            const res = await window._apiCreate(url, PhieuDkDetaiApi.serializePayloadForStore(data));
             return res;
         } catch (err: any) {
             console.log(err);

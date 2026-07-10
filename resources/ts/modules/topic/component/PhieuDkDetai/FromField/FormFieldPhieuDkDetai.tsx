@@ -47,12 +47,12 @@ interface FormFieldPhieuDkDetaiProps {
     listMonhoc: Monhoc[];
     listBosach: Bosach[];
     listTusach: Tusach[];
-    Donvi: DonVi | null;
+    listDonvi: DonVi[];
     listBTV: User[];
 }
 
 const FormFieldPhieuDkDetai = React.memo((props: FormFieldPhieuDkDetaiProps) => {
-    const { form, setField, invalidFields, listMangsach, listDoituong, listLop, listMonhoc, listBosach, listTusach, Donvi, listBTV} = props;
+    const { form, setField, invalidFields, listMangsach, listDoituong, listLop, listMonhoc, listBosach, listTusach, listDonvi, listBTV} = props;
     const [showModalChooseBTV, setShowModalChooseBTV] = useState(false);
 
     const onShowModalChooseBTV = useCallback(() => {
@@ -107,10 +107,13 @@ const FormFieldPhieuDkDetai = React.memo((props: FormFieldPhieuDkDetaiProps) => 
         [form.idListBTV, listBTV, setField],
     );
 
-    const handlerChangeLuatuoi = useCallback((value: unknown) => {
-        setField("TypeLuaTuoi", (value as number) ?? 0);
-        setField("LuaTuoi", listDoituong.find((item) => item.id === (value as number))?.TenDoiTuong ?? "");
-    }, [setField, listDoituong]);
+    const listDoiTuongSuDung = useMemo(
+        () =>
+            listDoituong.filter(
+                (item) => !LUA_TUOI_IDS.includes(item.id as (typeof LUA_TUOI_IDS)[number]),
+            ),
+        [listDoituong],
+    );
 
     const listLuaTuoiDoituong = useMemo(
         () =>
@@ -118,6 +121,34 @@ const FormFieldPhieuDkDetai = React.memo((props: FormFieldPhieuDkDetaiProps) => 
                 LUA_TUOI_IDS.includes(item.id as (typeof LUA_TUOI_IDS)[number]),
             ),
         [listDoituong],
+    );
+
+    const handlerChangeDoiTuong = useCallback((value: unknown) => {
+        setField("TypeLuaTuoi", (value as number) ?? 0);
+    }, [setField]);
+
+    const handlerChangeLuaTuoi = useCallback((value: unknown) => {
+        const id = (value as number) ?? 0;
+        setField(
+            "LuaTuoi",
+            listLuaTuoiDoituong.find((item) => item.id === id)?.TenDoiTuong ?? "",
+        );
+    }, [setField, listLuaTuoiDoituong]);
+
+    const luaTuoiSelectedId = useMemo(() => {
+        if (!form.LuaTuoi?.trim()) {
+            return undefined;
+        }
+        return listLuaTuoiDoituong.find((item) => item.TenDoiTuong === form.LuaTuoi)?.id;
+    }, [form.LuaTuoi, listLuaTuoiDoituong]);
+
+    const listDonviOptions = useMemo(
+        () =>
+            listDonvi.map((donvi) => ({
+                value: donvi.id,
+                label: donvi.TenDonVi,
+            })),
+        [listDonvi],
     );
 
     const onDeCuongChange = useCallback((contentHTML: string) => {
@@ -154,7 +185,7 @@ const FormFieldPhieuDkDetai = React.memo((props: FormFieldPhieuDkDetaiProps) => 
                                 placeholder="Ngày đăng ký"
                                 value={convertValueToDayjs(form.NgayDK)}
                                 onChange={(date: Dayjs | null | undefined) => {
-                                    if (date) setField("NgayDK", date ? new Date(date.toISOString()) : undefined);
+                                    setField("NgayDK", date ? date.toDate() : undefined);
                                 }}
                                 format="DD/MM/YYYY"
                             />
@@ -225,8 +256,17 @@ const FormFieldPhieuDkDetai = React.memo((props: FormFieldPhieuDkDetaiProps) => 
                 <div className="phieu-dk-grid-2wide">
                     <div className="phieu-dk-inline-row">
                         <InlineLabelReq>Tên đơn vị đăng ký</InlineLabelReq>
-                        <div className="phieu-dk-field">
-                            <Input size="small" value={Donvi?.TenDonVi ?? ""} readOnly />
+                        <div className="phieu-dk-field" {...markField("ID_DonVi")}>
+                            <Select
+                                size="small"
+                                className="w-100"
+                                showSearch
+                                placeholder="Chọn đơn vị đăng ký"
+                                value={form.ID_DonVi && form.ID_DonVi > 0 ? form.ID_DonVi : undefined}
+                                onChange={(value) => setField("ID_DonVi", value ?? 0)}
+                                options={listDonviOptions}
+                                optionFilterProp="label"
+                            />
                         </div>
                     </div>
                     <div className="phieu-dk-inline-row">
@@ -243,7 +283,8 @@ const FormFieldPhieuDkDetai = React.memo((props: FormFieldPhieuDkDetaiProps) => 
             </React.Fragment>
         ),
         [
-            Donvi?.TenDonVi,
+            form.ID_DonVi,
+            listDonviOptions,
             form.BienTapVien,
             form.DiaChi,
             form.ISBNCode,
@@ -340,7 +381,7 @@ const FormFieldPhieuDkDetai = React.memo((props: FormFieldPhieuDkDetaiProps) => 
                                 placeholder="Bản quyền từ ngày"
                                 value={convertValueToDayjs(form.BanQuyenTuNgay)}
                                 onChange={(date: Dayjs | null | undefined) => {
-                                    if (date) setField("BanQuyenTuNgay", date ? new Date(date.toISOString()) : undefined);
+                                    setField("BanQuyenTuNgay", date ? date.toDate() : undefined);
                                 }}
                                 format="DD/MM/YYYY"
                             />
@@ -356,7 +397,7 @@ const FormFieldPhieuDkDetai = React.memo((props: FormFieldPhieuDkDetaiProps) => 
                                         placeholder="Bản quyền đến ngày"
                                         value={convertValueToDayjs(form.BanQuyenDenNgay)}
                                         onChange={(date: Dayjs | null | undefined) => {
-                                            if (date) setField("BanQuyenDenNgay", date ? new Date(date.toISOString()) : undefined);
+                                            setField("BanQuyenDenNgay", date ? date.toDate() : undefined);
                                         }}
                                         format="DD/MM/YYYY"
                                     />
@@ -702,7 +743,7 @@ const FormFieldPhieuDkDetai = React.memo((props: FormFieldPhieuDkDetaiProps) => 
                                             placeholder="Ngày ký"
                                             value={convertValueToDayjs(form.NgayKyHDBS)}
                                             onChange={(date: Dayjs | null | undefined) => {
-                                                if (date) setField("NgayKyHDBS", date ? new Date(date.toISOString()) : undefined);
+                                                setField("NgayKyHDBS", date ? date.toDate() : undefined);
                                             }}
                                             format="DD/MM/YYYY"
                                         />
@@ -732,7 +773,7 @@ const FormFieldPhieuDkDetai = React.memo((props: FormFieldPhieuDkDetaiProps) => 
                                                 placeholder="Từ ngày"
                                                 value={convertValueToDayjs(form.TuNgayHDBS)}
                                                 onChange={(date: Dayjs | null | undefined) => {
-                                                    if (date) setField("TuNgayHDBS", date ? new Date(date.toISOString()) : undefined);
+                                                    setField("TuNgayHDBS", date ? date.toDate() : undefined);
                                                 }}
                                                 format="DD/MM/YYYY"
                                             />
@@ -744,7 +785,7 @@ const FormFieldPhieuDkDetai = React.memo((props: FormFieldPhieuDkDetaiProps) => 
                                                     placeholder="Đến ngày"
                                                     value={convertValueToDayjs(form.DenNgayHDBS)}
                                                     onChange={(date: Dayjs | null | undefined) => {
-                                                        if (date) setField("DenNgayHDBS", date ? new Date(date.toISOString()) : undefined);
+                                                        setField("DenNgayHDBS", date ? date.toDate() : undefined);
                                                     }}
                                                     format="DD/MM/YYYY"
                                                 />
@@ -817,11 +858,11 @@ const FormFieldPhieuDkDetai = React.memo((props: FormFieldPhieuDkDetaiProps) => 
                                     <InlineLabelReq>6.1. Đối tượng</InlineLabelReq>
                                     <div className="phieu-dk-field" {...markField("TypeLuaTuoi")}>
                                         <ComponentSelectAntObject
-                                            listData={listDoituong}
+                                            listData={listDoiTuongSuDung}
                                             keyValue="id"
                                             labelValue="TenDoiTuong"
-                                            onChange={handlerChangeLuatuoi}
-                                            value={form.TypeLuaTuoi ?? ""}
+                                            onChange={handlerChangeDoiTuong}
+                                            value={form.TypeLuaTuoi && form.TypeLuaTuoi > 0 ? form.TypeLuaTuoi : undefined}
                                             placeholder="Chọn đối tượng"
                                             style={{ width: "100%" }}
                                             showSearch={true}
@@ -840,9 +881,9 @@ const FormFieldPhieuDkDetai = React.memo((props: FormFieldPhieuDkDetaiProps) => 
                                             listData={listLuaTuoiDoituong}
                                             keyValue="id"
                                             labelValue="TenDoiTuong"
-                                            onChange={handlerChangeLuatuoi}
-                                            value={form.TypeLuaTuoi ?? ""}
-                                            placeholder="Chọn đối tượng"
+                                            onChange={handlerChangeLuaTuoi}
+                                            value={luaTuoiSelectedId}
+                                            placeholder="Chọn lứa tuổi"
                                             style={{ width: "100%" }}
                                             showSearch={true}
                                             optionFilterProp="label"
@@ -979,11 +1020,15 @@ const FormFieldPhieuDkDetai = React.memo((props: FormFieldPhieuDkDetaiProps) => 
             form.ThoiDiemCoDuBT,
             form.TuNgayHDBS,
             form.TypeLuaTuoi,
-            handlerChangeLuatuoi,
+            form.LuaTuoi,
+            handlerChangeDoiTuong,
+            handlerChangeLuaTuoi,
             listBosach,
+            listDoiTuongSuDung,
             listDoituong,
             listLop,
             listLuaTuoiDoituong,
+            luaTuoiSelectedId,
             listMangsach,
             listMonhoc,
             listTusach,

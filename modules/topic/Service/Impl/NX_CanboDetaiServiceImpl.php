@@ -58,6 +58,9 @@ class NX_CanboDetaiServiceImpl extends BaseService implements NX_CanboDetaiServi
 
     public function phanCongDocDuyet(array $idsDeTai, int $idCanBoDoc, int $idCanBoPhanCong): int
     {
+        /** @var CT_Detai_CongDoanService $congDoanService */
+        $congDoanService = app(CT_Detai_CongDoanService::class);
+
         if ($idCanBoDoc <= 0) {
             throw new Exception('Vui lòng chọn cán bộ phân công đọc duyệt');
         }
@@ -132,6 +135,13 @@ class NX_CanboDetaiServiceImpl extends BaseService implements NX_CanboDetaiServi
                 $phieu->TrangThai = PhieuDkDetaiTrangThai::HDXB_NXBGDVN_DANG_XET;
             }
             $phieu->save();
+
+            $congDoanService->ghiCongDoanTrangThai(
+                (int) $phieu->_id,
+                $idCanBoDoc,
+                $trangThai,
+                PhieuDkDetaiTrangThai::HDXB_NXBGDVN_DANG_XET
+            );
 
             $count++;
         }

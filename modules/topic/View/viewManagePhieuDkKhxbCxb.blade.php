@@ -3,6 +3,7 @@
 @php
     $pageProps = [
         'listUsers' => $listUsers,
+        'mapTrangThai' => $mapTrangThai,
     ];
 @endphp
 

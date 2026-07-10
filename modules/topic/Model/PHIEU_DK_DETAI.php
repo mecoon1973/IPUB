@@ -4,6 +4,7 @@ namespace Modules\Topic\Model;
 
 use Core\Model\Model;
 use DateTime;
+use Modules\Topic\Object\PhieuDkDetaiTrangThai;
 
 /**
  * @property int $_id

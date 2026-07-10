@@ -83,3 +83,9 @@ export function getPheDuyetDiInTrangThaiLabel(daPheDuyet: boolean, tenTrangThai?
     }
     return daPheDuyet ? "Đã phê duyệt đi in" : "Chưa phê duyệt đi in";
 }
+
+/** Kết luận xét duyệt bản thảo — ipub_dm_sach.XetDuyetBanThao */
+export function getXetDuyetBanThaoLabel(xetDuyet?: boolean): string {
+    const value = xetDuyet ? 1 : 0;
+    return PHE_DUYET_DI_IN_KET_LUAN_OPTIONS.find((opt) => opt.value === value)?.label ?? "Chưa duyệt";
+}

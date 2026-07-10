@@ -1,10 +1,14 @@
-import React from "react";
+import React, { useCallback } from "react";
 import { Dropdown, Table, type MenuProps, type TableProps } from "antd";
 import { formatDateToString } from "../../../core/utils/helpersDayjs";
 import { useManagePhieuChuyenBanThaoStore } from "../../store/PhieuChuyenBanThao/managePhieuChuyenBanThaoStore";
 import type { PhieuChuyenBanThao } from "../../type";
 
-export const TablePhieuChuyenBanThaoComponent = React.memo(() => {
+interface TablePhieuChuyenBanThaoProps {
+    onDelete?: (record: PhieuChuyenBanThao) => void;
+}
+
+export const TablePhieuChuyenBanThaoComponent = React.memo(({ onDelete }: TablePhieuChuyenBanThaoProps) => {
     const listPhieuChuyenBanThao = useManagePhieuChuyenBanThaoStore((state) => state.listPhieuChuyenBanThao);
 
     const columns: TableProps<PhieuChuyenBanThao>["columns"] = [
@@ -61,7 +65,8 @@ export const TablePhieuChuyenBanThaoComponent = React.memo(() => {
                     },
                     {
                         key: "delete",
-                        label: <a href={`/phieu-chuyen-ban-thao/xoa/${record.id}`}>Xóa</a>,
+                        label: <span className="text-danger">Xóa</span>,
+                        onClick: () => onDelete?.(record),
                     },
                     {
                         key: "view",

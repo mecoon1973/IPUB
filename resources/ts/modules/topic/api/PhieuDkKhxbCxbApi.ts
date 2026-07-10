@@ -1,5 +1,5 @@
 import type { PagiResult } from "../../page/type";
-import type { CapMaIsbnPayload, CapMaSoCxbPayload, FilterPhieuDkKhxbCxb, KetChuyenThanhSachPayload, PhieuDkDetai, PhieuDkKhxbCxb, StorePhieuDkKhxbCxbPayload } from "../type";
+import type { CapMaIsbnPayload, CapMaSoCxbPayload, FilterPhieuDkKhxbCxb, KetChuyenThanhSachPayload, LuuXetDuyetPhieuDkKhxbCxbPayload, PhieuDkDetai, PhieuDkKhxbCxb, StorePhieuDkKhxbCxbPayload, XetDuyetPhieuDkKhxbCxbRow } from "../type";
 import { formatDateToIso8601UtcOffset } from "../../core/utils/helpersDayjs";
 
 export class PhieuDkKhxbCxbApi {
@@ -143,6 +143,34 @@ export class PhieuDkKhxbCxbApi {
         try {
             const res = await window._apiCreate(url, data);
             return res as { phieu: PhieuDkKhxbCxb; countKetChuyen: number; listDeTai: PhieuDkDetai[] };
+        } catch (err: unknown) {
+            const message = (err as { responseJSON?: { message?: string } })?.responseJSON?.message
+                || "Có lỗi xảy ra, vui lòng thử lại";
+            window._toastbox(message, "danger");
+            return null;
+        }
+    }
+
+    static async getXetDuyet(idPhieu: number): Promise<{ phieu: PhieuDkKhxbCxb; listDeTai: XetDuyetPhieuDkKhxbCxbRow[] } | null> {
+        const url = `/api/topic/phieu-dk-khxb-cxb/xet-duyet/${idPhieu}`;
+        try {
+            const res = await window._apiGet(url);
+            return res as { phieu: PhieuDkKhxbCxb; listDeTai: XetDuyetPhieuDkKhxbCxbRow[] };
+        } catch (err: unknown) {
+            const message = (err as { responseJSON?: { message?: string } })?.responseJSON?.message
+                || "Có lỗi xảy ra, vui lòng thử lại";
+            window._toastbox(message, "danger");
+            return null;
+        }
+    }
+
+    static async luuXetDuyet(
+        data: LuuXetDuyetPhieuDkKhxbCxbPayload,
+    ): Promise<{ phieu: PhieuDkKhxbCxb; count: number; listDeTai: XetDuyetPhieuDkKhxbCxbRow[] } | null> {
+        const url = "/api/topic/phieu-dk-khxb-cxb/xet-duyet";
+        try {
+            const res = await window._apiCreate(url, data);
+            return res as { phieu: PhieuDkKhxbCxb; count: number; listDeTai: XetDuyetPhieuDkKhxbCxbRow[] };
         } catch (err: unknown) {
             const message = (err as { responseJSON?: { message?: string } })?.responseJSON?.message
                 || "Có lỗi xảy ra, vui lòng thử lại";

@@ -43,22 +43,22 @@ class PhieuDkDetaiController extends Controller {
         /** @var PhieuDkDetaiService $phieuDkDetaiService */
         $phieuDkDetaiService = app(PhieuDkDetaiService::class);
         $phieuDkDetai = $id ? $phieuDkDetaiService->findOne("no-cache",['id' => $id]) : null;
-        $dataView = $this->getDataView(["listDoituong", "listMangsach", "mapTrangThai", "listLop", "listMonhoc", "listBosach", "listTusach"]);
+        $dataView = $this->getDataView(["listDoituong", "listMangsach", "mapTrangThai", "listLop", "listMonhoc", "listBosach", "listTusach", "listDonvi"]);
         /** tìm đơn vị của phiếu đăng ký đề tài */
         $idDonvi = 0;
         if($phieuDkDetai){
             $idDonvi = $phieuDkDetai->ID_DonVi;
-        }else{
-            if($user && isset($user->ID_DonVi)){
-                $idDonvi = $user->ID_DonVi;
-            }
+        }elseif($user && !empty($user->ID_DonVi)){
+            $idDonvi = (int) $user->ID_DonVi;
         }
         /** @var DonviService $donviService */
         $donviService = app(DonviService::class);
-        $donvi = $idDonvi ? $donviService->findOne("no-cache",['id' => $idDonvi]) : null;
-        //
-
-        //
+        $donviModel = $idDonvi ? $donviService->findOne("no-cache", ['_id' => $idDonvi]) : null;
+        $donvi = null;
+        if($donviModel){
+            $donvi = $donviModel->toArray();
+            $donvi['id'] = (int) $donviModel->_id;
+        }
         /** @var UserService $userService */
         $userService = app(UserService::class);
         $listBTV = $userService->getListBTV();

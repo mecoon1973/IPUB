@@ -12,6 +12,7 @@ use Modules\System\Traits\TraitsGetData;
 use Modules\Topic\Request\FrmCapMaIsbnRequest;
 use Modules\Topic\Request\FrmCapMaSoCxbRequest;
 use Modules\Topic\Request\FrmKetChuyenThanhSachRequest;
+use Modules\Topic\Request\FrmLuuXetDuyetPhieuDkKhxbCxbRequest;
 use Modules\Topic\Request\FrmSearchPhieuDkKhxbCxbRequest;
 use Modules\Topic\Request\FrmStorePhieuDkKhxbCxbRequest;
 use Modules\Topic\Service\PhieuDkKhxbCxbService;
@@ -26,9 +27,8 @@ class PhieuDkKhxbCxbController extends Controller
     {
         /** @var UserService $userService */
         $userService = app(UserService::class);
-        $dataView = [
-            'listUsers' => $userService->getListBTV(),
-        ];
+        $dataView = $this->getDataView(['mapTrangThai']);
+        $dataView['listUsers'] = $userService->getListBTV();
 
         return view('topic::viewManagePhieuDkKhxbCxb', $dataView);
     }
@@ -220,5 +220,42 @@ class PhieuDkKhxbCxbController extends Controller
 
         return response()->json($result, 200);
 
+    }
+
+    public function getXetDuyet(Request $request, int $id): JsonResponse
+    {
+        /** @var PhieuDkKhxbCxbService $phieuDkKhxbCxbService */
+        $phieuDkKhxbCxbService = app(PhieuDkKhxbCxbService::class);
+        try {
+            $result = $phieuDkKhxbCxbService->getXetDuyet($id);
+
+            return response()->json($result, 200);
+        } catch (Exception $exception) {
+            return response()->json([
+                'message' => $exception->getMessage(),
+            ], 500);
+        }
+    }
+
+    public function luuXetDuyet(FrmLuuXetDuyetPhieuDkKhxbCxbRequest $request): JsonResponse
+    {
+        /** @var User $user */
+        $user = Auth::user();
+        /** @var PhieuDkKhxbCxbService $phieuDkKhxbCxbService */
+        $phieuDkKhxbCxbService = app(PhieuDkKhxbCxbService::class);
+        try {
+            $payload = $request->toPayload();
+            $result = $phieuDkKhxbCxbService->luuXetDuyet(
+                (int) $payload['idPhieu'],
+                $payload['items'],
+                (int) $user->_id
+            );
+
+            return response()->json($result, 200);
+        } catch (Exception $exception) {
+            return response()->json([
+                'message' => $exception->getMessage(),
+            ], 500);
+        }
     }
 }

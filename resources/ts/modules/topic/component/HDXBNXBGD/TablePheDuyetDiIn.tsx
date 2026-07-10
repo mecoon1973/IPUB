@@ -2,13 +2,14 @@ import React, { useCallback, useEffect, useMemo } from "react";
 import { Dropdown, Table, Tag, type MenuProps, type TableProps } from "antd";
 import { usePheDuyetDiInStore } from "../../store/HDXBNXBGDVN/pheDuyetDiInStore";
 import type { PheDuyetDiInRow } from "../../type";
-import { getTrangThaiDocBanThaoLabel, TRANG_THAI_DOC_BAN_THAO } from "../../constants/hdxbNxbgdvn";
+import { getPheDuyetDiInTrangThaiLabel } from "../../constants/hdxbNxbgdvn";
 
 interface TablePheDuyetDiInProps {
     onApproveRow?: (row: PheDuyetDiInRow) => void;
+    onViewDetail?: (row: PheDuyetDiInRow) => void;
 }
 
-function TablePheDuyetDiInComponent({ onApproveRow }: TablePheDuyetDiInProps) {
+function TablePheDuyetDiInComponent({ onApproveRow, onViewDetail }: TablePheDuyetDiInProps) {
     const listRows = usePheDuyetDiInStore((state) => state.listRows);
     const selectedRowKeys = usePheDuyetDiInStore((state) => state.selectedRowKeys);
     const setSelectedRowKeys = usePheDuyetDiInStore((state) => state.setSelectedRowKeys);
@@ -21,9 +22,9 @@ function TablePheDuyetDiInComponent({ onApproveRow }: TablePheDuyetDiInProps) {
         () => ({
             selectedRowKeys,
             onChange: (keys: React.Key[]) => setSelectedRowKeys(keys.map(String)),
-            getCheckboxProps: (record: PheDuyetDiInRow) => ({
-                disabled: record.DaPheDuyetDiIn,
-            }),
+            // getCheckboxProps: (record: PheDuyetDiInRow) => ({
+            //     disabled: record.DaPheDuyetDiIn,
+            // }),
         }),
         [selectedRowKeys, setSelectedRowKeys],
     );
@@ -60,17 +61,12 @@ function TablePheDuyetDiInComponent({ onApproveRow }: TablePheDuyetDiInProps) {
             {
                 title: "Trạng thái",
                 key: "TrangThai",
-                width: 180,
+                width: 200,
                 render: (_, record) => {
-                    const trangThai = record.TrangThaiDocBanThao ?? TRANG_THAI_DOC_BAN_THAO.CHUA_DOC_DUYET;
-                    const tagColor = trangThai === TRANG_THAI_DOC_BAN_THAO.DA_DOC_DUYET
-                        ? "success"
-                        : trangThai === TRANG_THAI_DOC_BAN_THAO.DANG_DOC_DUYET
-                            ? "processing"
-                            : "default";
+                    const daPheDuyetDiIn = record.XetDuyetBanThao ?? record.DaPheDuyetDiIn ?? false;
                     return (
-                        <Tag color={tagColor} className="m-0">
-                            {getTrangThaiDocBanThaoLabel(trangThai, record.TenTrangThai)}
+                        <Tag color={daPheDuyetDiIn ? "success" : "default"} className="m-0">
+                            {getPheDuyetDiInTrangThaiLabel(daPheDuyetDiIn)}
                         </Tag>
                     );
                 },
@@ -83,11 +79,11 @@ function TablePheDuyetDiInComponent({ onApproveRow }: TablePheDuyetDiInProps) {
                 render: (_, record) => {
                     const items: MenuProps["items"] = [
                         {
-                            key: "pheDuyetDiIn",
-                            label: "Phê duyệt đi in",
-                            disabled: record.DaPheDuyetDiIn,
-                            onClick: () => handleApproveRow(record),
+                            key: "chitiet",
+                            label: "Xem chi tiết",
+                            onClick: () => onViewDetail?.(record),
                         },
+
                     ];
                     return (
                         <Dropdown menu={{ items }} trigger={["click"]}>
@@ -99,7 +95,7 @@ function TablePheDuyetDiInComponent({ onApproveRow }: TablePheDuyetDiInProps) {
                 },
             },
         ],
-        [handleApproveRow],
+        [onViewDetail],
     );
 
     return (

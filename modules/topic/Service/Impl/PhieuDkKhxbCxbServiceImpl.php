@@ -10,11 +10,14 @@ use MongoDB\BSON\Regex;
 use Modules\Topic\Model\PHIEU_DK_KHXB_CXB;
 use Modules\Topic\Model\PHIEU_DK_DETAI;
 use Modules\Topic\Object\FilterPhieuDkKhxbCxb;
+use Modules\Topic\Object\PhieuDkDetaiTrangThai;
 use Modules\Book\Repository\SachRepository;
 use Modules\Book\Service\SachService;
+use Modules\System\Service\DonviService;
 use Modules\Topic\Repository\CT_PhieuDkKhxbCxbRepository;
 use Modules\Topic\Repository\PhieuDkDetaiRepository;
 use Modules\Topic\Repository\PhieuDkKhxbCxbRepository;
+use Modules\Topic\Service\CT_Detai_CongDoanService;
 use Modules\Topic\Service\PhieuDkKhxbCxbService;
 
 class PhieuDkKhxbCxbServiceImpl extends BaseService implements PhieuDkKhxbCxbService
@@ -688,5 +691,154 @@ class PhieuDkKhxbCxbServiceImpl extends BaseService implements PhieuDkKhxbCxbSer
         if ($duplicate) {
             throw new Exception("Mã phiếu [{$maSo}] đã được sử dụng");
         }
+    }
+
+    public function getXetDuyet(int $idPhieu): array
+    {
+        /** @var PHIEU_DK_KHXB_CXB|null $phieu */
+        $phieu = $this->baseRepo->get($idPhieu);
+        if (!$phieu || $phieu->IsDeleted) {
+            throw new Exception('Phiếu trình CXB không tồn tại');
+        }
+
+        $listCt = $this->ctPhieuDkKhxbCxbRepo->findAll(
+            [
+                'ID_PhieuDK' => $idPhieu,
+                'IsDeleted' => false,
+            ],
+            ['ThuTuTrongPhieu' => 'asc']
+        );
+
+        $listIdDeTai = [];
+        foreach ($listCt as $ct) {
+            $listIdDeTai[] = (int) $ct->ID_DeTai;
+        }
+
+        $deTaiMap = $this->loadDeTaiMapByIds($listIdDeTai);
+        $donviMap = $this->loadDonviMapByDeTai($deTaiMap);
+
+        $listDeTai = [];
+        foreach ($listCt as $ct) {
+            $idDeTai = (int) $ct->ID_DeTai;
+            /** @var PHIEU_DK_DETAI|null $deTai */
+            $deTai = $deTaiMap[$idDeTai] ?? null;
+            if (!$deTai) {
+                continue;
+            }
+
+            $idDonVi = (int) ($deTai->ID_DonVi ?? 0);
+            $listDeTai[] = [
+                'id' => $idDeTai,
+                'idCt' => (int) $ct->_id,
+                'TenDeTai' => (string) ($deTai->TenDeTai ?? ''),
+                'TenDonVi' => $donviMap[$idDonVi] ?? '',
+                'TrangThai' => (int) ($deTai->TrangThai ?? $ct->TrangThai ?? 0),
+            ];
+        }
+
+        return [
+            'phieu' => $phieu,
+            'listDeTai' => $listDeTai,
+        ];
+    }
+
+    public function luuXetDuyet(int $idPhieu, array $items, int $idCanBo): array
+    {
+        if ($idCanBo <= 0) {
+            throw new Exception('Người dùng chưa đăng nhập');
+        }
+
+        /** @var PHIEU_DK_KHXB_CXB|null $phieu */
+        $phieu = $this->baseRepo->get($idPhieu);
+        if (!$phieu || $phieu->IsDeleted) {
+            throw new Exception('Phiếu trình CXB không tồn tại');
+        }
+
+        $allowedTrangThai = array_flip(PhieuDkDetaiTrangThai::cxbXetDuyetValues());
+        $idDeTaiTrongPhieu = array_flip($this->loadListIdDeTaiFromChiTiet($idPhieu));
+
+        /** @var CT_Detai_CongDoanService $congDoanService */
+        $congDoanService = app(CT_Detai_CongDoanService::class);
+
+        $count = 0;
+        $now = now();
+
+        foreach ($items as $item) {
+            $idDeTai = (int) ($item['idDeTai'] ?? 0);
+            $trangThaiMoi = (int) ($item['TrangThai'] ?? -1);
+
+            if ($idDeTai <= 0 || !isset($idDeTaiTrongPhieu[$idDeTai]) || !isset($allowedTrangThai[$trangThaiMoi])) {
+                continue;
+            }
+
+            /** @var PHIEU_DK_DETAI|null $deTai */
+            $deTai = $this->phieuDkDetaiRepo->get($idDeTai);
+            if (!$deTai) {
+                continue;
+            }
+
+            $trangThaiCu = (int) ($deTai->TrangThai ?? 0);
+            if ($trangThaiCu === $trangThaiMoi) {
+                continue;
+            }
+
+            $deTai->TrangThai = $trangThaiMoi;
+            $deTai->EditedBy = $idCanBo;
+            $deTai->EditedOn = $now;
+            $deTai->save();
+
+            $ct = $this->ctPhieuDkKhxbCxbRepo->findOne([
+                'ID_PhieuDK' => $idPhieu,
+                'ID_DeTai' => $idDeTai,
+                'IsDeleted' => false,
+            ]);
+            if ($ct) {
+                $ct->TrangThai = $trangThaiMoi;
+                $ct->EditedBy = $idCanBo;
+                $ct->EditedOn = $now;
+                $ct->save();
+            }
+
+            $congDoanService->ghiCongDoanTrangThai($idDeTai, $idCanBo, $trangThaiCu, $trangThaiMoi);
+            $count++;
+        }
+
+        if ($count === 0) {
+            throw new Exception('Không có đề tài nào được cập nhật');
+        }
+
+        return [
+            'phieu' => $phieu,
+            'count' => $count,
+            'listDeTai' => $this->getXetDuyet($idPhieu)['listDeTai'],
+        ];
+    }
+
+    /** @param array<int, PHIEU_DK_DETAI> $deTaiMap */
+    private function loadDonviMapByDeTai(array $deTaiMap): array
+    {
+        $idsDonVi = [];
+        foreach ($deTaiMap as $deTai) {
+            $idDonVi = (int) ($deTai->ID_DonVi ?? 0);
+            if ($idDonVi > 0) {
+                $idsDonVi[$idDonVi] = true;
+            }
+        }
+
+        if (count($idsDonVi) === 0) {
+            return [];
+        }
+
+        /** @var DonviService $donviService */
+        $donviService = app(DonviService::class);
+        $map = [];
+        foreach (array_keys($idsDonVi) as $idDonVi) {
+            $donvi = $donviService->findOne('no-cache', ['_id' => $idDonVi]);
+            if ($donvi) {
+                $map[$idDonVi] = (string) ($donvi->TenDonVi ?? '');
+            }
+        }
+
+        return $map;
     }
 }

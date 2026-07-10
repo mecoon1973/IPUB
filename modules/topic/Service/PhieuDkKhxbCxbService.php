@@ -28,4 +28,8 @@ interface PhieuDkKhxbCxbService extends IBaseService
     public function capMaIsbn(int $idPhieu, array $isbnList, int $idCanBo): array;
 
     public function ketChuyenThanhSach(int $idPhieu, array $listIdDeTai, int $idCanBo): array;
+
+    public function getXetDuyet(int $idPhieu): array;
+
+    public function luuXetDuyet(int $idPhieu, array $items, int $idCanBo): array;
 }
