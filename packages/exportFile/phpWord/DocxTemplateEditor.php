@@ -34,6 +34,42 @@ class DocxTemplateEditor extends TemplateProcessor
     }
 
     /**
+     * Thay paragraph chứa placeholder bằng HTML đã convert sang OOXML (nhiều &lt;w:p&gt;).
+     *
+     * Giữ bold/italic/list/xuống dòng/indent margin-left; numbering theo value/start của HTML.
+     * Placeholder nên đứng một mình trong một đoạn Word (không chung dòng với text khác).
+     */
+    public function replaceHtmlBlock(string $search, string $html): void
+    {
+        if ($search === '') {
+            return;
+        }
+
+        $searchKeys = $this->resolveSearchKeys($search);
+        foreach ($searchKeys as $searchKey) {
+            $this->tempDocumentMainPart = $this->replaceHtmlBlockInXml(
+                $this->tempDocumentMainPart,
+                $searchKey,
+                $html
+            );
+            foreach ($this->tempDocumentHeaders as $index => $headerXml) {
+                $this->tempDocumentHeaders[$index] = $this->replaceHtmlBlockInXml(
+                    $headerXml,
+                    $searchKey,
+                    $html
+                );
+            }
+            foreach ($this->tempDocumentFooters as $index => $footerXml) {
+                $this->tempDocumentFooters[$index] = $this->replaceHtmlBlockInXml(
+                    $footerXml,
+                    $searchKey,
+                    $html
+                );
+            }
+        }
+    }
+
+    /**
      * Thay mọi lần xuất hiện $search bằng $replace trong body/header/footer.
      *
      * Nếu không tìm thấy exact match và $search dạng !Name!, thử không phân biệt hoa/thường
@@ -75,6 +111,86 @@ class DocxTemplateEditor extends TemplateProcessor
                 self::MAXIMUM_REPLACEMENTS_DEFAULT
             );
         }
+    }
+
+    /**
+     * Tìm từng lần xuất hiện $searchKey, thay cả &lt;w:p&gt; chứa nó bằng OOXML từ HTML.
+     */
+    protected function replaceHtmlBlockInXml(string $xml, string $searchKey, string $html): string
+    {
+        if ($xml === '' || $searchKey === '' || !str_contains($xml, $searchKey)) {
+            return $xml;
+        }
+
+        $offset = 0;
+        while (($pos = strpos($xml, $searchKey, $offset)) !== false) {
+            $start = $this->findXmlBlockStartIn($xml, $pos, 'w:p');
+            $end = $start >= 0 ? $this->findXmlBlockEndIn($xml, $start, 'w:p') : -1;
+            if ($start < 0 || $end < 0) {
+                // Không nằm trong paragraph → fallback text thuần (escape)
+                $plain = HtmlToDocxXml::looksLikeHtml($html)
+                    ? trim(html_entity_decode(strip_tags($html), ENT_QUOTES | ENT_HTML5, 'UTF-8'))
+                    : $html;
+                $escaped = (new Xml())->escape(static::ensureUtf8Encoded($plain));
+                $xml = substr($xml, 0, $pos) . $escaped . substr($xml, $pos + strlen($searchKey));
+                $offset = $pos + strlen($escaped);
+                continue;
+            }
+
+            $placeholderPara = substr($xml, $start, $end - $start);
+            $defaultRPr = $this->extractFirstRunProperties($placeholderPara);
+            $blockXml = HtmlToDocxXml::convert($html, $defaultRPr);
+
+            $xml = substr($xml, 0, $start) . $blockXml . substr($xml, $end);
+            $offset = $start + strlen($blockXml);
+        }
+
+        return $xml;
+    }
+
+    /**
+     * @see TemplateProcessor::findXmlBlockStart() — bản làm việc trên chuỗi XML bất kỳ
+     */
+    protected function findXmlBlockStartIn(string $xml, int $offset, string $blockType): int
+    {
+        $reverseOffset = (strlen($xml) - $offset) * -1;
+        $blockStart = strrpos($xml, '<' . $blockType . ' ', $reverseOffset);
+        if (false === $blockStart || strrpos(substr($xml, $blockStart, $offset - $blockStart), '<' . $blockType . '>')) {
+            $blockStart = strrpos($xml, '<' . $blockType . '>', $reverseOffset);
+        }
+
+        return ($blockStart === false) ? -1 : $blockStart;
+    }
+
+    /**
+     * @see TemplateProcessor::findXmlBlockEnd()
+     */
+    protected function findXmlBlockEndIn(string $xml, int $offset, string $blockType): int
+    {
+        $blockEndStart = strpos($xml, '</' . $blockType . '>', $offset);
+
+        return ($blockEndStart === false) ? -1 : $blockEndStart + 3 + strlen($blockType);
+    }
+
+    /**
+     * Lấy &lt;w:rPr&gt; từ run text chứa placeholder (không lấy rPr trong w:pPr —
+     * pPr thường có w:b w:val="0" và sẽ đè mất bold/italic của HTML).
+     */
+    protected function extractFirstRunProperties(string $paragraphXml): string
+    {
+        if (preg_match('/<w:r\b[^>]*>.*?<w:rPr\b[^>]*>.*?<\/w:rPr>/s', $paragraphXml, $runMatch) === 1
+            && preg_match('/<w:rPr\b[^>]*>.*?<\/w:rPr>/s', $runMatch[0], $match) === 1
+        ) {
+            return $match[0];
+        }
+
+        if (preg_match('/<w:r\b[^>]*>.*?<w:rPr\b[^>]*\/>/s', $paragraphXml, $runMatch) === 1
+            && preg_match('/<w:rPr\b[^>]*\/>/', $runMatch[0], $match) === 1
+        ) {
+            return $match[0];
+        }
+
+        return '';
     }
 
     /**

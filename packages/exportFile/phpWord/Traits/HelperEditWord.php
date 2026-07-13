@@ -15,7 +15,7 @@ trait HelperEditWord
     abstract public function getTemplateEditor(): DocxTemplateEditor;
 
     /**
-     * Thay hàng loạt placeholder trong DOCX bằng giá trị tương ứng.
+     * Thay hàng loạt placeholder trong DOCX bằng giá trị tương ứng (text thuần).
      *
      * @param array<string, mixed> $content Map placeholder → value
      */
@@ -31,6 +31,24 @@ trait HelperEditWord
     }
 
     /**
+     * Thay hàng loạt placeholder bằng HTML (giữ bold/italic/list/indent/numbering).
+     *
+     * Placeholder HTML nên đứng một mình trong một đoạn Word.
+     *
+     * @param array<string, mixed> $content Map placeholder → HTML string
+     */
+    public function replateHtmlContent(array $content): void
+    {
+        foreach ($content as $placeholder => $value) {
+            if (!is_string($placeholder) || $placeholder === '') {
+                continue;
+            }
+
+            $this->replaceHtmlContent($placeholder, $value);
+        }
+    }
+
+    /**
      * Thay một placeholder trong toàn bộ document (body + header + footer).
      */
     public function replacePlaceholderValue(string $placeholder, mixed $value): void
@@ -40,6 +58,21 @@ trait HelperEditWord
         }
 
         $this->getTemplateEditor()->replaceLiteral(
+            $placeholder,
+            $this->normalizeReplacementValue($value)
+        );
+    }
+
+    /**
+     * Thay một placeholder bằng HTML block (OOXML), không escape thẻ.
+     */
+    public function replaceHtmlContent(string $placeholder, mixed $value): void
+    {
+        if ($placeholder === '') {
+            throw new InvalidArgumentException('Placeholder không được rỗng.');
+        }
+
+        $this->getTemplateEditor()->replaceHtmlBlock(
             $placeholder,
             $this->normalizeReplacementValue($value)
         );
