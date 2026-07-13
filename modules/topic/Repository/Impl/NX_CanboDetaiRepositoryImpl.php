@@ -31,4 +31,28 @@ class NX_CanboDetaiRepositoryImpl extends BaseRepository implements NX_CanboDeta
 
         return array_values(array_unique($ids));
     }
+
+    public function getActivePhanCongDeTaiIdsByCanBo(int $idCanBo): array
+    {
+        if ($idCanBo <= 0) {
+            return [];
+        }
+
+        $rows = $this->findAll([
+            'LaPhanCong' => true,
+            'IsDeleted' => false,
+            'InUsed' => true,
+            'ID_CanBo' => $idCanBo,
+        ], [], ['ID_DeTai']);
+
+        $ids = [];
+        foreach ($rows as $row) {
+            $idDeTai = (int) ($row->ID_DeTai ?? 0);
+            if ($idDeTai > 0) {
+                $ids[] = $idDeTai;
+            }
+        }
+
+        return array_values(array_unique($ids));
+    }
 }

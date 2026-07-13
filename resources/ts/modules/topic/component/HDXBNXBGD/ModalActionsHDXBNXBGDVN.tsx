@@ -25,17 +25,6 @@ function ModalActionsHDXBNXBGDVN({ onSuccess }: { onSuccess?: () => void }) {
 
     const modalConfig = useMemo<ModalConfig | null>(() => {
         switch (activeModal) {
-            case "docDuyet":
-                return {
-                    key: "docDuyet",
-                    title: "ĐỌC DUYỆT ĐỀ TÀI",
-                    description: "Xác nhận chuyển các đề tài đã chọn sang bước đọc duyệt.",
-                    confirmLabel: "Xác nhận",
-                    onConfirm: async () => {
-                        window._toastbox("Chức năng đọc duyệt đang được hoàn thiện", "info");
-                        return true;
-                    },
-                };
             case "inPhieuTrinh":
                 return {
                     key: "inPhieuTrinh",

@@ -6,6 +6,7 @@ import FilterHDXBNXBGDVNComponent from '../../component/HDXBNXBGD/FilterHDXBNXBG
 import TableHDXBNXBGDVNComponent from '../../component/HDXBNXBGD/TableHDXBNXBGDVNComponent';
 import ActionToolbarHDXBNXBGDVN from '../../component/HDXBNXBGD/ActionToolbarHDXBNXBGDVN';
 import ModalPhanCongDocDuyetHDXBNXBGDVN from '../../component/HDXBNXBGD/ModalPhanCongDocDuyetHDXBNXBGDVN';
+import ModalPhanCongDocDuyetAssignHDXBNXBGDVN from '../../component/HDXBNXBGD/ModalPhanCongDocDuyetAssignHDXBNXBGDVN';
 import ModalXetDuyetDeTaiHDXBNXBGDVN from '../../component/HDXBNXBGD/ModalXetDuyetDeTaiHDXBNXBGDVN';
 import ModalActionsHDXBNXBGDVN from '../../component/HDXBNXBGD/ModalActionsHDXBNXBGDVN';
 import { mountReactComponentOnReady, readRootDataProps } from '../../../core/utils/helpers';
@@ -56,7 +57,8 @@ export const ViewManageHDXBNXBGDVN = React.memo((props: ViewManageHDXBNXBGDVNPro
             <ActionToolbarHDXBNXBGDVN />
             <TableHDXBNXBGDVNComponent />
             <ComponentPagination pagiInfo={pagiInfo} callBack={getListHDXBNXBGD} />
-            <ModalPhanCongDocDuyetHDXBNXBGDVN listBTV={listBTV} onSuccess={getListHDXBNXBGD} />
+            <ModalPhanCongDocDuyetAssignHDXBNXBGDVN listBTV={listBTV} onSuccess={getListHDXBNXBGD} />
+            <ModalPhanCongDocDuyetHDXBNXBGDVN onSuccess={getListHDXBNXBGD} />
             <ModalXetDuyetDeTaiHDXBNXBGDVN listDonvi={listDonvi} onSuccess={getListHDXBNXBGD} />
             <ModalActionsHDXBNXBGDVN onSuccess={getListHDXBNXBGD} />
         </div>

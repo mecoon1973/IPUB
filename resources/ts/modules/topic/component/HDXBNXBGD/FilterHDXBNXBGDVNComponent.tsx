@@ -3,7 +3,7 @@ import type { DonVi } from '../../../user/type';
 import { ComponentSelectAntObject } from '../../../page/component/componentSelectAnt';
 import { useManageHDXBNXBGDVNStore } from '../../store/HDXBNXBGDVN/manageHDXBNXBGDVN';
 import type { FilterHDXBNXBGDVN } from '../../type';
-import { HDXBNXBGDVN_TRANG_THAI_FILTER_OPTIONS } from '../../constants/hdxbNxbgdvn';
+import { HDXBNXBGDVN_LOC_THEO_OPTIONS, HDXBNXBGDVN_TRANG_THAI_FILTER_OPTIONS } from '../../constants/hdxbNxbgdvn';
 
 interface FilterHDXBNXBGDVNComponentProps {
     listDonvi: DonVi[];
@@ -67,9 +67,11 @@ function FilterHDXBNXBGDVNComponent(props: FilterHDXBNXBGDVNComponentProps) {
                         value={filter.PhanCong}
                         onChange={(e) => updateFilter('PhanCong', Number(e.target.value))}
                     >
-                        <option value={-1}>Tất cả</option>
-                        <option value={0}>Chưa phân công</option>
-                        <option value={1}>Đã phân công</option>
+                        {HDXBNXBGDVN_LOC_THEO_OPTIONS.map((option) => (
+                            <option key={option.value} value={option.value}>
+                                {option.label}
+                            </option>
+                        ))}
                     </select>
                 </div>
 

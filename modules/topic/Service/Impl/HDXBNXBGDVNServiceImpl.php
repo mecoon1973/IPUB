@@ -159,18 +159,32 @@ class HDXBNXBGDVNServiceImpl extends BaseService implements HDXBNXBGDVNService
 
     private function buildConditionsWithPhanCong(FilterHDXBNXBGDVN $filter): array {
         $conditions = $filter->buildConditions();
+        $phanCong = $filter->PhanCong;
 
-        if ($filter->PhanCong !== 0 && $filter->PhanCong !== 1) {
+        if ($phanCong === null || $phanCong === FilterHDXBNXBGDVN::PHAN_CONG_TAT_CA) {
             return $conditions;
         }
 
         /** @var NX_CanboDetaiService $nxCanboDetaiService */
         $nxCanboDetaiService = app(NX_CanboDetaiService::class);
-        $idsDaPhanCong = $nxCanboDetaiService->getActivePhanCongDeTaiIds();
 
-        $phanCongCondition = $filter->PhanCong === 1
-            ? ['_id' => ['$in' => count($idsDaPhanCong) > 0 ? $idsDaPhanCong : [0]]]
-            : ['_id' => ['$nin' => $idsDaPhanCong]];
+        if ($phanCong === FilterHDXBNXBGDVN::PHAN_CONG_DA_CA_NHAN) {
+            $idCanBo = (int) (\Illuminate\Support\Facades\Auth::user()->_id ?? 0);
+            $idsDaPhanCong = $idCanBo > 0
+                ? $nxCanboDetaiService->getActivePhanCongDeTaiIdsByCanBo($idCanBo)
+                : [];
+            $phanCongCondition = [
+                '_id' => ['$in' => count($idsDaPhanCong) > 0 ? $idsDaPhanCong : [0]],
+            ];
+        } elseif ($phanCong === FilterHDXBNXBGDVN::PHAN_CONG_DA_TAT_CA) {
+            $idsDaPhanCong = $nxCanboDetaiService->getActivePhanCongDeTaiIds();
+            $phanCongCondition = [
+                '_id' => ['$in' => count($idsDaPhanCong) > 0 ? $idsDaPhanCong : [0]],
+            ];
+        } else {
+            $idsDaPhanCong = $nxCanboDetaiService->getActivePhanCongDeTaiIds();
+            $phanCongCondition = ['_id' => ['$nin' => $idsDaPhanCong]];
+        }
 
         if (isset($conditions['$and'])) {
             $conditions['$and'][] = $phanCongCondition;

@@ -296,6 +296,18 @@ export interface HDXBNXBGDVNXetDuyetRow {
     YeuCauDocKiemDinh: boolean;
 }
 
+export interface HDXBNXBGDVNDocDuyetRow {
+    id: number;
+    idNxCanBoDetai: number;
+    TenDeTai: string;
+    TacGia: string;
+    KhoSach: string;
+    SoTrang: number;
+    YKienNhanXet: string;
+    ThongTinLienQuan: string;
+    Duyet: number;
+}
+
 export interface FilterXetDuyetHDXBNXBGDVN {
     TuNgay?: string | null;
     DenNgay?: string | null;

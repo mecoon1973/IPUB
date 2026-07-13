@@ -10,6 +10,7 @@ use Core\Repository\CountersOlmRepository as CounterRepository;
 use Core\Service\BaseService;
 use Core\Object\Paginate;
 use Core\Service\BaseConvertTool;
+use Modules\Topic\Object\CongDoanMa;
 use Modules\Topic\Object\FilterPhieuDkDetai;
 use Modules\Topic\Model\PHIEU_DK_DETAI;
 
@@ -50,7 +51,9 @@ class PhieuDkDetaiServiceImpl extends BaseService implements PhieuDkDetaiService
     }
 
     public function store(array $data): PHIEU_DK_DETAI {
-        if(data_get($data, "id", 0) != 0) {
+        $isCreate = data_get($data, "id", 0) == 0;
+
+        if(!$isCreate) {
             /** @var PHIEU_DK_DETAI $phieuDkDetai */
             $phieuDkDetai = $this->baseRepo->get($data["id"]);
             if($phieuDkDetai) {
@@ -64,6 +67,20 @@ class PhieuDkDetaiServiceImpl extends BaseService implements PhieuDkDetaiService
         if(!$phieuDkDetai){
             throw new Exception("Có lỗi xảy ra, vui lòng thử lại");
         }
+
+        if ($isCreate) {
+            $idCanBo = (int) ($data['CreatedBy'] ?? Auth::id() ?? 0);
+            if ($idCanBo > 0) {
+                /** @var CT_Detai_CongDoanService $congDoanService */
+                $congDoanService = app(CT_Detai_CongDoanService::class);
+                $congDoanService->ghiCongDoanTheoMaCD(
+                    (int) $phieuDkDetai->_id,
+                    $idCanBo,
+                    CongDoanMa::TAO_PHIEU_DK
+                );
+            }
+        }
+
         return $phieuDkDetai;
     }
 
@@ -73,7 +90,22 @@ class PhieuDkDetaiServiceImpl extends BaseService implements PhieuDkDetaiService
             throw new Exception("PhieuDkDetai không tồn tại");
         }
         $phieuDkDetai->IsDeleted = true;
-        return $phieuDkDetai->save();
+        $saved = $phieuDkDetai->save();
+
+        if ($saved) {
+            $idCanBo = (int) (Auth::id() ?? 0);
+            if ($idCanBo > 0) {
+                /** @var CT_Detai_CongDoanService $congDoanService */
+                $congDoanService = app(CT_Detai_CongDoanService::class);
+                $congDoanService->ghiCongDoanTheoMaCD(
+                    (int) $phieuDkDetai->_id,
+                    $idCanBo,
+                    CongDoanMa::HUY_DE_TAI
+                );
+            }
+        }
+
+        return $saved;
     }
 
     public function convertDataListBTV(){

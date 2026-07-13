@@ -1,3 +1,18 @@
+/** Lọc theo phân công đọc duyệt — form quản lý HĐXB NXBGDVN */
+export const HDXBNXBGDVN_LOC_THEO = {
+    TAT_CA: -1,
+    DUOC_PHAN_CONG_TAT_CA: 1,
+    DUOC_PHAN_CONG_CA_NHAN: 2,
+    CHUA_PHAN_CONG: 0,
+} as const;
+
+export const HDXBNXBGDVN_LOC_THEO_OPTIONS = [
+    { value: HDXBNXBGDVN_LOC_THEO.TAT_CA, label: "Tất cả" },
+    { value: HDXBNXBGDVN_LOC_THEO.DUOC_PHAN_CONG_TAT_CA, label: "Được phân công (tất cả)" },
+    { value: HDXBNXBGDVN_LOC_THEO.DUOC_PHAN_CONG_CA_NHAN, label: "Được phân công (cá nhân)" },
+    { value: HDXBNXBGDVN_LOC_THEO.CHUA_PHAN_CONG, label: "Chưa phân công" },
+] as const;
+
 /** Lọc trạng thái trên form tìm kiếm HĐXB NXBGDVN */
 export const HDXBNXBGDVN_TRANG_THAI_FILTER_OPTIONS = [
     { value: -1, label: "Tất cả" },
@@ -35,6 +50,12 @@ export const NX_CANBO_DETAI_DUYET = {
 export const NX_CANBO_DETAI_DUYET_OPTIONS = [
     { value: NX_CANBO_DETAI_DUYET.CHUA_XET, label: "Chưa xử lý" },
     { value: NX_CANBO_DETAI_DUYET.DUYET, label: "Duyệt" },
+    { value: NX_CANBO_DETAI_DUYET.TRA_LAI, label: "Trả lại" },
+] as const;
+
+/** Kết luận trên modal đọc duyệt đề tài */
+export const DOC_DUYET_KET_LUAN_OPTIONS = [
+    { value: NX_CANBO_DETAI_DUYET.DUYET, label: "Đồng ý" },
     { value: NX_CANBO_DETAI_DUYET.TRA_LAI, label: "Trả lại" },
 ] as const;
 

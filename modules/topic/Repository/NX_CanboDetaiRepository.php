@@ -12,4 +12,7 @@ interface NX_CanboDetaiRepository extends IBaseRepository
 {
     /** @return int[] */
     public function getActivePhanCongDeTaiIds(): array;
+
+    /** @return int[] */
+    public function getActivePhanCongDeTaiIdsByCanBo(int $idCanBo): array;
 }

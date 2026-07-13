@@ -68,7 +68,6 @@ export const SelectSachKetChuyen = React.memo(({
             ID_DonVi: 0,
             NamXuatBan: "",
             NamTaiBan: "",
-            HTXB: 0,
             NgayDK: [],
             IsDeleted: false,
             KetChuyenThanhSach: true,

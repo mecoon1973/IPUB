@@ -9,6 +9,7 @@ use Exception;
 use MongoDB\BSON\Regex;
 use Modules\Topic\Model\PHIEU_DK_KHXB_CXB;
 use Modules\Topic\Model\PHIEU_DK_DETAI;
+use Modules\Topic\Object\CongDoanMa;
 use Modules\Topic\Object\FilterPhieuDkKhxbCxb;
 use Modules\Topic\Object\PhieuDkDetaiTrangThai;
 use Modules\Book\Repository\SachRepository;
@@ -136,6 +137,9 @@ class PhieuDkKhxbCxbServiceImpl extends BaseService implements PhieuDkKhxbCxbSer
 
         $deTaiMap = $this->loadDeTaiMapByIds($listIdDeTai);
 
+        /** @var CT_Detai_CongDoanService $congDoanService */
+        $congDoanService = app(CT_Detai_CongDoanService::class);
+
         // Mỗi đề tài nhận mã riêng, số thứ tự (xxx) theo thứ tự trong phiếu
         foreach (array_values($listIdDeTai) as $index => $idDeTai) {
             /** @var PHIEU_DK_DETAI|null $deTai */
@@ -152,6 +156,14 @@ class PhieuDkKhxbCxbServiceImpl extends BaseService implements PhieuDkKhxbCxbSer
             $deTai->EditedBy = $idCanBo;
             $deTai->EditedOn = now();
             $deTai->save();
+
+            $congDoanService->ghiCongDoanTheoMaCD(
+                $idDeTai,
+                $idCanBo,
+                CongDoanMa::CAP_MA_SO_CXB,
+                null,
+                'Mã CXB: ' . $maSoDeTai
+            );
         }
 
         $phieu->PhanDauMaSo = $soCvCxb;
@@ -205,6 +217,9 @@ class PhieuDkKhxbCxbServiceImpl extends BaseService implements PhieuDkKhxbCxbSer
             $updates[$idDeTai] = $isbn;
         }
 
+        /** @var CT_Detai_CongDoanService $congDoanService */
+        $congDoanService = app(CT_Detai_CongDoanService::class);
+
         foreach ($updates as $idDeTai => $isbn) {
             /** @var PHIEU_DK_DETAI $deTai */
             $deTai = $deTaiMap[$idDeTai];
@@ -212,6 +227,16 @@ class PhieuDkKhxbCxbServiceImpl extends BaseService implements PhieuDkKhxbCxbSer
             $deTai->EditedBy = $idCanBo;
             $deTai->EditedOn = now();
             $deTai->save();
+
+            if ($isbn !== '') {
+                $congDoanService->ghiCongDoanTheoMaCD(
+                    $idDeTai,
+                    $idCanBo,
+                    CongDoanMa::CAP_MA_ISBN,
+                    null,
+                    'ISBN: ' . $isbn
+                );
+            }
         }
 
         return [
@@ -244,6 +269,9 @@ class PhieuDkKhxbCxbServiceImpl extends BaseService implements PhieuDkKhxbCxbSer
         /** @var SachRepository $sachRepo */
         $sachRepo = app(SachRepository::class);
 
+        /** @var CT_Detai_CongDoanService $congDoanService */
+        $congDoanService = app(CT_Detai_CongDoanService::class);
+
         $countKetChuyen = 0;
         foreach ($listIdDeTai as $idDeTai) {
             if (!isset($idDeTaiTrongPhieu[$idDeTai]) || !isset($deTaiMap[$idDeTai])) {
@@ -261,12 +289,19 @@ class PhieuDkKhxbCxbServiceImpl extends BaseService implements PhieuDkKhxbCxbSer
                 continue;
             }
 
-            $sachService->store($this->mapDeTaiToSach($deTai, $idCanBo));
+            $sach = $sachService->store($this->mapDeTaiToSach($deTai, $idCanBo));
 
             $deTai->TrangThai = self::TRANG_THAI_KET_CHUYEN_THANH_SACH;
             $deTai->EditedBy = $idCanBo;
             $deTai->EditedOn = now();
             $deTai->save();
+
+            $congDoanService->ghiCongDoanTheoMaCD(
+                $idDeTai,
+                $idCanBo,
+                CongDoanMa::KET_CHUYEN_SACH,
+                (int) ($sach->_id ?? 0) ?: null
+            );
 
             $countKetChuyen++;
         }
@@ -291,7 +326,6 @@ class PhieuDkKhxbCxbServiceImpl extends BaseService implements PhieuDkKhxbCxbSer
     {
         return [
             'ID_DeTai' => (int) $deTai->_id,
-            'MaSoGoc' => (string) ($deTai->MaSo ?? ''),
             'MaSo' => (string) ($deTai->MaSo ?? ''),
             'MaSoCXB' => (string) ($deTai->MaSoCXB ?? ''),
             'NgayDK' => $deTai->NgayDk,
@@ -473,6 +507,7 @@ class PhieuDkKhxbCxbServiceImpl extends BaseService implements PhieuDkKhxbCxbSer
                 ]);
             });
             $this->syncChiTietDeTai((int) $phieu->_id, $listIdDeTai, $idCanBo, $phieu);
+            $this->ghiCongDoanTaoDonDkXuatBan($listIdDeTai, $idCanBo);
         }
 
         return [
@@ -840,5 +875,30 @@ class PhieuDkKhxbCxbServiceImpl extends BaseService implements PhieuDkKhxbCxbSer
         }
 
         return $map;
+    }
+
+    /**
+     * @param int[] $listIdDeTai
+     */
+    private function ghiCongDoanTaoDonDkXuatBan(array $listIdDeTai, int $idCanBo): void
+    {
+        if ($idCanBo <= 0 || count($listIdDeTai) === 0) {
+            return;
+        }
+
+        /** @var CT_Detai_CongDoanService $congDoanService */
+        $congDoanService = app(CT_Detai_CongDoanService::class);
+
+        foreach ($listIdDeTai as $idDeTai) {
+            $idDeTai = (int) $idDeTai;
+            if ($idDeTai <= 0) {
+                continue;
+            }
+            $congDoanService->ghiCongDoanTheoMaCD(
+                $idDeTai,
+                $idCanBo,
+                CongDoanMa::TAO_DON_DK_XUAT_BAN
+            );
+        }
     }
 }

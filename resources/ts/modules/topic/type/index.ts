@@ -15,6 +15,7 @@ export type {
     FilterHDXBNXBGDVN,
     FilterXetDuyetHDXBNXBGDVN,
     HDXBNXBGDVNXetDuyetRow,
+    HDXBNXBGDVNDocDuyetRow,
     PheDuyetDiInRow,
     FilterPheDuyetDiIn,
     PheDuyetDiInLuuItem,

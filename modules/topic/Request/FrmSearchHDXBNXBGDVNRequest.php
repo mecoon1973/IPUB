@@ -26,7 +26,12 @@ class FrmSearchHDXBNXBGDVNRequest extends FormRequest
         return [
             "TenDeTai" => "nullable|string",
             "ID_DonVi" => "nullable|integer",
-            "PhanCong" => "nullable|integer",
+            "PhanCong" => "nullable|integer|in:" . implode(',', [
+                FilterHDXBNXBGDVN::PHAN_CONG_TAT_CA,
+                FilterHDXBNXBGDVN::PHAN_CONG_CHUA,
+                FilterHDXBNXBGDVN::PHAN_CONG_DA_TAT_CA,
+                FilterHDXBNXBGDVN::PHAN_CONG_DA_CA_NHAN,
+            ]),
             "TrangThai" => "nullable|integer",
             "limit" => "nullable|integer",
         ];

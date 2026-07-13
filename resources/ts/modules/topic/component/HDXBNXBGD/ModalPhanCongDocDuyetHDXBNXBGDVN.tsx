@@ -1,175 +1,226 @@
 import React, { useCallback, useEffect, useMemo, useState } from "react";
-import { Button, Modal, Table, type TableProps } from "antd";
-import { ComponentSelectAntObject } from "../../../page/component/componentSelectAnt";
-import type { User } from "../../../user/type";
-import type { HDXBNXBGDVN } from "../../type";
-import { useManageHDXBNXBGDVNStore } from "../../store/HDXBNXBGDVN/manageHDXBNXBGDVN";
+import { Button, Input, Modal, Select, Table, type TableProps } from "antd";
+import { ReloadOutlined, SaveOutlined } from "@ant-design/icons";
 import { HDXBNXBGDVNApi } from "../../api/HDXBNXBGDVNApi";
+import { DOC_DUYET_KET_LUAN_OPTIONS, NX_CANBO_DETAI_DUYET } from "../../constants/hdxbNxbgdvn";
+import { useManageHDXBNXBGDVNStore } from "../../store/HDXBNXBGDVN/manageHDXBNXBGDVN";
+import type { HDXBNXBGDVNDocDuyetRow } from "../../type";
+
+const { TextArea } = Input;
 
 interface ModalPhanCongDocDuyetHDXBNXBGDVNProps {
-    listBTV: User[];
     onSuccess?: () => void;
 }
 
-function ModalPhanCongDocDuyetHDXBNXBGDVN(props: ModalPhanCongDocDuyetHDXBNXBGDVNProps) {
-    const { listBTV, onSuccess } = props;
+function renderThongTinDeTai(record: HDXBNXBGDVNDocDuyetRow) {
+    return (
+        <div className="text-primary small lh-sm">
+            <div>
+                <span className="fw-semibold">Tên đề tài:</span> {record.TenDeTai || "-"}
+            </div>
+            <div>
+                <span className="fw-semibold">Tác giả:</span> {record.TacGia || "-"}
+            </div>
+            <div>
+                <span className="fw-semibold">Khổ sách:</span> {record.KhoSach || "-"}
+            </div>
+            <div>
+                <span className="fw-semibold">Số trang:</span> {record.SoTrang > 0 ? record.SoTrang : "-"}
+            </div>
+        </div>
+    );
+}
+
+function ModalPhanCongDocDuyetHDXBNXBGDVN({ onSuccess }: ModalPhanCongDocDuyetHDXBNXBGDVNProps) {
     const activeModal = useManageHDXBNXBGDVNStore((state) => state.activeModal);
     const setActiveModal = useManageHDXBNXBGDVNStore((state) => state.setActiveModal);
-    const phanCongItems = useManageHDXBNXBGDVNStore((state) => state.phanCongItems);
-    const setPhanCongItems = useManageHDXBNXBGDVNStore((state) => state.setPhanCongItems);
-    const [idCanBo, setIdCanBo] = useState<number>(0);
-    const [idDeTaiThem, setIdDeTaiThem] = useState<number>(0);
-    const [deTaiChuaPhanCong, setDeTaiChuaPhanCong] = useState<HDXBNXBGDVN[]>([]);
+    const selectedRowKeys = useManageHDXBNXBGDVNStore((state) => state.selectedRowKeys);
+
+    const [rows, setRows] = useState<HDXBNXBGDVNDocDuyetRow[]>([]);
+    const [initialRows, setInitialRows] = useState<HDXBNXBGDVNDocDuyetRow[]>([]);
+    const [isLoading, setIsLoading] = useState(false);
     const [isSubmitting, setIsSubmitting] = useState(false);
 
-    const open = activeModal === "phanCongDocDuyet";
+    const open = activeModal === "docDuyet";
 
-    const nguoiDocDuyetTen = useMemo(() => {
-        if (!idCanBo) return "";
-        return listBTV.find((u) => Number(u.id) === Number(idCanBo))?.HoTen ?? "";
-    }, [idCanBo, listBTV]);
+    const loadData = useCallback(async (ids: number[]) => {
+        if (ids.length === 0) {
+            setRows([]);
+            setInitialRows([]);
+            return;
+        }
+
+        setIsLoading(true);
+        const list = await HDXBNXBGDVNApi.getListDocDuyet(ids);
+        const normalized = list.map((row) => ({
+            ...row,
+            YKienNhanXet: row.YKienNhanXet ?? "",
+            ThongTinLienQuan: row.ThongTinLienQuan ?? "",
+            Duyet: row.Duyet || NX_CANBO_DETAI_DUYET.DUYET,
+        }));
+        setRows(normalized);
+        setInitialRows(normalized);
+        setIsLoading(false);
+    }, []);
 
     useEffect(() => {
         if (!open) {
-            setIdCanBo(0);
-            setIdDeTaiThem(0);
+            setRows([]);
+            setInitialRows([]);
             setIsSubmitting(false);
             return;
         }
-        HDXBNXBGDVNApi.getList({ PhanCong: 0 }).then((res) => setDeTaiChuaPhanCong(res));
-    }, [open]);
+
+        const ids = selectedRowKeys.map((key) => Number(key)).filter((id) => id > 0);
+        loadData(ids);
+    }, [loadData, open, selectedRowKeys]);
 
     const handleClose = useCallback(() => {
         setActiveModal(null);
-        setPhanCongItems([]);
-    }, [setActiveModal, setPhanCongItems]);
+    }, [setActiveModal]);
 
-    const handleAddDeTai = useCallback(() => {
-        if (!idDeTaiThem) return;
-        const deTai = deTaiChuaPhanCong.find((item) => item.id === idDeTaiThem);
-        if (!deTai) return;
-        setPhanCongItems((prev) => {
-            if (prev.some((item) => item.id === deTai.id)) {
-                window._toastbox("Đề tài đã có trong danh sách", "warning");
-                return prev;
+    const updateRow = useCallback((id: number, patch: Partial<HDXBNXBGDVNDocDuyetRow>) => {
+        setRows((prev) => prev.map((row) => (row.id === id ? { ...row, ...patch } : row)));
+    }, []);
+
+    const handleSave = useCallback(
+        async (closeAfterSave = false) => {
+            if (rows.length === 0) {
+                window._toastbox("Không có đề tài để lưu", "danger");
+                return;
             }
-            return [...prev, deTai];
-        });
-        setIdDeTaiThem(0);
-    }, [deTaiChuaPhanCong, idDeTaiThem, setPhanCongItems]);
 
-    const handleRemove = useCallback(
-        (id: number) => {
-            setPhanCongItems((prev) => prev.filter((item) => item.id !== id));
+            setIsSubmitting(true);
+            const ok = await HDXBNXBGDVNApi.luuDocDuyet(rows);
+            setIsSubmitting(false);
+
+            if (!ok) {
+                return;
+            }
+
+            window._toastbox("Lưu đọc duyệt thành công", "success");
+            if (closeAfterSave) {
+                handleClose();
+                onSuccess?.();
+                return;
+            }
+
+            setInitialRows(rows);
+            onSuccess?.();
         },
-        [setPhanCongItems],
+        [handleClose, onSuccess, rows],
     );
 
-    const handleSubmit = useCallback(async () => {
-        if (!idCanBo) {
-            window._toastbox("Vui lòng chọn cán bộ phân công đọc duyệt", "danger");
-            return;
-        }
-        if (phanCongItems.length === 0) {
-            window._toastbox("Vui lòng chọn ít nhất một đề tài", "danger");
-            return;
-        }
+    const handleRefresh = useCallback(() => {
+        setRows(initialRows);
+    }, [initialRows]);
 
-        setIsSubmitting(true);
-        const ok = await HDXBNXBGDVNApi.phanCongDocDuyet(
-            phanCongItems.map((item) => item.id),
-            idCanBo,
-        );
-        setIsSubmitting(false);
-
-        if (!ok) return;
-
-        window._toastbox("Phân công đọc duyệt thành công", "success");
-        handleClose();
-        onSuccess?.();
-    }, [handleClose, idCanBo, onSuccess, phanCongItems]);
-
-    const deTaiThemOptions = useMemo(
-        () => deTaiChuaPhanCong.filter((item) => !phanCongItems.some((p) => p.id === item.id)),
-        [deTaiChuaPhanCong, phanCongItems],
+    const columns: TableProps<HDXBNXBGDVNDocDuyetRow>["columns"] = useMemo(
+        () => [
+            {
+                title: "STT",
+                key: "stt",
+                width: 56,
+                render: (_v, _r, i) => i + 1,
+            },
+            {
+                title: "THÔNG TIN ĐỀ TÀI",
+                key: "ThongTinDeTai",
+                width: 280,
+                render: (_v, record) => renderThongTinDeTai(record),
+            },
+            {
+                title: "Ý KIẾN NHẬN XÉT",
+                key: "YKienNhanXet",
+                width: 240,
+                render: (_v, record) => (
+                    <TextArea
+                        rows={5}
+                        value={record.YKienNhanXet}
+                        onChange={(e) => updateRow(record.id, { YKienNhanXet: e.target.value })}
+                    />
+                ),
+            },
+            {
+                title: "THÔNG TIN LIÊN QUAN",
+                key: "ThongTinLienQuan",
+                width: 240,
+                render: (_v, record) => (
+                    <TextArea
+                        rows={5}
+                        value={record.ThongTinLienQuan}
+                        onChange={(e) => updateRow(record.id, { ThongTinLienQuan: e.target.value })}
+                    />
+                ),
+            },
+            {
+                title: "KẾT LUẬN",
+                key: "Duyet",
+                width: 160,
+                render: (_v, record) => (
+                    <Select
+                        style={{ width: "100%" }}
+                        value={record.Duyet}
+                        options={DOC_DUYET_KET_LUAN_OPTIONS.map((opt) => ({
+                            value: opt.value,
+                            label: opt.label,
+                        }))}
+                        onChange={(value) => updateRow(record.id, { Duyet: value })}
+                    />
+                ),
+            },
+        ],
+        [updateRow],
     );
-
-    const columns: TableProps<HDXBNXBGDVN>["columns"] = [
-        { title: "TT", key: "stt", width: 56, render: (_v, _r, i) => i + 1 },
-        { title: "TÊN ĐỀ TÀI", dataIndex: "TenDeTai", key: "TenDeTai" },
-        {
-            title: "NGƯỜI ĐỌC DUYỆT",
-            key: "NguoiDocDuyet",
-            render: () => nguoiDocDuyetTen || "-",
-        },
-        { title: "ĐƠN VỊ TỔ CHỨC BẢN THẢO", dataIndex: "TenDonVi", key: "TenDonVi" },
-        {
-            title: "",
-            key: "action",
-            width: 80,
-            render: (_, record) => (
-                <Button type="link" danger size="small" className="px-0" onClick={() => handleRemove(record.id)}>
-                    Xóa
-                </Button>
-            ),
-        },
-    ];
 
     return (
         <Modal
-            title="PHÂN CÔNG ĐỌC DUYỆT ĐỀ TÀI"
+            title="ĐỌC DUYỆT ĐỀ TÀI"
             open={open}
             onCancel={handleClose}
-            width={960}
-            footer={[
-                <Button key="cancel" onClick={handleClose}>
-                    Hủy
-                </Button>,
-                <Button key="submit" type="primary" loading={isSubmitting} onClick={handleSubmit}>
-                    Lưu
-                </Button>,
-            ]}
+            width="95%"
+            style={{ maxWidth: 1200 }}
+            footer={null}
+            destroyOnClose
         >
-            <div className="row g-3 mb-3">
-                <div className="col-md-6">
-                    <label className="form-label mb-1">Chọn cán bộ</label>
-                    <ComponentSelectAntObject
-                        listData={listBTV}
-                        keyValue="id"
-                        labelValue="HoTen"
-                        value={idCanBo || undefined}
-                        onChange={(value) => setIdCanBo(Number(value))}
-                        placeholder="Chọn cán bộ phân công đọc duyệt"
-                        style={{ width: "100%" }}
-                        showSearch
-                        optionFilterProp="label"
-                    />
-                </div>
-                <div className="col-md-6">
-                    <label className="form-label mb-1">Chọn thêm đề tài</label>
-                    <div className="d-flex gap-2">
-                        <ComponentSelectAntObject
-                            listData={deTaiThemOptions}
-                            keyValue="id"
-                            labelValue="TenDeTai"
-                            value={idDeTaiThem || undefined}
-                            onChange={(value) => setIdDeTaiThem(Number(value))}
-                            placeholder="Chọn thêm đề tài để phân công đọc duyệt"
-                            style={{ width: "100%" }}
-                            showSearch
-                            optionFilterProp="label"
-                        />
-                        <Button onClick={handleAddDeTai}>Thêm</Button>
-                    </div>
-                </div>
+            <div className="d-flex align-items-center gap-3 mb-3 border-bottom pb-2">
+                <Button
+                    type="link"
+                    className="p-0 d-inline-flex align-items-center gap-1"
+                    icon={<SaveOutlined />}
+                    loading={isSubmitting}
+                    onClick={() => handleSave(false)}
+                >
+                    Lưu
+                </Button>
+                <Button
+                    type="link"
+                    className="p-0 d-inline-flex align-items-center gap-1"
+                    icon={<SaveOutlined />}
+                    loading={isSubmitting}
+                    onClick={() => handleSave(true)}
+                >
+                    Lưu và đóng
+                </Button>
+                <Button
+                    type="link"
+                    className="p-0 d-inline-flex align-items-center gap-1"
+                    icon={<ReloadOutlined />}
+                    loading={isLoading}
+                    onClick={handleRefresh}
+                >
+                    Làm mới
+                </Button>
             </div>
-            <Table<HDXBNXBGDVN>
+
+            <Table<HDXBNXBGDVNDocDuyetRow>
                 rowKey={(record) => String(record.id)}
                 columns={columns}
-                dataSource={phanCongItems}
+                dataSource={rows}
+                loading={isLoading}
                 pagination={false}
                 size="small"
-                scroll={{ y: 320 }}
+                scroll={{ x: 980, y: 420 }}
             />
         </Modal>
     );

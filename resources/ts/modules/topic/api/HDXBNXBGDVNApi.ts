@@ -1,5 +1,5 @@
 import type { PagiResult } from "../../page/type";
-import { defaultFilterHDXBNXBGDVN, defaultFilterPheDuyetDiIn, type FilterHDXBNXBGDVN, type FilterPheDuyetDiIn, type FilterXetDuyetHDXBNXBGDVN, type HDXBNXBGDVN, type HDXBNXBGDVNXetDuyetRow, type PheDuyetDiInLuuItem, type PheDuyetDiInRow } from "../type";
+import { defaultFilterHDXBNXBGDVN, defaultFilterPheDuyetDiIn, type FilterHDXBNXBGDVN, type FilterPheDuyetDiIn, type FilterXetDuyetHDXBNXBGDVN, type HDXBNXBGDVN, type HDXBNXBGDVNDocDuyetRow, type HDXBNXBGDVNXetDuyetRow, type PheDuyetDiInLuuItem, type PheDuyetDiInRow } from "../type";
 
 export class HDXBNXBGDVNApi {
     static readonly conditionDefault: FilterHDXBNXBGDVN = defaultFilterHDXBNXBGDVN;
@@ -75,6 +75,36 @@ export class HDXBNXBGDVNApi {
                     YKienHDXB: row.YKienHDXB,
                     Duyet: row.Duyet,
                     YeuCauDocKiemDinh: row.YeuCauDocKiemDinh ? 1 : 0,
+                })),
+            });
+            return true;
+        } catch (err: any) {
+            window._toastbox(err.responseJSON?.message || "Có lỗi xảy ra, vui lòng thử lại", "danger");
+            return false;
+        }
+    }
+
+    static async getListDocDuyet(ids: number[]): Promise<HDXBNXBGDVNDocDuyetRow[]> {
+        const url = "/api/topic/hdxb-nxbgdvn/doc-duyet/list";
+        try {
+            const res = await window._apiGet(url, { ids });
+            return res as HDXBNXBGDVNDocDuyetRow[];
+        } catch (err: any) {
+            window._toastbox(err.responseJSON?.message || "Có lỗi xảy ra, vui lòng thử lại", "danger");
+            return [];
+        }
+    }
+
+    static async luuDocDuyet(items: HDXBNXBGDVNDocDuyetRow[]): Promise<boolean> {
+        const url = "/api/topic/hdxb-nxbgdvn/doc-duyet";
+        try {
+            await window._apiCreate(url, {
+                items: items.map((row) => ({
+                    idDeTai: row.id,
+                    idNxCanBoDetai: row.idNxCanBoDetai,
+                    YKienNhanXet: row.YKienNhanXet,
+                    ThongTinLienQuan: row.ThongTinLienQuan,
+                    Duyet: row.Duyet,
                 })),
             });
             return true;

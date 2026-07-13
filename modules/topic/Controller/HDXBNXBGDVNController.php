@@ -8,9 +8,11 @@ use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\View\View;
 use Modules\System\Traits\TraitsGetData;
+use Modules\Topic\Request\FrmLuuDocDuyetHDXBNXBGDVNRequest;
 use Modules\Topic\Request\FrmLuuPheDuyetDiInRequest;
 use Modules\Topic\Request\FrmLuuXetDuyetHDXBNXBGDVNRequest;
 use Modules\Topic\Request\FrmPhanCongDocDuyetHDXBNXBGDVNRequest;
+use Modules\Topic\Request\FrmSearchDocDuyetHDXBNXBGDVNRequest;
 use Modules\Topic\Request\FrmSearchHDXBNXBGDVNRequest;
 use Modules\Topic\Request\FrmSearchPheDuyetDiInRequest;
 use Modules\Topic\Request\FrmSearchXetDuyetHDXBNXBGDVNRequest;
@@ -97,6 +99,40 @@ class HDXBNXBGDVNController extends Controller {
         );
         return response()->json(['success' => true, 'count' => $count], 200);
 
+    }
+
+    public function getListDocDuyet(FrmSearchDocDuyetHDXBNXBGDVNRequest $request): JsonResponse {
+        /** @var NX_CanboDetaiService $nxCanboDetaiService */
+        $nxCanboDetaiService = app(NX_CanboDetaiService::class);
+
+        try {
+            $result = $nxCanboDetaiService->getListDocDuyet(
+                $request->getIdsDeTai(),
+                $this->resolveIdCanBoNguoiDuyet()
+            );
+            return response()->json($result, 200);
+        } catch (Exception $exception) {
+            return response()->json([
+                'message' => $exception->getMessage(),
+            ], 500);
+        }
+    }
+
+    public function luuDocDuyet(FrmLuuDocDuyetHDXBNXBGDVNRequest $request): JsonResponse {
+        /** @var NX_CanboDetaiService $nxCanboDetaiService */
+        $nxCanboDetaiService = app(NX_CanboDetaiService::class);
+
+        try {
+            $count = $nxCanboDetaiService->luuDocDuyet(
+                $request->getItems(),
+                $this->resolveIdCanBoNguoiDuyet()
+            );
+            return response()->json(['success' => true, 'count' => $count], 200);
+        } catch (Exception $exception) {
+            return response()->json([
+                'message' => $exception->getMessage(),
+            ], 500);
+        }
     }
 
     public function getPaginatePheDuyetDiIn(FrmSearchPheDuyetDiInRequest $request, string $page = 'page-1'): JsonResponse {

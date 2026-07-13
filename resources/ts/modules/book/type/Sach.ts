@@ -103,7 +103,7 @@ export interface FilterSach extends Relationships {
     ID_DonVi: number;
     NamXuatBan: string;
     NamTaiBan: string;
-    HTXB: number;
+    HTXB?: number;
     NgayDK: Date[];
     IsDeleted?: boolean;
     KetChuyenThanhSach?: boolean;

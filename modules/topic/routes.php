@@ -38,6 +38,8 @@ Route::group(['middleware' => ['web', 'auth.custom']], function () {
                 Route::get('/paginate/{page?}', [HDXBNXBGDVNController::class, 'getPaginate'])->name('hdxb-nxbgdvn.paginate')->where('page', regexRoute("page"));
                 Route::get('/list', [HDXBNXBGDVNController::class, 'getList'])->name('hdxb-nxbgdvn.list');
                 Route::post('/phan-cong-doc-duyet', [HDXBNXBGDVNController::class, 'phanCongDocDuyet'])->name('hdxb-nxbgdvn.phan-cong-doc-duyet');
+                Route::get('/doc-duyet/list', [HDXBNXBGDVNController::class, 'getListDocDuyet'])->name('hdxb-nxbgdvn.doc-duyet.list');
+                Route::post('/doc-duyet', [HDXBNXBGDVNController::class, 'luuDocDuyet'])->name('hdxb-nxbgdvn.doc-duyet');
                 Route::get('/xet-duyet/list', [HDXBNXBGDVNController::class, 'getListXetDuyet'])->name('hdxb-nxbgdvn.xet-duyet.list');
                 Route::post('/xet-duyet', [HDXBNXBGDVNController::class, 'luuXetDuyetDeTai'])->name('hdxb-nxbgdvn.xet-duyet');
                 Route::get('/phe-duyet-di-in/paginate/{page?}', [HDXBNXBGDVNController::class, 'getPaginatePheDuyetDiIn'])->name('hdxb-nxbgdvn.phe-duyet-di-in.paginate')->where('page', regexRoute("page"));

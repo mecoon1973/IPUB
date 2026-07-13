@@ -19,6 +19,9 @@ interface NX_CanboDetaiService extends IBaseService
     /** @return int[] */
     public function getActivePhanCongDeTaiIds(): array;
 
+    /** @return int[] */
+    public function getActivePhanCongDeTaiIdsByCanBo(int $idCanBo): array;
+
     /**
      * Phân công đọc duyệt đề tài.
      *
@@ -33,4 +36,17 @@ interface NX_CanboDetaiService extends IBaseService
      * @param array<int, array<string, mixed>> $items
      */
     public function luuXetDuyetDeTai(array $items, int $idCanBo): int;
+
+    /**
+     * Danh sách đề tài được phân công cho cán bộ đọc duyệt hiện tại.
+     *
+     * @param int[] $idsDeTai
+     * @return array<int, array<string, mixed>>
+     */
+    public function getListDocDuyet(array $idsDeTai, int $idCanBo): array;
+
+    /**
+     * @param array<int, array<string, mixed>> $items
+     */
+    public function luuDocDuyet(array $items, int $idCanBo): int;
 }

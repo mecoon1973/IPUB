@@ -20,6 +20,11 @@ class FilterHDXBNXBGDVN extends BaseObject {
         PhieuDkDetaiTrangThai::HDXB_NXBGDVN_CHUA_XET,
     ];
 
+    public const PHAN_CONG_TAT_CA = -1;
+    public const PHAN_CONG_CHUA = 0;
+    public const PHAN_CONG_DA_TAT_CA = 1;
+    public const PHAN_CONG_DA_CA_NHAN = 2;
+
     public ?string $TenDeTai = null;
     public ?int $ID_DonVi = null;
     public ?int $PhanCong = null;

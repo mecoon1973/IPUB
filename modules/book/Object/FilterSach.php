@@ -25,7 +25,7 @@ class FilterSach extends BaseObject {
     public int $ID_DonVi = 0;
     public string $NamXuatBan = "";
     public string $NamTaiBan = "";
-    public int $HTXB = 0;
+    public int $HTXB = -1;
     public array $NgayDK = [];
     public ?bool $IsDeleted = null;
     public bool $KetChuyenThanhSach = false;
@@ -40,13 +40,19 @@ class FilterSach extends BaseObject {
             $conditions['_id'] = (int) $this->id;
         }
         if ($this->title !== null && $this->title !== "") {
+            $keyword = preg_quote($this->title, "/");
+            $regex = new Regex($keyword, "ui");
             $conditions['$or'] = [
-                ["MaSo" => ['$regex' => new Regex(preg_quote($this->title, "/"), "ui")]],
-                ["TenSach" => ['$regex' => new Regex(preg_quote($this->title, "/"), "ui")]],
+                ['MaSo' => $regex],
+                ['TenSach' => $regex],
             ];
         }
         if ($this->MaSo !== null && $this->MaSo !== "") {
-            $conditions["MaSo"] =['$regex' => new Regex(preg_quote($this->MaSo, "/"))];
+            $keyword = preg_quote($this->MaSo, "/");
+            $regex = new Regex($keyword, "ui");
+            $conditions['$or'] = [
+                ["MaSo" => $regex],
+            ];
         }
         if ($this->ID_MangSach !== null && $this->ID_MangSach !== 0) {
             $conditions["ID_MangSach"] = (int)$this->ID_MangSach;
@@ -69,7 +75,7 @@ class FilterSach extends BaseObject {
             unset($conditions["NamXuatBan"]);
         }
         if ($this->HTXB !== null && in_array($this->HTXB, [0, 1])) {
-            $conditions["HTXB"] = (bool)$this->HTXB;
+            $conditions["HTXB"] = (bool) $this->HTXB;
         }
         if (is_array($this->NgayDK) && count($this->NgayDK) >= 2) {
             $conditions["NgayDK"] = ['$gte' => $this->NgayDK[0], '$lte' => $this->NgayDK[1]];
