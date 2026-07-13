@@ -4,7 +4,7 @@ namespace Modules\System\Traits;
 
 use Exception;
 use Illuminate\Http\UploadedFile;
-use Modules\System\Model\DM_TEMPLATE_EXCEL;
+use Modules\System\Model\DM_TEMPLATE_EXPORT;
 
 /**
  * Upload, lưu trữ và dọn dẹp file template Excel trong public/template/excel.
@@ -20,7 +20,7 @@ trait ManagesPublicTemplateExcelFiles
      * Upload file template Excel và lưu vào public/template/excel.
      *
      * Luồng xử lý:
-     * 1. Validate key và định dạng file (.xlsx, .xls)
+     * 1. Validate key và định dạng file (.xlsx, .xls , .html)
      * 2. Chuẩn hóa key thành tên file an toàn (sanitizeTemplateKey)
      * 3. Lấy/tao thư mục lưu trữ (getTemplateExcelDirectory)
      * 4. Xóa file cũ cùng key nếu đã tồn tại (removeExistingTemplateFiles)
@@ -39,19 +39,23 @@ trait ManagesPublicTemplateExcelFiles
         }
 
         $extension = strtolower($file->getClientOriginalExtension());
-        if (!in_array($extension, ["xlsx", "xls"], true)) {
-            throw new Exception("Chỉ chấp nhận file Excel (.xlsx, .xls)");
+        if (!in_array($extension, ["xlsx", "xls", "doc", "docx", "html"], true)) {
+            throw new Exception("Chỉ chấp nhận file (.xlsx, .xls, .doc, .docx)");
         }
 
         $safeKey = $this->sanitizeTemplateKey($normalizedKey);
         $fileName = $safeKey . "." . $extension;
-        $directory = $this->getTemplateExcelDirectory();
+        $directory = $this->getTemplateStorageDirectory($extension);
 
-        $this->removeExistingTemplateFiles($directory, $safeKey);
+        $this->removeExistingTemplateFiles(
+            $directory,
+            $safeKey,
+            $this->getTemplateExtensionsForDirectory($extension)
+        );
 
         $file->move($directory, $fileName);
 
-        return url("template/excel/" . $fileName);
+        return url($this->getTemplatePublicDirectory($extension) . "/" . $fileName);
     }
 
     /**
@@ -60,41 +64,98 @@ trait ManagesPublicTemplateExcelFiles
      * - Đổi key: xóa file .xlsx/.xls của key cũ trong public/template/excel
      * - Đổi path_file_template: xóa file cũ nếu khác file mới (tránh sót file khi đổi URL/đuôi)
      */
-    protected function cleanupObsoleteTemplateFilesOnUpdate(DM_TEMPLATE_EXCEL $existing, array $data): void {
-        $directory = $this->getTemplateExcelDirectory();
+    protected function cleanupObsoleteTemplateFilesOnUpdate(DM_TEMPLATE_EXPORT $existing, array $data): void {
         $oldKey = trim((string) $existing->key);
         $newKey = trim((string) data_get($data, "key", ""));
-        $oldPath = trim((string) $existing->path_file_template);
-        $newPath = trim((string) data_get($data, "path_file_template", ""));
+        $oldExcelPath = trim((string) $existing->path_file_template);
+        $newExcelPath = trim((string) data_get($data, "path_file_template", ""));
+        $oldDocPath = trim((string) $existing->path_file_template_doc);
+        $newDocPath = trim((string) data_get($data, "path_file_template_doc", ""));
 
         if ($oldKey !== "" && $newKey !== "" && $oldKey !== $newKey) {
             $oldSafeKey = $this->sanitizeTemplateKey($oldKey);
             $newSafeKey = $this->sanitizeTemplateKey($newKey);
             if ($oldSafeKey !== $newSafeKey) {
-                $this->removeExistingTemplateFiles($directory, $oldSafeKey);
+                $this->removeExistingTemplateFiles(
+                    $this->getTemplateStorageDirectory("xlsx"),
+                    $oldSafeKey,
+                    ["xlsx", "xls"]
+                );
+                $this->removeExistingTemplateFiles(
+                    $this->getTemplateStorageDirectory("docx"),
+                    $oldSafeKey,
+                    ["doc", "docx"]
+                );
+                $this->removeExistingTemplateFiles(
+                    $this->getTemplateStorageDirectory("html"),
+                    $oldSafeKey,
+                    ["html"]
+                );
             }
         }
 
-        if ($oldPath !== "" && $newPath !== "" && $oldPath !== $newPath) {
-            $this->deleteTemplateFileByPath($oldPath, $newPath);
+        if ($oldExcelPath !== "" && $newExcelPath !== "" && $oldExcelPath !== $newExcelPath) {
+            $this->deleteTemplateFileByPath($oldExcelPath, $newExcelPath);
+        }
+
+        if ($oldDocPath !== "" && $newDocPath !== "" && $oldDocPath !== $newDocPath) {
+            $this->deleteTemplateFileByPath($oldDocPath, $newDocPath);
         }
     }
 
     /**
-     * Lấy đường dẫn tuyệt đối thư mục lưu template Excel trong public.
-     *
-     * Thư mục: {project}/public/template/excel
-     * Tự tạo thư mục (mkdir recursive) nếu chưa tồn tại.
-     *
-     * @return string Đường dẫn tuyệt đối, vd: C:\xampp7.4\htdocs\laravel-12\public\template\excel
+     * Lấy đường dẫn tuyệt đối thư mục lưu template theo định dạng file.
      */
-    private function getTemplateExcelDirectory(): string {
-        $directory = public_path("template/excel");
+    private function getTemplateStorageDirectory(string $extension): string
+    {
+        $relativeDirectory = $this->getTemplatePublicDirectory($extension);
+        $directory = public_path($relativeDirectory);
         if (!is_dir($directory)) {
             mkdir($directory, 0755, true);
         }
 
         return $directory;
+    }
+
+    private function getTemplatePublicDirectory(string $extension): string
+    {
+        $normalizedExtend = strtolower(trim($extension));
+
+        if (in_array($normalizedExtend, ["xlsx", "xls"], true)) {
+            return "template/excel";
+        }
+
+        if (in_array($normalizedExtend, ["doc", "docx"], true)) {
+            return "template/word";
+        }
+
+        return "template/html";
+    }
+
+    /**
+     * @return list<string>
+     */
+    private function getTemplateExtensionsForDirectory(string $extension): array
+    {
+        $normalizedExtend = strtolower(trim($extension));
+
+        if (in_array($normalizedExtend, ["xlsx", "xls"], true)) {
+            return ["xlsx", "xls"];
+        }
+
+        if (in_array($normalizedExtend, ["doc", "docx"], true)) {
+            return ["doc", "docx"];
+        }
+
+        return ["html"];
+    }
+
+    /**
+     * @deprecated Dùng getTemplateStorageDirectory()
+     */
+    private function getTemplateExcelDirectory(string $extend): string
+    {
+        return $this->getTemplateStorageDirectory($extend);
     }
 
     /**
@@ -120,9 +181,12 @@ trait ManagesPublicTemplateExcelFiles
 
     /**
      * Xóa file template cũ cùng key trước khi upload file mới (ghi đè theo key).
+     *
+     * @param list<string> $extensions
      */
-    private function removeExistingTemplateFiles(string $directory, string $safeKey): void {
-        foreach (["xlsx", "xls"] as $extension) {
+    private function removeExistingTemplateFiles(string $directory, string $safeKey, array $extensions): void
+    {
+        foreach ($extensions as $extension) {
             $existingPath = $directory . DIRECTORY_SEPARATOR . $safeKey . "." . $extension;
             if (file_exists($existingPath)) {
                 unlink($existingPath);

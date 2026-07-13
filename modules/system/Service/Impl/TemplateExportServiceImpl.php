@@ -3,27 +3,27 @@ namespace Modules\System\Service\Impl;
 
 use Core\Object\Paginate;
 
-use Modules\System\Service\TemplateExcelService;
-use Modules\System\Repository\TemplateExcelRepository;
+use Modules\System\Service\TemplateExportService;
+use Modules\System\Repository\TemplateExportRepository;
 
 use Core\Service\BaseService;
 use Exception;
-use Modules\System\Model\DM_TEMPLATE_EXCEL;
-use Modules\System\Object\FilterTemplateExcel;
+use Modules\System\Model\DM_TEMPLATE_EXPORT;
+use Modules\System\Object\FilterTemplateExport;
 use Modules\System\Traits\ManagesPublicTemplateExcelFiles;
 
-class TemplateExcelServiceImpl extends BaseService implements TemplateExcelService
+class TemplateExportServiceImpl extends BaseService implements TemplateExportService
 {
     use ManagesPublicTemplateExcelFiles;
 
-    /** @var TemplateExcelRepository */
+    /** @var TemplateExportRepository */
     protected $baseRepo;
 
-    public function __construct(TemplateExcelRepository $baseRepo) {
+    public function __construct(TemplateExportRepository $baseRepo) {
         parent::__construct($baseRepo);
     }
 
-    public function getPaginate(FilterTemplateExcel $filter, string $page): array {
+    public function getPaginate(FilterTemplateExport $filter, string $page): array {
         $conditions = $filter->buildConditions();
         $paginate = new Paginate([
             "conditions" => $conditions,
@@ -36,15 +36,15 @@ class TemplateExcelServiceImpl extends BaseService implements TemplateExcelServi
             "pagiInfo" => $result->pagi_info
         ];
     }
-    public function getList(FilterTemplateExcel $filter) {
+    public function getList(FilterTemplateExport $filter) {
         $result = $this->baseRepo->findAllWithFilter($filter);
         return $result;
     }
 
-    public function store(array $data): DM_TEMPLATE_EXCEL {
+    public function store(array $data): DM_TEMPLATE_EXPORT {
 
         if(data_get($data, "id", 0) != 0) {
-            /** @var DM_TEMPLATE_EXCEL $templateExcel */
+            /** @var DM_TEMPLATE_EXPORT $templateExcel */
             $templateExcel = $this->baseRepo->get($data["id"]);
             if($templateExcel) {
                 $this->cleanupObsoleteTemplateFilesOnUpdate($templateExcel, $data);
@@ -53,7 +53,7 @@ class TemplateExcelServiceImpl extends BaseService implements TemplateExcelServi
             }
         }
         $this->isExistTemplateExcel($data["key"]);
-        /** @var DM_TEMPLATE_EXCEL $templateExcel */
+        /** @var DM_TEMPLATE_EXPORT $templateExcel */
         $templateExcel = $this->baseRepo->create($data);
         if(!$templateExcel){
             throw new Exception("Có lỗi xảy ra, vui lòng thử lại");

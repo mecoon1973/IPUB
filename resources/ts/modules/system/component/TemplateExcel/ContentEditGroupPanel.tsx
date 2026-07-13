@@ -1,7 +1,7 @@
 import React, { useCallback } from "react";
 import { Button, Input, Select } from "antd";
 import { CloseOutlined, PlusOutlined } from "@ant-design/icons";
-import { ContentEditTemplateType } from "../../type/TemplateExcel";
+import { ContentEditTemplateType } from "../../type/TemplateExport";
 import {
     ContentReplaceEntryRow,
     type ReplaceEntry,

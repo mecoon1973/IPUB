@@ -8,7 +8,7 @@ use InvalidArgumentException;
 /**
  * Một nhóm cấu hình chèn nội dung vào template Excel.
  *
- * @see resources/ts/modules/system/type/TemplateExcel.ts — ContentEditTemplate
+ * @see resources/ts/modules/system/type/TemplateExport.ts — ContentEditTemplate
  *
  * @property string $type      ContentEditTemplateType::TEXT|ContentEditTemplateType::LOOP
  * @property string $key_data  Đường dẫn dữ liệu gốc (bắt buộc khi type = loop)
@@ -134,7 +134,7 @@ class ContentEditTemplate extends BaseObject
         );
     }
 
-    public function getDataText(array $data): array
+    public function getDataText(array $data, ?bool $html = false): array
     {
         if ($this->type !== self::TYPE_TEXT) {
             throw new InvalidArgumentException('type phải là ' . self::TYPE_TEXT . ', nhận được: ' . $this->type);
@@ -148,9 +148,14 @@ class ContentEditTemplate extends BaseObject
             );
 
             $value = data_get($data, $config->value, '');
-
             if ($config->callback !== '') {
-                $value = call_user_func($config->callback, $value);
+                if(function_exists($config->callback)){
+                    if($html && $config->callback == "core_normalize_html_to_string"){
+                        // mục đích khi lấy dữ liệu cho file .html thì cần giữ lại các thẻ html
+                    }else{
+                        $value = call_user_func($config->callback, $value);
+                    }
+                }
             }
 
             $result[$placeholder] = $value;

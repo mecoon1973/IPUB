@@ -205,9 +205,7 @@ function _ComponentUploadFile(props: ComponentUploadFileProps): React.JSX.Elemen
                     </div>
                     <div className="flex w-full flex-col items-center gap-2">
                         <p className="m-0 text-lg font-semibold leading-7 text-gray-900">
-                            {multiple
-                                ? "Kéo thả file Excel vào đây hoặc bấm Chọn tệp"
-                                : "Kéo thả file Excel vào đây hoặc bấm Chọn tệp"}
+                            Kéo thả file vào đây hoặc bấm Chọn tệp
                         </p>
                         <p className="m-0 text-base leading-6 text-gray-500">
                             Hỗ trợ định dạng {formatAcceptLabel(accept)}
@@ -295,10 +293,11 @@ export const ComponentUploadFile = React.memo(_ComponentUploadFile);
 
 interface TemplateDownloadProps {
     pathFile: string;
+    icon?: string;
 }
 
 function _TemplateDownloadComponent(props: TemplateDownloadProps): React.JSX.Element | null {
-    const { pathFile } = props;
+    const { pathFile, icon = ICON_EXCEL_FILE } = props;
     const handleDownload = useCallback(() => {
         window.open(pathFile, "_blank");
     }, [pathFile]);
@@ -308,7 +307,7 @@ function _TemplateDownloadComponent(props: TemplateDownloadProps): React.JSX.Ele
     return (
         <div className="flex w-full items-center gap-4 rounded-2xl border border-gray-200 bg-white p-4">
             <img
-                src={ICON_EXCEL_FILE}
+                src={icon}
                 alt=""
                 className="h-12 w-12 shrink-0"
                 aria-hidden

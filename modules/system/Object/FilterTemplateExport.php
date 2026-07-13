@@ -6,7 +6,7 @@ use MongoDB\BSON\Regex;
 /**
  *
  */
-class FilterTemplateExcel extends BaseObject {
+class FilterTemplateExport extends BaseObject {
 
     public ?string $key = null;
     public ?string $name = null;

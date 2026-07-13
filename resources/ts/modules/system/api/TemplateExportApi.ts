@@ -1,17 +1,15 @@
 
 import { defaultPagiInfo, type PagiResult } from "../../page/type";
-import type { TemplateExcel } from "../type/TemplateExcel";
+import type { TemplateExport, TemplateFileField } from "../type/TemplateExport";
 
-export class TemplateExcelApi{
+export class TemplateExportApi{
 
-    /** điều kiện mặc định khi lấy danh sách Template Excel */
-    static readonly conditionDefault : Partial<TemplateExcel> = {
+    static readonly conditionDefault : Partial<TemplateExport> = {
         IsDeleted : false,
     }
 
-    /** lấy danh sách Template Excel có phân trang */
-    static async getPaginateTemplateExcel(data : Partial<TemplateExcel> = TemplateExcelApi.conditionDefault, page = 'page-1') : Promise<PagiResult<TemplateExcel>>{
-        const url = "/api/system/template-excel/paginate/";
+    static async getPaginateTemplateExport(data : Partial<TemplateExport> = TemplateExportApi.conditionDefault, page = 'page-1') : Promise<PagiResult<TemplateExport>>{
+        const url = "/api/system/template-export/paginate/";
         try {
             const res = await window._apiGet(url + page, data);
             return res;
@@ -24,9 +22,8 @@ export class TemplateExcelApi{
         }
     }
 
-    /** lấy danh sách Template Excel */
-        static async getAll(data : Partial<TemplateExcel> = {}) : Promise<TemplateExcel[]>{
-        const url = "/api/system/template-excel/get-all";
+    static async getAll(data : Partial<TemplateExport> = {}) : Promise<TemplateExport[]>{
+        const url = "/api/system/template-export/get-all";
         try {
             const res = await window._apiGet(url, data);
             return res;
@@ -36,9 +33,8 @@ export class TemplateExcelApi{
         }
     }
 
-    /** cập nhật Template Excel */
-    static async upsert(data : Partial<TemplateExcel>) : Promise<TemplateExcel|null>{
-        const url = "/api/system/template-excel/store";
+    static async upsert(data : Partial<TemplateExport>) : Promise<TemplateExport|null>{
+        const url = "/api/system/template-export/store";
         try {
             const res = await window._apiCreate(url, data);
             return res;
@@ -48,24 +44,27 @@ export class TemplateExcelApi{
         }
     }
 
-    /** upload file template Excel — đặt tên file theo key để ghi đè khi cập nhật */
-    static async uploadTemplateFile(file: File, key: string): Promise<string | null> {
-        const url = "/api/system/template-excel/upload";
+    static async uploadTemplateFile(
+        file: File,
+        key: string,
+        field: TemplateFileField,
+    ): Promise<string | null> {
+        const url = "/api/system/template-export/upload";
         const formData = new FormData();
         formData.append("file", file);
         formData.append("key", key);
+        formData.append("field", field);
         try {
             const res = await window._apiUpload(url, formData);
-            return res?.path_file_template ?? null;
+            return res?.[field] ?? null;
         } catch (err: any) {
             window._toastbox(err.responseJSON?.message || "Có lỗi xảy ra khi tải file lên, vui lòng thử lại", "danger");
             return null;
         }
     }
 
-    /** xóa Template Excel */
     static async delete(id: number) : Promise<boolean>{
-        const url = `/api/system/template-excel/delete/${id}`;
+        const url = `/api/system/template-export/delete/${id}`;
         try {
             const res = await window._apiDelete(url);
             return res as boolean;

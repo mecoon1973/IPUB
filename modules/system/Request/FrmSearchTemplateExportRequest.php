@@ -3,9 +3,9 @@ namespace Modules\System\Request;
 
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Support\Facades\Auth;
-use Modules\System\Object\FilterTemplateExcel;
+use Modules\System\Object\FilterTemplateExport;
 
-class FrmSearchTemplateExcelRequest extends FormRequest
+class FrmSearchTemplateExportRequest extends FormRequest
 {
     protected $casts = [
         'id' => 'int',
@@ -14,21 +14,11 @@ class FrmSearchTemplateExcelRequest extends FormRequest
         'path_file_template' => 'string',
     ];
 
-    /**
-     * Determine if the user is authorized to make this request.
-     *
-     * @return bool
-     */
     public function authorize()
     {
         return Auth::check();
     }
 
-    /**
-     * Get the validation rules that apply to the request.
-     *
-     * @return array
-     */
     public function rules() {
         return [
             'key' => 'sometimes|string',
@@ -59,14 +49,9 @@ class FrmSearchTemplateExcelRequest extends FormRequest
         }
     }
 
-    /**
-     * Chuyển đổi dữ liệu đầu vào thành đối tượng FilterTemplateExcel.
-     *
-     * @return FilterTemplateExcel
-     */
-    public function toFilter() : FilterTemplateExcel {
+    public function toFilter() : FilterTemplateExport {
         $validated = $this->validated();
-        $filter = new FilterTemplateExcel();
+        $filter = new FilterTemplateExport();
         foreach ($this->casts as $key => $type) {
             if (!array_key_exists($key, $validated)) {
                 continue;

@@ -302,4 +302,53 @@ if(!function_exists('core_normalize_path')){
 
 }
 
+if (!function_exists('core_normalize_html_to_string')) {
+    /**
+     * Chuyển HTML thành chuỗi plain text (decode entity, bỏ thẻ, giữ xuống dòng, ol/ul).
+     *
+     * @param string $html HTML đầu vào
+     * @return string Chuỗi text đã chuẩn hóa
+     */
+    function core_normalize_html_to_string(string $html): string
+    {
+        return \Core\Utility\HtmlToTextNormalizer::toString($html);
+    }
+}
+if(!function_exists('core_normalize_date_time_to_string')){
+    /**
+     * Chuẩn hóa datetime
+     * @param string|int|\DateTimeInterface $dateTime Chuỗi datetime hoặc Unix timestamp (giây)
+     * @return string Chuỗi datetime chuẩn hóa "ngày 2 tháng 7 năm 2026"
+     */
+    function core_normalize_date_time_to_string(string|int|\DateTimeInterface $dateTime): string
+    {
+        if ($dateTime instanceof \DateTimeInterface) {
+            $carbon = Carbon::instance($dateTime);
+        } elseif (is_int($dateTime)) {
+            $carbon = Carbon::createFromTimestamp($dateTime);
+        } else {
+            $trimmed = trim($dateTime);
 
+            if ($trimmed === '') {
+                return '';
+            }
+
+            if (ctype_digit($trimmed)) {
+                $carbon = Carbon::createFromTimestamp((int) $trimmed);
+            } else {
+                $carbon = Carbon::parse($trimmed);
+            }
+        }
+
+        if (!$carbon->isValid()) {
+            throw new InvalidArgumentException('Datetime không hợp lệ: ' . (string) $dateTime);
+        }
+
+        return sprintf(
+            'ngày %d tháng %d năm %d',
+            (int) $carbon->format('j'),
+            (int) $carbon->format('n'),
+            (int) $carbon->format('Y')
+        );
+    }
+}
