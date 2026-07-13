@@ -45,6 +45,56 @@ trait HelperEditWord
         );
     }
 
+    /**
+     * Nhân bản hàng bảng chứa placeholder (giống Excel duplicateRowCellsBelow).
+     *
+     * Placeholder trong DOCX phải nằm trong <w:tr>. Hàng gốc + $duplicateCount bản sao.
+     *
+     * @param list<string> $columnKeys     Key từ map_replate, vd: ["!a!", "!b!", "!c!"]
+     * @param int          $duplicateCount Số hàng chèn thêm (mảng 10 phần tử → 9)
+     */
+    public function duplicateTableRowBelow(array $columnKeys, int $duplicateCount): void
+    {
+        if ($columnKeys === []) {
+            throw new InvalidArgumentException('columnKeys không được rỗng.');
+        }
+
+        $anchor = (string) $columnKeys[0];
+        $this->getTemplateEditor()->duplicateTableRowBelow(
+            $anchor,
+            $duplicateCount,
+            array_values(array_map('strval', $columnKeys))
+        );
+    }
+
+    /**
+     * Điền ma trận dữ liệu vào các hàng đã nhân bản (giống Excel fillDuplicatedRowValues).
+     *
+     * @param list<string>                  $columnKeys
+     * @param array<int, array<int, mixed>> $rowValuesMatrix
+     */
+    public function fillDuplicatedRowValues(array $columnKeys, array $rowValuesMatrix): void
+    {
+        $this->getTemplateEditor()->fillDuplicatedRowValues(
+            array_values(array_map('strval', $columnKeys)),
+            $rowValuesMatrix
+        );
+    }
+
+    /**
+     * Gộp duplicate + fill cho TYPE_LOOP trên DOCX.
+     *
+     * @param list<string>                  $columnKeys
+     * @param array<int, array<int, mixed>> $rowValuesMatrix
+     */
+    public function applyLoopRows(array $columnKeys, array $rowValuesMatrix): void
+    {
+        $this->getTemplateEditor()->applyLoopRows(
+            array_values(array_map('strval', $columnKeys)),
+            $rowValuesMatrix
+        );
+    }
+
     protected function normalizeReplacementValue(mixed $value): string
     {
         if ($value === null) {

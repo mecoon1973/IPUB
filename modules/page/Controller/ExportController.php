@@ -130,25 +130,45 @@ class ExportController extends Controller
         dd("done");
 
     }
+    /**
+     * Test export DOCX: lấy template + dữ liệu phiếu → map placeholder → ghi file .docx.
+     *
+     * Luồng:
+     * 1. TemplateExport (key) → path .docx tuyệt đối
+     * 2. EditWord mở ZIP/XML (DocxTemplateEditor), nối placeholder !Name! bị Word tách run
+     * 3. PhieuDkDetai → $data["phieu_dk_detai"]
+     * 4. content_edit type=text → getDataText: placeholder => giá trị (data_get + callback)
+     * 5. replateContent → replaceLiteral trên body/header/footer
+     * 6. saveAs → file output
+     */
     public function testDocx(Request $request){
 
         /** @var TemplateExportService $templateExcelService */
         $templateExcelService = app(TemplateExportService::class);
+        // Cấu hình template: path_file_template_doc + content_edit (map placeholder)
         $templateExcel = $templateExcelService->findOne("no-cache", ["key" => "Template_Phieu_DK_DE_TAI"]);
         $pathFile = $templateExcelService->getTemplateFileAbsolutePath($templateExcel->path_file_template_doc);
+
+        // Clone DOCX vào temp; fixBrokenBangPlaceholders nối "!"" + "Name" + "!" → "!Name!"
         $editDocx = new EditWord($pathFile);
+
         /** @var PhieuDkDetaiService $phieuDkDetaiService */
         $phieuDkDetaiService = app(PhieuDkDetaiService::class);
         $phieu_dk_detai = $phieuDkDetaiService->findOne("no-cache", ["_id" => 171252]);
+        // Root key phải khớp content_edit.map_replate[].value (vd. "phieu_dk_detai.ten_de_tai")
         $data = ["phieu_dk_detai" => $phieu_dk_detai];
 
+        // content_edit → DTO; TYPE_TEXT thay placeholder đơn; TYPE_LOOP → applyLoopRows / duplicate+fill
         $contentEditItems = ContentEditTemplate::listFromArray($templateExcel->content_edit ?? []);
         $dataRender = [];
         foreach ($contentEditItems as $contentEdit) {
             if ($contentEdit->type === ContentEditTemplate::TYPE_TEXT) {
+                // Ví dụ: ["!TenDeTai!" => "Đề tài ABC", "!TacGia!" => "..."]
                 $dataRender = array_merge($dataRender, $contentEdit->getDataText($data));
             }
         }
+
+        // HelperEditWord: từng cặp → DocxTemplateEditor::replaceLiteral (escape XML, case-insensitive)
         $editDocx->replateContent($dataRender);
         $editDocx->save("E:\\Dowload\\rpPhieuDkDetai_new.docx");
         dd("done");

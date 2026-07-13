@@ -9,15 +9,18 @@ use RuntimeException;
  * Chỉnh sửa file Word có sẵn (.docx) bằng TemplateProcessor (thao tác XML trong ZIP).
  *
  * Luồng sử dụng cơ bản:
- *   1. new EditWord($path)     — clone file .docx vào editor
- *   2. replateContent($map)     — thay placeholder bằng value
- *   3. save($outputPath)        — ghi file mới
+ *   1. new EditWord($path)              — clone file .docx vào editor
+ *   2. replateContent($map)              — thay placeholder đơn (TYPE_TEXT)
+ *   3. applyLoopRows($keys, $matrix)     — nhân hàng bảng + điền (TYPE_LOOP)
+ *      hoặc duplicateTableRowBelow + fillDuplicatedRowValues (giống Excel)
+ *   4. save($outputPath)                 — ghi file mới
  *
  * Lưu ý:
  * - Không dùng IOFactory::load()/PhpWord object model vì reader Word2007 không
  *   parse đủ OpenXML (DrawingML/VML textbox…) — load rồi save sẽ mất checkbox/textbox.
  * - TemplateProcessor giữ nguyên XML gốc; chỉ thay chuỗi text.
  * - Placeholder dạng !Name! bị Word tách run sẽ được nối lại trước khi replace.
+ * - TYPE_LOOP: placeholder phải nằm trong hàng bảng Word (<w:tr>).
  */
 class EditWord
 {

@@ -3,8 +3,10 @@
 namespace ExportFile\phpWord;
 
 use PhpOffice\PhpWord\Escaper\Xml;
+use PhpOffice\PhpWord\Exception\Exception as PhpWordException;
 use PhpOffice\PhpWord\Settings;
 use PhpOffice\PhpWord\TemplateProcessor;
+use RuntimeException;
 
 /**
  * TemplateProcessor mở rộng: thay chuỗi placeholder tùy ý (vd. [!TenSach!], !TenSach!)
@@ -102,6 +104,174 @@ class DocxTemplateEditor extends TemplateProcessor
     }
 
     /**
+     * Nhân bản hàng bảng (<w:tr>) chứa $anchorPlaceholder.
+     *
+     * Tương đương Excel duplicateRowCellsBelow: hàng gốc + $duplicateCount bản sao.
+     * Placeholder trong mỗi hàng được đánh chỉ số: !a! → !a#1!, !a#2!, …
+     * (tránh đụng substring khi replace lần lượt).
+     *
+     * @param list<string> $placeholdersToIndex Placeholder cần đánh chỉ số (thường = columnKeys)
+     */
+    public function duplicateTableRowBelow(string $anchorPlaceholder, int $duplicateCount, array $placeholdersToIndex = []): void
+    {
+        if ($duplicateCount < 0) {
+            throw new RuntimeException('duplicateCount không được âm.');
+        }
+
+        $totalRows = $duplicateCount + 1;
+        $anchor = $this->resolveSearchKeys($anchorPlaceholder)[0] ?? $anchorPlaceholder;
+
+        $tagPos = strpos($this->tempDocumentMainPart, $anchor);
+        if ($tagPos === false) {
+            throw new RuntimeException(
+                'Không tìm thấy placeholder neo hàng loop: ' . $anchorPlaceholder
+            );
+        }
+
+        try {
+            $rowStart = $this->findRowStart($tagPos);
+            $rowEnd = $this->findRowEnd($tagPos);
+        } catch (PhpWordException $exception) {
+            throw new RuntimeException(
+                'Placeholder loop phải nằm trong hàng bảng (<w:tr>): ' . $anchorPlaceholder,
+                0,
+                $exception
+            );
+        }
+
+        $xmlRow = $this->getSlice($rowStart, $rowEnd);
+        $placeholders = $placeholdersToIndex !== []
+            ? $placeholdersToIndex
+            : [$anchorPlaceholder];
+
+        $clonedRows = $this->indexClonedBangPlaceholders($totalRows, $xmlRow, $placeholders);
+
+        $this->tempDocumentMainPart =
+            $this->getSlice(0, $rowStart)
+            . implode('', $clonedRows)
+            . $this->getSlice($rowEnd);
+    }
+
+    /**
+     * Điền giá trị vào các hàng đã nhân bản (placeholder dạng !Name#1!, !Name#2!, …).
+     *
+     * @param list<string>                    $columnKeys       Key map_replate (vd. ["!a!", "!b!"])
+     * @param array<int, array<int, mixed>>   $rowValuesMatrix  Hàng × cột, thứ tự khớp $columnKeys
+     */
+    public function fillDuplicatedRowValues(array $columnKeys, array $rowValuesMatrix): void
+    {
+        if ($columnKeys === [] || $rowValuesMatrix === []) {
+            return;
+        }
+
+        foreach ($rowValuesMatrix as $rowIndex => $rowValues) {
+            if (!is_array($rowValues)) {
+                continue;
+            }
+
+            $rowNumber = $rowIndex + 1;
+
+            foreach ($columnKeys as $colIndex => $placeholder) {
+                if (!is_string($placeholder) || $placeholder === '') {
+                    continue;
+                }
+
+                $indexed = $this->buildIndexedBangPlaceholder($placeholder, $rowNumber);
+                $value = $rowValues[$colIndex] ?? '';
+                $this->replaceLiteral($indexed, $this->stringifyLoopValue($value));
+            }
+        }
+    }
+
+    /**
+     * Clone hàng template và điền luôn (gộp duplicate + fill).
+     *
+     * @param list<string>                  $columnKeys
+     * @param array<int, array<int, mixed>> $rowValuesMatrix
+     */
+    public function applyLoopRows(array $columnKeys, array $rowValuesMatrix): void
+    {
+        if ($columnKeys === [] || $rowValuesMatrix === []) {
+            return;
+        }
+
+        $anchor = $columnKeys[0];
+        $this->duplicateTableRowBelow($anchor, count($rowValuesMatrix) - 1, $columnKeys);
+        $this->fillDuplicatedRowValues($columnKeys, $rowValuesMatrix);
+    }
+
+    /**
+     * Đánh chỉ số placeholder bang trong mỗi bản sao hàng: !a! → !a#1!, !a#2!, …
+     *
+     * @param list<string> $placeholders
+     *
+     * @return list<string>
+     */
+    protected function indexClonedBangPlaceholders(int $count, string $xmlBlock, array $placeholders): array
+    {
+        $resolvedPlaceholders = [];
+        foreach ($placeholders as $placeholder) {
+            if (!is_string($placeholder) || $placeholder === '') {
+                continue;
+            }
+            $resolvedPlaceholders[] = $this->resolveSearchKeys($placeholder)[0] ?? $placeholder;
+        }
+        $resolvedPlaceholders = array_values(array_unique($resolvedPlaceholders));
+
+        // Placeholder dài hơn trước để tránh !ab! nuốt !a!
+        usort($resolvedPlaceholders, static fn (string $a, string $b): int => strlen($b) <=> strlen($a));
+
+        $results = [];
+        for ($i = 1; $i <= $count; ++$i) {
+            $rowXml = $xmlBlock;
+            foreach ($resolvedPlaceholders as $placeholder) {
+                $indexed = $this->buildIndexedBangPlaceholder($placeholder, $i);
+                $rowXml = str_replace($placeholder, $indexed, $rowXml);
+            }
+            $results[] = $rowXml;
+        }
+
+        return $results;
+    }
+
+    /**
+     * !Name! → !Name#2! ; [!Name!] → [!Name#2!]
+     */
+    protected function buildIndexedBangPlaceholder(string $placeholder, int $rowNumber): string
+    {
+        if (preg_match('/^\[!(.+?)!\]$/', $placeholder, $match) === 1) {
+            return '[!' . $match[1] . '#' . $rowNumber . '!]';
+        }
+
+        if (preg_match('/^!(.+?)!$/', $placeholder, $match) === 1) {
+            return '!' . $match[1] . '#' . $rowNumber . '!';
+        }
+
+        return $placeholder . '#' . $rowNumber;
+    }
+
+    protected function stringifyLoopValue(mixed $value): string
+    {
+        if ($value === null) {
+            return '';
+        }
+
+        if (is_scalar($value) || (is_object($value) && method_exists($value, '__toString'))) {
+            return (string) $value;
+        }
+
+        return '';
+    }
+
+    /**
+     * Chọn chuỗi placeholder thực tế sẽ đưa vào setValueForPart.
+     *
+     * Thứ tự:
+     * 1. Có exact match trong doc → giữ nguyên $search
+     * 2. Không phải dạng !Name! / [!Name!] → không fallback case, trả $search
+     * 3. Có biến thể khác hoa/thường trong doc → dùng biến thể đó (Word giữ casing gốc)
+     * 4. Không tìm thấy → vẫn trả $search (replace sẽ no-op)
+     *
      * @return list<string>
      */
     protected function resolveSearchKeys(string $search): array
@@ -110,7 +280,11 @@ class DocxTemplateEditor extends TemplateProcessor
             return [$search];
         }
 
-        if (!preg_match('/^![A-Za-z0-9_]+!$/', $search) && !preg_match('/^\[![A-Za-z0-9_]+!\]$/', $search)) {
+        // Chỉ fallback case-insensitive cho placeholder bang chuẩn (kể cả đã đánh chỉ số !a#1!)
+        if (
+            !preg_match('/^![A-Za-z0-9_]+(?:#\d+)?!$/', $search)
+            && !preg_match('/^\[![A-Za-z0-9_]+(?:#\d+)?!\]$/', $search)
+        ) {
             return [$search];
         }
 
@@ -122,6 +296,9 @@ class DocxTemplateEditor extends TemplateProcessor
         return [$search];
     }
 
+    /**
+     * Kiểm tra $needle xuất hiện exact (phân biệt hoa/thường) trong body, header, footer.
+     */
     protected function documentContains(string $needle): bool
     {
         if (str_contains($this->tempDocumentMainPart, $needle)) {
@@ -143,6 +320,14 @@ class DocxTemplateEditor extends TemplateProcessor
         return false;
     }
 
+    /**
+     * Tìm lần xuất hiện đầu tiên của $search trong doc, không phân biệt hoa/thường.
+     *
+     * Ví dụ: config "!TacGia!" nhưng Word lưu "!Tacgia!" → trả "!Tacgia!"
+     * để setValueForPart match đúng chuỗi trong XML.
+     *
+     * @return string|null Chuỗi đúng casing trong XML, hoặc null nếu không có
+     */
     protected function findCaseInsensitivePlaceholder(string $search): ?string
     {
         $parts = [$this->tempDocumentMainPart];
@@ -153,6 +338,7 @@ class DocxTemplateEditor extends TemplateProcessor
             $parts[] = $footerXml;
         }
 
+        // /i = ignore case; trả về đúng text như trong XML ($match[0])
         $pattern = '/' . preg_quote($search, '/') . '/iu';
         foreach ($parts as $xml) {
             if (preg_match($pattern, $xml, $match) === 1) {
