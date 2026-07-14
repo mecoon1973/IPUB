@@ -93,13 +93,14 @@ export default defineConfig({
                 'resources/ts/modules/system/view/LoaiXBPLC/viewManageLoaiXbpLc.tsx',
                 'resources/ts/modules/system/view/DoituongSNV/viewManageDoituongSNV.tsx',
                 'resources/ts/modules/system/view/DoituongSNV/viewStoreDoituongSNV.tsx',
-                'resources/ts/modules/system/view/TemplateExcel/viewManageTemplateExcel.tsx',
-                'resources/ts/modules/system/view/TemplateExcel/viewStoreTemplateExcel.tsx',
+                'resources/ts/modules/system/view/TemplateExport/viewManageTemplateExport.tsx',
+                'resources/ts/modules/system/view/TemplateExport/viewStoreTemplateExport.tsx',
 
                 'resources/ts/modules/topic/view/PhieuDkDetai/viewManagePhieuDkDetai.tsx',
                 'resources/ts/modules/topic/view/PhieuDkDetai/viewStorePhieuDkDetai.tsx',
                 'resources/ts/modules/topic/view/PhieuDkDetai/viewTaiBanPhieuDkDetai.tsx',
                 'resources/ts/modules/topic/view/PhieuDkDetai/viewChuyenKeHoachPhieuDkDetai.tsx',
+                'resources/ts/modules/topic/view/PhieuDkDetai/viewPrintPhieuDkDeTai.tsx',
 
                 'resources/ts/modules/topic/view/HDXBNXBGDVN/viewManageHDXBNXBGDVN.tsx',
                 'resources/ts/modules/topic/view/HDXBNXBGDVN/viewPheDuyetDiInHDXBNXBGDVN.tsx',

@@ -7,7 +7,7 @@ use Core\Object\BaseObject;
 /**
  * Cấu hình thay thế cho một placeholder / ô Excel.
  *
- * @see resources/ts/modules/system/type/TemplateExcel.ts — ContentReplaceTemplate
+ * @see resources/ts/modules/system/type/TemplateExport.ts — ContentReplaceTemplate
  *
  * @property string $value    Đường dẫn dữ liệu cần thay thế
  * @property string $callback Hàm callback xử lý sau khi lấy value (tuỳ chọn)

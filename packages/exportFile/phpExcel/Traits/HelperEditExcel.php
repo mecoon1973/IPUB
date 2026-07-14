@@ -8,7 +8,6 @@ use PhpOffice\PhpSpreadsheet\Cell\Coordinate;
 use PhpOffice\PhpSpreadsheet\RichText\RichText;
 use PhpOffice\PhpSpreadsheet\Style\Alignment;
 use PhpOffice\PhpSpreadsheet\Worksheet\Worksheet;
-use RuntimeException;
 
 trait HelperEditExcel {
 
@@ -42,18 +41,20 @@ trait HelperEditExcel {
      * Ví dụ: ô "Sách: [!TenSach!] - CXB" + placeholder "[!TenSach!]" + value "Toán 1"
      *      → "Sách: Toán 1 - CXB"
      *
-     * @return Cell Ô sau khi đã thay thế
+     * @return Cell|null Ô sau khi đã thay thế, hoặc null nếu không tìm thấy placeholder
      */
-    public function replacePlaceholderValue(Worksheet $sheet, string $placeholder, mixed $value): Cell
+    public function replacePlaceholderValue(Worksheet $sheet, string $placeholder, mixed $value): ?Cell
     {
         $coordinate = $this->findPlaceholderCell($placeholder, $sheet);
+        if ($coordinate === '') {
+            return null;
+        }
+
         $cell = $sheet->getCell($coordinate);
         $currentValue = $this->cellValueToString($cell->getValue());
 
         if (!str_contains($currentValue, $placeholder)) {
-            throw new RuntimeException(
-                'Ô "' . $coordinate . '" không chứa placeholder "' . $placeholder . '".'
-            );
+            return null;
         }
 
         $replacement = $this->normalizeReplacementValue($value);
@@ -65,29 +66,31 @@ trait HelperEditExcel {
     /**
      * Lấy object Cell chứa placeholder.
      *
-     * @throws RuntimeException Không tìm thấy ô khớp placeholder
+     * @return Cell|null null nếu không tìm thấy
      */
-    public function findPlaceholderCellObject(string $placeholder, Worksheet $sheet): Cell
+    public function findPlaceholderCellObject(string $placeholder, Worksheet $sheet): ?Cell
     {
-        return $sheet->getCell($this->findPlaceholderCell($placeholder, $sheet));
+        $coordinate = $this->findPlaceholderCell($placeholder, $sheet);
+        if ($coordinate === '') {
+            return null;
+        }
+
+        return $sheet->getCell($coordinate);
     }
 
     /**
      * Tìm ô đầu tiên trong sheet chứa placeholder (mặc định: $title$).
      *
-     * @param string         $placeholder Giá trị cần tìm, vd: $title$
-     * @param Worksheet $sheet       Sheet cần quét;
+     * @param string    $placeholder Giá trị cần tìm, vd: $title$
+     * @param Worksheet $sheet       Sheet cần quét
      *
-     * @return string Địa chỉ cell, vd: "C5"
-     *
-     * @throws RuntimeException Không tìm thấy ô khớp placeholder
+     * @return string Địa chỉ cell (vd: "C5"), hoặc "" nếu không tìm thấy
      */
     public function findPlaceholderCell(string $placeholder, Worksheet $sheet): string
     {
         if ($placeholder === '') {
             throw new InvalidArgumentException('Placeholder không được rỗng.');
         }
-
 
         foreach ($sheet->getRowIterator() as $row) {
             $cellIterator = $row->getCellIterator();
@@ -104,9 +107,7 @@ trait HelperEditExcel {
             }
         }
 
-        throw new RuntimeException(
-            'Không tìm thấy ô chứa placeholder "' . $placeholder . '" trong sheet "' . $sheet->getTitle() . '".'
-        );
+        return '';
     }
 
     /**
@@ -433,6 +434,15 @@ trait HelperEditExcel {
 
         foreach ($columnKeys as $columnKey) {
             $coordinate = $this->resolveColumnKeyToCoordinate($sheet, (string) $columnKey);
+            if ($coordinate === '') {
+                // Giữ index cột khớp matrix; bỏ qua khi điền.
+                $columnMeta[] = [
+                    'key' => (string) $columnKey,
+                    'column' => null,
+                ];
+                continue;
+            }
+
             [$column, $row] = Coordinate::coordinateFromString($coordinate);
 
             if ($templateRow === null) {
@@ -447,6 +457,10 @@ trait HelperEditExcel {
             ];
         }
 
+        if ($templateRow === null) {
+            return;
+        }
+
         foreach ($rowValuesMatrix as $rowIndex => $rowValues) {
             if (!is_array($rowValues)) {
                 continue;
@@ -455,6 +469,10 @@ trait HelperEditExcel {
             $targetRow = $templateRow + $rowIndex;
 
             foreach ($columnMeta as $colIndex => $meta) {
+                if ($meta['column'] === null) {
+                    continue;
+                }
+
                 $coordinate = $meta['column'] . $targetRow;
                 $value = $rowValues[$colIndex] ?? '';
 
@@ -470,22 +488,33 @@ trait HelperEditExcel {
     /**
      * @param array<int, string> $columnKeys
      *
-     * @return array<int, string>
+     * @return array<int, string> Chỉ gồm tọa độ tìm được (bỏ placeholder không có trên sheet)
      */
     protected function resolveColumnKeysToCoordinates(Worksheet $sheet, array $columnKeys): array
     {
         $coordinates = [];
 
         foreach ($columnKeys as $columnKey) {
-            $coordinates[] = $this->resolveColumnKeyToCoordinate($sheet, (string) $columnKey);
+            $coordinate = $this->resolveColumnKeyToCoordinate($sheet, (string) $columnKey);
+            if ($coordinate === '') {
+                continue;
+            }
+            $coordinates[] = $coordinate;
         }
 
         return $coordinates;
     }
 
+    /**
+     * @return string Tọa độ ô, hoặc "" nếu placeholder không tồn tại trên sheet
+     */
     protected function resolveColumnKeyToCoordinate(Worksheet $sheet, string $columnKey): string
     {
         $columnKey = trim($columnKey);
+
+        if ($columnKey === '') {
+            return '';
+        }
 
         if ($this->isCellCoordinate($columnKey)) {
             return strtoupper($columnKey);

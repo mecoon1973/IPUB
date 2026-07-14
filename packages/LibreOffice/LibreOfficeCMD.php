@@ -44,7 +44,7 @@ final class LibreOfficeCMD
      *
      * @var list<string>
      */
-    private const SUPPORTED_INPUT_EXTENSIONS = ['xlsx', 'html'];
+    private const SUPPORTED_INPUT_EXTENSIONS = ['xlsx', 'docx'];
 
     /**
      * Filter LibreOffice tương ứng từng định dạng đích.
@@ -69,7 +69,7 @@ final class LibreOfficeCMD
      */
     private const ALLOWED_CONVERSIONS = [
         'xlsx' => [self::FORMAT_PDF, self::FORMAT_HTML, self::FORMAT_TXT],
-        'html' => [self::FORMAT_DOCX, self::FORMAT_RTF],
+        'docx' => [self::FORMAT_PDF, self::FORMAT_HTML, self::FORMAT_TXT],
     ];
 
     /**

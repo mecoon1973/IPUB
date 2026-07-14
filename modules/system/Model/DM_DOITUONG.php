@@ -3,20 +3,22 @@
 namespace Modules\System\Model;
 
 use Core\Model\Model;
+use DateTime;
+
 /**
  * @property int $_id
- * @property string MaDoiTuong
- * @property string TenDoiTuong
- * @property string MoTa
- * @property int CreatedBy
- * @property datetime CreatedOn
- * @property int EditedBy
- * @property datetime EditedOn
- * @property boolean IsDeleted
- * @property boolean InUsed
- * @property string KhoaGuiNhan
- * @property string KiHieu
- * @property string type
+ * @property string $MaDoiTuong
+ * @property string $TenDoiTuong
+ * @property string $MoTa
+ * @property int $CreatedBy
+ * @property DateTime $CreatedOn
+ * @property int $EditedBy
+ * @property Datetime $EditedOn
+ * @property boolean $IsDeleted
+ * @property boolean $InUsed
+ * @property string $KhoaGuiNhan
+ * @property string $KiHieu
+ * @property string $type
  */
 class DM_DOITUONG extends Model {
     protected $connection = "olm";
@@ -59,7 +61,6 @@ class DM_DOITUONG extends Model {
         "InUsed" => true,
         "KhoaGuiNhan" => "",
         "KiHieu" => "",
-        "MaDoiTuong" => "",
         "type" => "",
     ];
 

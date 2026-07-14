@@ -3,15 +3,11 @@ namespace Modules\System\Request;
 
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Support\Facades\Auth;
-use Modules\System\Object\FilterTemplateExcel;
+use Modules\System\Object\FilterCap;
 
-class FrmSearchTemplateExcelRequest extends FormRequest
+class FrmSearchCapRequest extends FormRequest
 {
     protected $casts = [
-        'id' => 'int',
-        'key' => 'string',
-        'name' => 'string',
-        'path_file_template' => 'string',
     ];
 
     /**
@@ -31,17 +27,11 @@ class FrmSearchTemplateExcelRequest extends FormRequest
      */
     public function rules() {
         return [
-            'key' => 'sometimes|string',
-            'name' => 'sometimes|string',
-            'path_file_template' => 'sometimes|string',
         ];
     }
 
     public function messages() {
         return [
-            'key.string' => 'Key phải là chuỗi',
-            'name.string' => 'Tên phải là chuỗi',
-            'path_file_template.string' => 'Đường dẫn file template phải là chuỗi',
         ];
     }
 
@@ -60,13 +50,13 @@ class FrmSearchTemplateExcelRequest extends FormRequest
     }
 
     /**
-     * Chuyển đổi dữ liệu đầu vào thành đối tượng FilterTemplateExcel.
+     * Chuyển đổi dữ liệu đầu vào thành đối tượng FilterCap.
      *
-     * @return FilterTemplateExcel
+     * @return FilterCap
      */
-    public function toFilter() : FilterTemplateExcel {
+    public function toFilter() : FilterCap {
         $validated = $this->validated();
-        $filter = new FilterTemplateExcel();
+        $filter = new FilterCap();
         foreach ($this->casts as $key => $type) {
             if (!array_key_exists($key, $validated)) {
                 continue;

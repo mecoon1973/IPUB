@@ -78,7 +78,7 @@ use Modules\System\Repository\Impl\FunctionQuyenRepositoryImpl;
 use Modules\System\Repository\Impl\LoaiSnvRepositoryImpl;
 use Modules\System\Repository\Impl\LoaiXbpLcRepositoryImpl;
 use Modules\System\Repository\Impl\NhomQuyenRepositoryImpl;
-use Modules\System\Repository\Impl\TemplateExcelRepositoryImpl;
+use Modules\System\Repository\Impl\TemplateExportRepositoryImpl;
 use Modules\System\Repository\Impl\SystemLogRepositoryImpl;
 use Modules\System\Repository\Impl\TrangThaiRepositoryImpl;
 use Modules\System\Repository\LoaiSnvRepository;
@@ -87,7 +87,7 @@ use Modules\System\Repository\LoaiXBPRepository;
 use Modules\System\Repository\MangsachCXBRepository;
 use Modules\System\Repository\NgoaiNguRepository;
 use Modules\System\Repository\NhomQuyenRepository;
-use Modules\System\Repository\TemplateExcelRepository;
+use Modules\System\Repository\TemplateExportRepository;
 use Modules\System\Repository\SystemLogRepository;
 use Modules\System\Repository\TrangThaiRepository;
 use Modules\System\Repository\TusachRepository;
@@ -121,7 +121,7 @@ use Modules\System\Service\Impl\LoaiXBPServiceImpl;
 use Modules\System\Service\Impl\MangsachCXBServiceImpl;
 use Modules\System\Service\Impl\NgoaiNguServiceImpl;
 use Modules\System\Service\Impl\NhomQuyenServiceImpl;
-use Modules\System\Service\Impl\TemplateExcelServiceImpl;
+use Modules\System\Service\Impl\TemplateExportServiceImpl;
 use Modules\System\Service\Impl\SystemLogServiceImpl;
 use Modules\System\Service\Impl\TrangThaiServiceImpl;
 use Modules\System\Service\Impl\TusachServiceImpl;
@@ -131,7 +131,7 @@ use Modules\System\Service\LoaiXBPService;
 use Modules\System\Service\MangsachCXBService;
 use Modules\System\Service\NgoaiNguService;
 use Modules\System\Service\NhomQuyenService;
-use Modules\System\Service\TemplateExcelService;
+use Modules\System\Service\TemplateExportService;
 use Modules\System\Service\SystemLogService;
 use Modules\System\Service\TrangThaiService;
 use Modules\System\Service\TusachService;
@@ -225,8 +225,8 @@ class Provider extends ServiceProvider {
         $this->app->singleton(DoituongSNVRepository::class, DoituongSNVRepositoryImpl::class);
         $this->app->singleton(LoaiSnvService::class, LoaiSnvServiceImpl::class);
         $this->app->singleton(LoaiSnvRepository::class, LoaiSnvRepositoryImpl::class);
-        $this->app->singleton(TemplateExcelService::class, TemplateExcelServiceImpl::class);
-        $this->app->singleton(TemplateExcelRepository::class, TemplateExcelRepositoryImpl::class);
+        $this->app->singleton(TemplateExportService::class, TemplateExportServiceImpl::class);
+        $this->app->singleton(TemplateExportRepository::class, TemplateExportRepositoryImpl::class);
 
 
         // các singleton chỉ dùng để chạy gộp dữ liệu

@@ -149,6 +149,7 @@ class ExportWord {
             case 'ul':
             case 'ol':
                 $this->renderNumbering($node);
+                break;
             case 'table':
                 $this->renderTable($node);
                 break;

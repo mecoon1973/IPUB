@@ -25,7 +25,7 @@ use Modules\System\Controller\LoaiXBPLCController;
 use Modules\System\Controller\MangsachCXBController;
 use Modules\System\Controller\NgoainguController;
 use Modules\System\Controller\SystemLogController;
-use Modules\System\Controller\TemplateExcelController;
+use Modules\System\Controller\TemplateExportController;
 use ExportFile\phpWord\ExportWord;
 
 Route::group(['middleware' => ['web', 'auth.custom']], function () {
@@ -168,12 +168,12 @@ Route::group(['middleware' => ['web', 'auth.custom']], function () {
                 Route::post('/store', [LoaiXBPLCController::class, 'store'])->name('loaiXbpLc.store');
                 Route::delete('/delete/{id}', [LoaiXBPLCController::class, 'delete'])->name('loaiXbpLc.delete');
             });
-            Route::group(['prefix' => 'template-excel'], function () {
-                Route::get('/get-list', [TemplateExcelController::class, 'getList'])->name('templateExcel.get-list');
-                Route::get('/paginate/{page?}', [TemplateExcelController::class, 'getPaginate'])->name('templateExcel.get-paginate');
-                Route::post('/upload', [TemplateExcelController::class, 'uploadTemplate'])->name('templateExcel.upload');
-                Route::post('/store', [TemplateExcelController::class, 'store'])->name('templateExcel.store');
-                Route::delete('/delete/{id}', [TemplateExcelController::class, 'delete'])->name('templateExcel.delete');
+            Route::group(['prefix' => 'template-export'], function () {
+                Route::get('/get-list', [TemplateExportController::class, 'getList'])->name('templateExport.get-list');
+                Route::get('/paginate/{page?}', [TemplateExportController::class, 'getPaginate'])->name('templateExport.get-paginate');
+                Route::post('/upload', [TemplateExportController::class, 'uploadTemplate'])->name('templateExport.upload');
+                Route::post('/store', [TemplateExportController::class, 'store'])->name('templateExport.store');
+                Route::delete('/delete/{id}', [TemplateExportController::class, 'delete'])->name('templateExport.delete');
             });
         });
     });
@@ -183,9 +183,9 @@ Route::group(['middleware' => ['web', 'auth.custom']], function () {
 
 Route::group(['middleware' => ['web', 'auth.custom']], function () {
     Route::group(['prefix' => 'he-thong'], function () {
-        Route::group(['prefix' => 'template-excel'], function () {
-            Route::get('/', [TemplateExcelController::class, 'viewManageTemplateExcel'])->name('templateExcel.manage');
-            Route::get('/cap-nhat/{id?}', [TemplateExcelController::class, 'viewStoreTemplateExcel'])->name('templateExcel.store');
+        Route::group(['prefix' => 'template-export'], function () {
+            Route::get('/', [TemplateExportController::class, 'viewManageTemplateExport'])->name('templateExport.manage');
+            Route::get('/cap-nhat/{id?}', [TemplateExportController::class, 'viewStoreTemplateExport'])->name('templateExport.store');
 
         });
         Route::group(['prefix' => 'don-vi'], function () {

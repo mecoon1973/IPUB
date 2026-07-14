@@ -39,6 +39,8 @@
         "ckeditor5": "^48.0.0",
         "dayjs": "^1.11.20",
         "jquery": "^4.0.0",
+        "pdfjs": "^2.5.4",
+        "pdfjs-dist": "^6.1.200",
         "react": "^19.2.4",
         "react-arborist": "^3.4.3",
         "react-dom": "^19.2.4",

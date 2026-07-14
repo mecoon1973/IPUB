@@ -302,4 +302,154 @@ if(!function_exists('core_normalize_path')){
 
 }
 
+if (!function_exists('core_normalize_html_to_string')) {
+    /**
+     * Chuyển HTML thành chuỗi plain text (decode entity, bỏ thẻ, giữ xuống dòng, ol/ul).
+     *
+     * @param string $html HTML đầu vào
+     * @return string Chuỗi text đã chuẩn hóa
+     */
+    function core_normalize_html_to_string(string $html): string
+    {
+        return \Core\Utility\HtmlToTextNormalizer::toString($html);
+    }
+}
+if(!function_exists('core_normalize_date_time_to_string')){
+    /**
+     * Chuẩn hóa datetime
+     * @param string|int|\DateTimeInterface $dateTime Chuỗi datetime hoặc Unix timestamp (giây)
+     * @return string Chuỗi datetime chuẩn hóa "ngày 2 tháng 7 năm 2026"
+     */
+    function core_normalize_date_time_to_string(string|int|\DateTimeInterface $dateTime): string
+    {
+        if ($dateTime instanceof \DateTimeInterface) {
+            $carbon = Carbon::instance($dateTime);
+        } elseif (is_int($dateTime)) {
+            $carbon = Carbon::createFromTimestamp($dateTime);
+        } else {
+            $trimmed = trim($dateTime);
 
+            if ($trimmed === '') {
+                return '';
+            }
+
+            if (ctype_digit($trimmed)) {
+                $carbon = Carbon::createFromTimestamp((int) $trimmed);
+            } else {
+                $carbon = Carbon::parse($trimmed);
+            }
+        }
+
+        if (!$carbon->isValid()) {
+            throw new InvalidArgumentException('Datetime không hợp lệ: ' . (string) $dateTime);
+        }
+
+        return sprintf(
+            'ngày %d tháng %d năm %d',
+            (int) $carbon->format('j'),
+            (int) $carbon->format('n'),
+            (int) $carbon->format('Y')
+        );
+    }
+}
+
+if (!function_exists('core_generate_random_letters')) {
+    /**
+     * Tạo chuỗi chữ cái ngẫu nhiên (a-zA-Z).
+     *
+     * @param int $length Độ dài chuỗi (mặc định 5)
+     */
+    function core_generate_random_letters(int $length = 5): string
+    {
+        if ($length < 1) {
+            throw new InvalidArgumentException('Độ dài chuỗi random phải >= 1.');
+        }
+
+        $alphabet = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ';
+        $max = strlen($alphabet) - 1;
+        $result = '';
+        for ($i = 0; $i < $length; $i++) {
+            $result .= $alphabet[random_int(0, $max)];
+        }
+
+        return $result;
+    }
+}
+
+if (!function_exists('core_ensure_directory')) {
+    /**
+     * Đảm bảo thư mục tồn tại (tạo đệ quy nếu chưa có).
+     *
+     * @param string $absolutePath Đường dẫn tuyệt đối thư mục
+     * @return string Đường dẫn đã chuẩn hóa
+     */
+    function core_ensure_directory(string $absolutePath): string
+    {
+        if (!is_dir($absolutePath) && !mkdir($absolutePath, 0755, true) && !is_dir($absolutePath)) {
+            throw new RuntimeException('Không thể tạo thư mục: ' . $absolutePath);
+        }
+
+        return core_normalize_path($absolutePath);
+    }
+}
+
+if (!function_exists('core_public_file_tmp_directory')) {
+    /**
+     * Đường dẫn tuyệt đối tới public/file_tmp (tạo nếu chưa có).
+     */
+    function core_public_file_tmp_directory(): string
+    {
+        return core_ensure_directory(public_path('file_tmp'));
+    }
+}
+
+if (!function_exists('core_build_unique_public_tmp_path')) {
+    /**
+     * Tạo đường dẫn tuyệt đối file mới trong public/file_tmp: {base}_{xxxxx}.{ext}
+     *
+     * @param string $baseName  Tên gốc (không gồm extension)
+     * @param string $extension Extension không có dấu chấm (vd: docx, pdf)
+     * @param int    $randomLen Số chữ cái random (mặc định 5)
+     */
+    function core_build_unique_public_tmp_path(string $baseName, string $extension, int $randomLen = 5): string
+    {
+        $extension = ltrim(strtolower($extension), '.');
+        $sanitized = preg_replace('/[^A-Za-z0-9_\-]/', '_', $baseName);
+        $baseName = (is_string($sanitized) && $sanitized !== '') ? $sanitized : 'export';
+        $dir = core_public_file_tmp_directory();
+
+        do {
+            $filename = $baseName . '_' . core_generate_random_letters($randomLen) . '.' . $extension;
+            $absolutePath = $dir . DIRECTORY_SEPARATOR . $filename;
+        } while (is_file($absolutePath));
+
+        return str_replace('\\', '/', $absolutePath);
+    }
+}
+
+if (!function_exists('core_public_absolute_path_to_url')) {
+    /**
+     * Chuyển đường dẫn tuyệt đối nằm trong public → URL (asset).
+     *
+     * @param string $absolutePath Đường dẫn tuyệt đối file trong public
+     * @return string URL truy cập qua web
+     */
+    function core_public_absolute_path_to_url(string $absolutePath): string
+    {
+        $absolutePath = core_normalize_path($absolutePath);
+        $publicRoot = core_normalize_path(public_path());
+
+        $normalizedAbsolute = str_replace('\\', '/', $absolutePath);
+        $normalizedPublic = str_replace('\\', '/', $publicRoot);
+
+        if (stripos($normalizedAbsolute, $normalizedPublic) !== 0) {
+            throw new InvalidArgumentException(
+                'File không nằm trong thư mục public: ' . $absolutePath
+            );
+        }
+
+        $relative = ltrim(substr($normalizedAbsolute, strlen($normalizedPublic)), '/');
+
+        return asset($relative);
+    }
+}

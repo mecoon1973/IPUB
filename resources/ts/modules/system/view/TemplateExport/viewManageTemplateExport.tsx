@@ -3,27 +3,26 @@ import {
     readRootDataProps,
 } from "../../../core/utils/helpers";
 import React, { useCallback, useEffect, useMemo, useState } from "react";
-import type { TemplateExcel } from "../../type/TemplateExcel";
-import { TemplateExcelApi } from "../../api/TemplateExcelApi";
+import type { TemplateExport } from "../../type/TemplateExport";
+import { TemplateExportApi } from "../../api/TemplateExportApi";
 import { defaultPagiInfo, type PagiInfo } from "../../../page/type";
 import { Button, Divider, Dropdown, Table, type MenuProps } from "antd";
 import { ComponentPagination } from "../../../page/component/pagination";
 import { getFileNameFromPath } from "../../../core/utils/helperFile";
 
-
-interface tableTemplateExcelProps {
-    templateExcel: TemplateExcel[];
-    handleDeleteTemplateExcel: (id: number) => void;
+interface tableTemplateExportProps {
+    templateExport: TemplateExport[];
+    handleDeleteTemplateExport: (id: number) => void;
 }
 
-const TableTemplateExcel = React.memo((props: tableTemplateExcelProps) => {
-    const { templateExcel, handleDeleteTemplateExcel } = props;
+const TableTemplateExport = React.memo((props: tableTemplateExportProps) => {
+    const { templateExport, handleDeleteTemplateExport } = props;
     const columns = useMemo(() => [
         {
             title: "STT",
             dataIndex: "stt",
             key: "stt",
-            render: (text: string, record: TemplateExcel, index: number) => index + 1,
+            render: (text: string, record: TemplateExport, index: number) => index + 1,
         },
         {
             title: "Tên template",
@@ -47,16 +46,16 @@ const TableTemplateExcel = React.memo((props: tableTemplateExcelProps) => {
             title: "",
             key: "action",
             width: 132,
-            render: (_value: unknown, record: TemplateExcel) => {
+            render: (_value: unknown, record: TemplateExport) => {
                 const items: MenuProps["items"] = [
                     {
                         key: "edit",
-                        label: <a href={`/he-thong/template-excel/cap-nhat/${record.id}`}>Chỉnh sửa</a>,
+                        label: <a href={`/he-thong/template-export/cap-nhat/${record.id}`}>Chỉnh sửa</a>,
                     },
                     {
                         key: "delete",
                         label: <span className="text-danger">Xóa</span>,
-                        onClick: () => handleDeleteTemplateExcel(record.id),
+                        onClick: () => handleDeleteTemplateExport(record.id),
                     },
                 ];
                 return (
@@ -70,59 +69,56 @@ const TableTemplateExcel = React.memo((props: tableTemplateExcelProps) => {
         },
     ], []);
     return (
-        <Table<TemplateExcel> rowKey="id" columns={columns} dataSource={templateExcel} pagination={false} size="small" />
+        <Table<TemplateExport> rowKey="id" columns={columns} dataSource={templateExport} pagination={false} size="small" />
     );
 });
 
-interface ViewManageTemplateExcelProps {
-
-
+interface ViewManageTemplateExportProps {
 }
 
-export const ViewManageTemplateExcel = React.memo((props: ViewManageTemplateExcelProps) => {
+export const ViewManageTemplateExport = React.memo((props: ViewManageTemplateExportProps) => {
     const {  } = props;
-    const [templateExcel, setTemplateExcel] = useState<TemplateExcel[]>([]);
+    const [templateExport, setTemplateExport] = useState<TemplateExport[]>([]);
     const [pagiInfo, setPagiInfo] = useState<PagiInfo>(defaultPagiInfo);
 
-    const fetchTemplateExcel = useCallback((page?: string) => {
+    const fetchTemplateExport = useCallback((page?: string) => {
         const conditions = {
             IsDeleted: false
         }
-        TemplateExcelApi.getPaginateTemplateExcel(conditions, page).then((res: { listResult: TemplateExcel[], pagiInfo: PagiInfo }) => {
-            setTemplateExcel(res.listResult);
+        TemplateExportApi.getPaginateTemplateExport(conditions, page).then((res: { listResult: TemplateExport[], pagiInfo: PagiInfo }) => {
+            setTemplateExport(res.listResult);
             setPagiInfo(res.pagiInfo);
         });
-    }, [setTemplateExcel, setPagiInfo]);
+    }, [setTemplateExport, setPagiInfo]);
 
-    const handleDeleteTemplateExcel = useCallback((id: number) => {
+    const handleDeleteTemplateExport = useCallback((id: number) => {
         const isConfirmed = window.confirm("Bạn có chắc chắn muốn xóa Template Excel này không?");
         if (!isConfirmed) return;
-        TemplateExcelApi.delete(id).then((res: boolean) => {
+        TemplateExportApi.delete(id).then((res: boolean) => {
             if (res) {
                 window._toastbox("Xóa Template Excel thành công", "success");
             }
         });
-    }, [setTemplateExcel]);
+    }, [setTemplateExport]);
 
     useEffect(() => {
-        fetchTemplateExcel();
+        fetchTemplateExport();
     }, []);
 
     return (
         <div className="px-2">
             <div className="px-1 py-1">
-                <Button type="link" href="/he-thong/template-excel/cap-nhat" className="text-success fw-semibold px-0">
+                <Button type="link" href="/he-thong/template-export/cap-nhat" className="text-success fw-semibold px-0">
                     + Thêm Template Excel
                 </Button>
             </div>
             <Divider className="my-2" />
-            <TableTemplateExcel templateExcel={templateExcel} handleDeleteTemplateExcel={handleDeleteTemplateExcel} />
-            <ComponentPagination pagiInfo={pagiInfo} callBack={fetchTemplateExcel} />
+            <TableTemplateExport templateExport={templateExport} handleDeleteTemplateExport={handleDeleteTemplateExport} />
+            <ComponentPagination pagiInfo={pagiInfo} callBack={fetchTemplateExport} />
         </div>
     );
 });
 
-
-const ROOT_ID = "root-manage-template-excel";
-const bladeProps = readRootDataProps<ViewManageTemplateExcelProps>(ROOT_ID) ?? {};
-mountReactComponentOnReady(ROOT_ID, <ViewManageTemplateExcel {...bladeProps} />);
+const ROOT_ID = "root-manage-template-export";
+const bladeProps = readRootDataProps<ViewManageTemplateExportProps>(ROOT_ID) ?? {};
+mountReactComponentOnReady(ROOT_ID, <ViewManageTemplateExport {...bladeProps} />);

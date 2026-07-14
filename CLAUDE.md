@@ -13,10 +13,10 @@ gotchas on top of those docs.
 | Backend | Laravel 12, PHP 8.5.0+, MongoDB (Jenssegers) |
 | Multi-tenant | stancl/tenancy |
 | API | Rebing GraphQL + REST |
-| Frontend | React 18, TypeScript, Tailwind CSS (`tw-` prefix) |
+| Frontend | React 18, TypeScript, Tailwind CSS|
 | State | Zustand (shared), React local state (local) |
 | Editor | Lexical Editor |
-| UI | Radix UI, `tw-olm-*` plugin classes |
+| UI | Radix UI|
 
 PHP 7.3/7.4 — no native enums, no match expressions, no union types.
 Use typed constant classes and value objects (see `docs/backend-conventions.md`).

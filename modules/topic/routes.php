@@ -75,6 +75,7 @@ Route::group(['middleware' => ['web', 'auth.custom']], function () {
         Route::get('/tai-ban', [PhieuDkDetaiController::class, 'viewTaiBanPhieuDkDetai'])->name('phieu-dk-detai.tai-ban');
         Route::get('/chuyen-ke-hoach', [PhieuDkDetaiController::class, 'viewChuyenKeHoachPhieuDkDetai'])->name('phieu-dk-detai.chuyen-ke-hoach');
         Route::get('/cap-nhat/{id?}', [PhieuDkDetaiController::class, 'viewStorePhieuDkDetai'])->name('phieu-dk-detai.store');
+        Route::get('/in/{id?}', [PhieuDkDetaiController::class, 'viewPrintPhieuDkDeTai'])->name('phieu-dk-detai.print');
     });
     Route::group(['prefix' => 'qd-in'], function () {
         Route::get('/quan-ly', [QDInController::class, 'viewManageQDIn'])->name('qd-in.manage');

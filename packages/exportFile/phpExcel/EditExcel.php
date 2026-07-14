@@ -99,6 +99,9 @@ class EditExcel {
     public function duplicateRowCellsBelow(array $templateCellCoordinates, int $duplicateCount): void
     {
         $resolvedCoordinates = $this->resolveColumnKeysToCoordinates($this->sheet, $templateCellCoordinates);
+        if ($resolvedCoordinates === []) {
+            return;
+        }
         $this->performDuplicateRowCellsBelow($this->sheet, $resolvedCoordinates, $duplicateCount);
     }
 
