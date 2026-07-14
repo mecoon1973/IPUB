@@ -100,8 +100,6 @@ Approved patterns:
   through `resources/ts/utils/initReactRoot` or a typed `VIEW_MAP`.
 - Shared UI uses `resources/ts/components`, Radix wrappers, `cn`, `clsx`,
   `tailwind-merge`, and `class-variance-authority` where practical.
-- Tailwind uses the `tw-` prefix, semantic tokens, and `tailwind/plugins`
-  component classes instead of repeated long utility chains.
 
 Legacy patterns:
 - Very large controllers or services that mix validation, authorization, query

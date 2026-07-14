@@ -117,15 +117,19 @@ trait HelperEditWord
     /**
      * Gộp duplicate + fill cho TYPE_LOOP trên DOCX.
      *
-     * @param list<string>                  $columnKeys
-     * @param array<int, array<int, mixed>> $rowValuesMatrix
+     * @param array<string, array<string, mixed>> $listDataLoop
+     *
      */
-    public function applyLoopRows(array $columnKeys, array $rowValuesMatrix): void
+    public function applyLoopRows(array $listDataLoop): void
     {
-        $this->getTemplateEditor()->applyLoopRows(
-            array_values(array_map('strval', $columnKeys)),
-            $rowValuesMatrix
-        );
+        foreach ($listDataLoop as $keyDataLoop => $dataLoop) {
+            $columnKeys = $dataLoop['columnKeys'];
+            $matrixContent = $dataLoop['matrixContent'];
+            $this->getTemplateEditor()->applyLoopRows(
+                array_values(array_map('strval', $columnKeys)),
+                $matrixContent
+            );
+        }
     }
 
     protected function normalizeReplacementValue(mixed $value): string

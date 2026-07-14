@@ -3,6 +3,8 @@
 namespace Modules\System\Model;
 
 use Core\Model\Model;
+use DateTime;
+
 /**
  * @property int $_id
  * @property string $MaMang
@@ -18,9 +20,9 @@ use Core\Model\Model;
  * @property int $VAT
  * @property int $iOrder
  * @property int $CreatedBy
- * @property datetime $CreatedOn
+ * @property DateTime $CreatedOn
  * @property int $EditedBy
- * @property datetime $EditedOn
+ * @property Datetime $EditedOn
  */
 class DM_MANGSACH extends Model {
     protected $connection = "olm";

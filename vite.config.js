@@ -100,6 +100,7 @@ export default defineConfig({
                 'resources/ts/modules/topic/view/PhieuDkDetai/viewStorePhieuDkDetai.tsx',
                 'resources/ts/modules/topic/view/PhieuDkDetai/viewTaiBanPhieuDkDetai.tsx',
                 'resources/ts/modules/topic/view/PhieuDkDetai/viewChuyenKeHoachPhieuDkDetai.tsx',
+                'resources/ts/modules/topic/view/PhieuDkDetai/viewPrintPhieuDkDeTai.tsx',
 
                 'resources/ts/modules/legalDeposit/view/PhieuNhapLC/viewManagePhieuNhapLC.tsx',
                 'resources/ts/modules/legalDeposit/view/PhieuNhapLC/viewStorePhieuNhapLC.tsx',

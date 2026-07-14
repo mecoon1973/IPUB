@@ -4,7 +4,6 @@ namespace ExportFile\phpWord;
 
 use PhpOffice\PhpWord\Escaper\Xml;
 use PhpOffice\PhpWord\Exception\Exception as PhpWordException;
-use PhpOffice\PhpWord\Settings;
 use PhpOffice\PhpWord\TemplateProcessor;
 use RuntimeException;
 
@@ -83,10 +82,10 @@ class DocxTemplateEditor extends TemplateProcessor
 
         $replace = static::ensureUtf8Encoded($replace);
 
-        if (Settings::isOutputEscapingEnabled()) {
-            $xmlEscaper = new Xml();
-            $replace = $xmlEscaper->escape($replace);
-        }
+        // Luôn escape text thuần (& < > " ') khi inject vào OOXML.
+        // Settings::isOutputEscapingEnabled() mặc định false trong PhpWord —
+        // nếu bỏ qua, chuỗi kiểu "GD&ĐT" làm document.xml invalid và Word không mở được.
+        $replace = (new Xml())->escape($replace);
 
         $replace = $this->replaceCarriageReturns($replace);
         $searchKeys = $this->resolveSearchKeys($search);

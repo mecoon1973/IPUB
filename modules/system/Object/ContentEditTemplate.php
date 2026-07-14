@@ -245,4 +245,73 @@ class ContentEditTemplate extends BaseObject
         return data_get($item, $fieldPath, '');
     }
 
+    /**
+     * Tách map placeholder TYPE_TEXT thành plain vs HTML.
+     *
+     * @param array<int, self> $contentEditItems
+     * @param array<string, mixed> $data
+     * @param array<string, mixed> $option 'getHtml' chỉ lấy giá trị thẻ html | 'getText' chỉ lấy giá trị text | 'isExcel' lấy giá trị cho file excel
+     *
+     * @return array<string, mixed>
+     */
+    public static function getTypeData(array $contentEditItems, array $data, array $option = []): array
+    {
+        $getHtml = $option['getHtml'] ?? false;
+        $getText = $option['getText'] ?? true;
+        $isExcel = $option['isExcel'] ?? false;
+        $dataRender = [];
+        $htmlRender = [];
+
+        foreach ($contentEditItems as $contentEdit) {
+            if (!$contentEdit instanceof self || $contentEdit->type !== self::TYPE_TEXT) {
+                continue;
+            }
+
+            foreach ($contentEdit->getDataText($data, !$isExcel) as $placeholder => $value) {
+                if (is_string($value) && \ExportFile\phpWord\HtmlToDocxXml::looksLikeHtml($value)) {
+                    $htmlRender[$placeholder] = $value;
+                } else {
+                    $dataRender[$placeholder] = $value;
+                }
+            }
+        }
+        if($isExcel){
+            return array_merge($dataRender, $htmlRender);
+        }
+        if($getHtml){
+            return $htmlRender;
+        }
+        if($getText){
+            return $dataRender;
+        }
+        return array_merge($dataRender, $htmlRender);
+    }
+
+    public static function getTypeDataLoop(array $contentEditItems, array $data, array $option = []): array {
+        $result = [];
+        // TYPE_LOOP trước (đánh chỉ số placeholder hàng bảng)
+        foreach ($contentEditItems as $contentEdit) {
+            if ($contentEdit->type !== ContentEditTemplate::TYPE_LOOP) {
+                continue;
+            }
+
+            $matrixContent = $contentEdit->getDataLoop($data);
+            if ($matrixContent === []) {
+                continue;
+            }
+
+            $columnKeys = $contentEdit->getLoopColumnKeys();
+            if ($columnKeys === []) {
+                continue;
+            }
+
+            $result[$contentEdit->key_data] = [
+                'columnKeys' => $columnKeys,
+                'matrixContent' => $matrixContent,
+            ];
+
+        }
+        return $result;
+    }
+
 }

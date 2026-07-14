@@ -4,6 +4,7 @@ namespace Modules\Topic\Controller;
 
 use App\Http\Controllers\Controller;
 use Exception;
+use ExportFile\ExportFile;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -32,6 +33,19 @@ class PhieuDkDetaiController extends Controller {
     public function viewChuyenKeHoachPhieuDkDetai(Request $request): View {
         $dataView = $this->getDataView(["listDonvi", "listMangsach", "listDonvi"]);
         return view('topic::viewChuyenKeHoachPhieuDkDetai', $dataView);
+    }
+    public function viewPrintPhieuDkDeTai(Request $request, int $id): View {
+        /** @var PhieuDkDetaiService $phieuDkDetaiService */
+        $phieuDkDetaiService = app(PhieuDkDetaiService::class);
+        $phieu_dk_detai = $phieuDkDetaiService->findOne("no-cache",['id' => $id]);
+        abort_if(!$phieu_dk_detai, 404, "Phiếu đăn ký đề tài không hợp lệ");
+
+        $data = ["phieu_dk_detai" => $phieu_dk_detai];
+        $exportFile = new ExportFile("Template_Phieu_DK_DE_TAI", $data, "pdf");
+        $url = $exportFile->export();
+        return view('topic::viewPrintPhieuDkDeTai', [
+            'url' => $url,
+        ]);
     }
 
     public function viewStorePhieuDkDetai(Request $request, ?int $id = null): View {

@@ -4,6 +4,15 @@ namespace Modules\Topic\Model;
 
 use Core\Model\Model;
 use DateTime;
+use Modules\System\Model\DM_BOSACH;
+use Modules\System\Model\DM_DONVI;
+use Modules\System\Model\DM_LOP;
+use Modules\System\Model\DM_MONHOC;
+use Modules\System\Model\DM_CAP;
+use Modules\System\Model\DM_DOITUONG;
+use Modules\System\Model\DM_LOAI_XBP;
+use Modules\System\Model\DM_MANGSACH;
+use Modules\System\Model\DM_MANGSACH_CXB;
 
 /**
  * @property int $_id
@@ -110,6 +119,20 @@ use DateTime;
  *
  * field mới thêm
  * @property array<int> $idListBTV chứa mảng id user là biên tập viên
+ * @property DM_DONVI $DonVi chứa đơn vị của đề tài
+ * @property DM_DONVI $DonViLK chứa đơn vị liên kết của đề tài
+ * @property DM_BOSACH $BoSach chứa sách của đề tài
+ * @property DM_MONHOC $MonHoc chứa môn học của đề tài
+ * @property DM_LOP $Lop chứa lớp của đề tài
+ * @property DM_CAP $Cap chứa cấp của đề tài
+ * @property DM_MANGSACH $MangSach chứa mạng sách của đề tài
+ * @property DM_MANGSACH_CXB $MangSachCXB chứa mạng sách của đề tài cấp xưởng
+ * @property DM_LOAI_XBP $LoaiXBP chứa loại xưởng của đề tài
+ * @property DM_DOITUONG $DoiTuong chứa đối tượng của đề tài
+ *
+ *
+ *
+ *
  */
 class PHIEU_DK_DETAI extends Model {
     protected $connection = "olm";
@@ -341,4 +364,44 @@ class PHIEU_DK_DETAI extends Model {
     ];
 
     protected $customCasts = [];
+
+    public function DonVi() {
+        return $this->belongsTo(DM_DONVI::class, "ID_DonVi", "_id");
+    }
+
+    public function BoSach() {
+        return $this->belongsTo(DM_BOSACH::class, "ID_BoSach", "_id");
+    }
+
+    public function MonHoc() {
+        return $this->belongsTo(DM_MONHOC::class, "ID_MonHoc", "_id");
+    }
+
+    public function Lop() {
+        return $this->belongsTo(DM_LOP::class, "ID_Lop", "_id");
+    }
+
+    public function Cap() {
+        return $this->belongsTo(DM_CAP::class, "ID_Cap", "_id");
+    }
+
+    public function MangSach() {
+        return $this->belongsTo(DM_MANGSACH::class, "ID_MangSach", "_id");
+    }
+
+    public function MangSachCXB() {
+        return $this->belongsTo(DM_MANGSACH_CXB::class, "ID_MangSach_CXB", "_id");
+    }
+
+    public function DonViLK() {
+        return $this->belongsTo(DM_DONVI::class, "ID_DonViLK", "_id");
+    }
+
+    public function LoaiXBP() {
+        return $this->belongsTo(DM_LOAI_XBP::class, "ID_LoaiXBP", "_id");
+    }
+
+    public function DoiTuong() {
+        return $this->belongsTo(DM_DOITUONG::class, "TypeLuaTuoi", "_id");
+    }
 }
