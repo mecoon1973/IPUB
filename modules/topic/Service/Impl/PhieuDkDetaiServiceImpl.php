@@ -169,6 +169,9 @@ class PhieuDkDetaiServiceImpl extends BaseService implements PhieuDkDetaiService
 
         $trangThaiHienTai = (int) ($phieuDkDetai->TrangThai ?? 0);
         $allowedFrom = [
+            PhieuDkDetaiTrangThai::CHUA_XET_DUYET,
+            PhieuDkDetaiTrangThai::HDXB_DON_VI_TRA_LAI,
+            PhieuDkDetaiTrangThai::HDXB_DON_VI_DANG_XET,
             PhieuDkDetaiTrangThai::HDXB_DON_VI_PHE_DUYET,
             PhieuDkDetaiTrangThai::HDXB_NXBGDVN_TRA_LAI,
             PhieuDkDetaiTrangThai::HDXB_NXBGDVN_CHUA_XET,

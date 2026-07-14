@@ -89,7 +89,16 @@ export const ModalChooseBTVComponent = React.memo((props: ModalChooseBTVProps) =
                         listData={listBTV}
                         keyValue="id"
                         labelValue="HoTen"
-                        onCustomLabel={(user) => `${user.HoTen} ${user.donvi?.TenDonVi ? `- ${user.donvi?.TenDonVi}` : ""}`}
+                        onCustomLabel={(user) => {
+                            const parts = [user.HoTen];
+                            if (user.donvi?.TenDonVi) {
+                                parts.push(user.donvi.TenDonVi);
+                            }
+                            if (user.MaSoChungChi?.trim()) {
+                                parts.push(`CCHN: ${user.MaSoChungChi.trim()}`);
+                            }
+                            return parts.join(" - ");
+                        }}
                         onChange={(id) => {
                             const user = listBTV.find((u) => Number(u.id) === Number(id));
                             if (user) {
