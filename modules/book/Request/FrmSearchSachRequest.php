@@ -17,6 +17,9 @@ class FrmSearchSachRequest extends FormRequest
         'HTXB' => 'int',
         'NgayDK' => 'array',
         'relations' => 'array',
+        'IsDeleted' => 'boolean',
+        'KetChuyenThanhSach' => 'boolean',
+        'id' => 'int',
     ];
 
     /**
@@ -46,6 +49,9 @@ class FrmSearchSachRequest extends FormRequest
             'NgayDK' => 'sometimes|array',
             'NgayDK.*' => 'sometimes|date',
             'relations' => 'sometimes|array',
+            'IsDeleted' => 'sometimes|boolean',
+            'KetChuyenThanhSach' => 'sometimes|boolean',
+            'id' => 'sometimes|int',
         ];
     }
 
@@ -61,6 +67,9 @@ class FrmSearchSachRequest extends FormRequest
             'NgayDK.array' => config("label.INPUT_ERROR"),
             'NgayDK.*.date' => config("label.INPUT_ERROR"),
             'relations.array' => config("label.INPUT_ERROR"),
+            'IsDeleted.boolean' => config("label.INPUT_ERROR"),
+            'KetChuyenThanhSach.boolean' => config("label.INPUT_ERROR"),
+            'id.int' => config("label.INPUT_ERROR"),
         ];
     }
 

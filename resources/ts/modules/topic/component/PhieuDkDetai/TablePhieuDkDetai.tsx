@@ -12,6 +12,8 @@ export const TablePhieuDkDetaiComponent = React.memo(() => {
     const setPhieuDkDetaiContext = useManagePhieuDkDetaiStore((state) => state.setPhieuDkDetaiContext);
     const setShowModalInfoPhieuDkDetai = useManagePhieuDkDetaiStore((state) => state.setShowModalInfoPhieuDkDetai);
     const setShowProcessStepInfoModal = useManagePhieuDkDetaiStore((state) => state.setShowProcessStepInfoModal);
+    const setShowModalXetDuyetNxbgdvn = useManagePhieuDkDetaiStore((state) => state.setShowModalXetDuyetNxbgdvn);
+    const setShowModalCapMaSoNxbgd = useManagePhieuDkDetaiStore((state) => state.setShowModalCapMaSoNxbgd);
 
     const columns: TableProps<PhieuDkDetai>["columns"] = [
         { title: "STT", key: "stt", width: 56, render: (_v, _r, i) => i + 1 },
@@ -53,8 +55,22 @@ export const TablePhieuDkDetaiComponent = React.memo(() => {
                     },
                     { key: "edit", label: <a href={`/phieu-dk-detai/cap-nhat/${phieuDkDetai.id}`}>Chỉnh sửa</a> },
                     { key: "duyet", label: "Xét Duyệt" },
-                    { key: "nxb", label: "NXBGDVN Xét duyệt" },
-                    { key: "ma", label: "Cấp mã số NXBDB" },
+                    {
+                        key: "nxb",
+                        label: "NXBGDVN Xét duyệt",
+                        onClick: () => {
+                            setPhieuDkDetaiContext(phieuDkDetai);
+                            setShowModalXetDuyetNxbgdvn(true);
+                        },
+                    },
+                    {
+                        key: "ma",
+                        label: "Cấp mã số NXBGD",
+                        onClick: () => {
+                            setPhieuDkDetaiContext(phieuDkDetai);
+                            setShowModalCapMaSoNxbgd(true);
+                        },
+                    },
                     { key: "clone", label: "Nhân bản đề tài" },
                     { key: "cancel", label: <span className="text-danger">Hủy đề tài</span>, onClick: () => {} },
                 ];

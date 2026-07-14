@@ -12,17 +12,31 @@ use Modules\Topic\Service\PhieuDkDetaiService;
 use Modules\Topic\Service\Impl\PhieuDkDetaiServiceImpl;
 use Modules\Topic\Repository\PhieuDkDetaiRepository;
 use Modules\Topic\Repository\Impl\PhieuDkDetaiRepositoryImpl;
+use Modules\Topic\Repository\Impl\NX_CanboDetaiRepositoryImpl;
 use Modules\Topic\Repository\Impl\QDInRepositoryImpl;
+use Modules\Topic\Repository\NX_CanboDetaiRepository;
 use Modules\Topic\Repository\PhieuChuyenBanThaoRepository;
 use Modules\Topic\Repository\QDInRepository;
+use Modules\Topic\Repository\HDXBNXBGDVNRepository;
+use Modules\Topic\Repository\Impl\HDXBNXBGDVNRepositoryImpl;
 use Modules\Topic\Service\CT_Detai_CongDoanService;
 use Modules\Topic\Service\CT_PhieuDkDetai_BtvService;
 use Modules\Topic\Service\Impl\CT_Detai_CongDoanServiceImpl;
 use Modules\Topic\Service\Impl\CT_PhieuDkDetai_BtvServiceImpl;
-use Modules\Topic\Service\Impl\PhieuChuyenBanThaoServiceImpl;
+use Modules\Topic\Service\Impl\NX_CanboDetaiServiceImpl;
 use Modules\Topic\Service\Impl\QDInServiceImpl;
+use Modules\Topic\Service\NX_CanboDetaiService;
+use Modules\Topic\Service\Impl\PhieuChuyenBanThaoServiceImpl;
 use Modules\Topic\Service\PhieuChuyenBanThaoService;
 use Modules\Topic\Service\QDInService;
+use Modules\Topic\Service\HDXBNXBGDVNService;
+use Modules\Topic\Service\Impl\HDXBNXBGDVNServiceImpl;
+use Modules\Topic\Repository\PhieuDkKhxbCxbRepository;
+use Modules\Topic\Repository\Impl\PhieuDkKhxbCxbRepositoryImpl;
+use Modules\Topic\Repository\CT_PhieuDkKhxbCxbRepository;
+use Modules\Topic\Repository\Impl\CT_PhieuDkKhxbCxbRepositoryImpl;
+use Modules\Topic\Service\PhieuDkKhxbCxbService;
+use Modules\Topic\Service\Impl\PhieuDkKhxbCxbServiceImpl;
 
 class Provider extends ServiceProvider {
     /**
@@ -50,6 +64,13 @@ class Provider extends ServiceProvider {
         $this->app->bind(CT_Detai_CongDoanRepository::class, CT_Detai_CongDoanRepositoryImpl::class);
         $this->app->bind(QDInService::class, QDInServiceImpl::class);
         $this->app->bind(QDInRepository::class, QDInRepositoryImpl::class);
+        $this->app->bind(HDXBNXBGDVNService::class, HDXBNXBGDVNServiceImpl::class);
+        $this->app->bind(HDXBNXBGDVNRepository::class, HDXBNXBGDVNRepositoryImpl::class);
+        $this->app->bind(NX_CanboDetaiService::class, NX_CanboDetaiServiceImpl::class);
+        $this->app->bind(NX_CanboDetaiRepository::class, NX_CanboDetaiRepositoryImpl::class);
+        $this->app->bind(PhieuDkKhxbCxbService::class, PhieuDkKhxbCxbServiceImpl::class);
+        $this->app->bind(PhieuDkKhxbCxbRepository::class, PhieuDkKhxbCxbRepositoryImpl::class);
+        $this->app->bind(CT_PhieuDkKhxbCxbRepository::class, CT_PhieuDkKhxbCxbRepositoryImpl::class);
         $this->app->bind(PhieuChuyenBanThaoService::class, PhieuChuyenBanThaoServiceImpl::class);
         $this->app->bind(PhieuChuyenBanThaoRepository::class, PhieuChuyenBanThaoRepositoryImpl::class);
         // Gate::define('update-user', 'Modules\User\Policy\UserPolicy@isPermission');

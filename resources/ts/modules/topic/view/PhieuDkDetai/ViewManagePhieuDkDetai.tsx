@@ -12,8 +12,9 @@ import type { DonVi } from "../../../user/type/DonVi";
 import type { Doituong } from "../../../system/type/DoiTuong";
 import type { Mangsach } from "../../../system/type/MangSach";
 import { ProcessStepInfoModalComponent } from "../../component/PhieuDkDetai/ProcessStepInfoModalPhieuDkDetai";
+import { ModalXetDuyetNxbgdvnComponent } from "../../component/PhieuDkDetai/ModalXetDuyetNxbgdvnComponent";
+import { ModalCapMaSoNxbgdComponent } from "../../component/PhieuDkDetai/ModalCapMaSoNxbgdComponent";
 import { useDataViewStore } from "../../../system/store/useDataViewStore";
-
 interface ViewManagePhieuDkDetaiProps {
     listDonvi: DonVi[];
     listMangsach: Mangsach[];
@@ -65,6 +66,8 @@ export const ViewManagePhieuDkDetai = React.memo((props: ViewManagePhieuDkDetaiP
             <TablePhieuDkDetaiComponent />
             <ModalInfoPhieuDkDetaiComponent />
             <ProcessStepInfoModalComponent />
+            <ModalXetDuyetNxbgdvnComponent onSuccess={getListPhieuDkDetai} />
+            <ModalCapMaSoNxbgdComponent onSuccess={getListPhieuDkDetai} />
             <ComponentPagination pagiInfo={pagiInfo} callBack={getListPhieuDkDetai} />
         </div>
     );

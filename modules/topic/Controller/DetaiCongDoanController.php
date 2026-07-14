@@ -29,7 +29,7 @@ class DetaiCongDoanController extends Controller {
         }
     }
 
-        public function getList(FrmSearchDetaiCongDoanRequest $request): JsonResponse {
+    public function getList(FrmSearchDetaiCongDoanRequest $request): JsonResponse {
         /** @var CT_Detai_CongDoanService $detaiCongDoanService */
         $detaiCongDoanService = app(CT_Detai_CongDoanService::class);
         try {

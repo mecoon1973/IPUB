@@ -33,9 +33,9 @@ export const dashboard: NodeDashboard[] = [
                     {
                         title: "2.1.3.B HĐXB NXBGDVN",
                         type: "link",
-                        routes: "",
+                        routes: "/hdxb-nxbgdvn/quan-ly",
                     },
-                    { title: "2.1.4 Cục xuất bản", type: "link", routes: "" },
+                    { title: "2.1.4 Cục xuất bản", type: "link", routes: "/phieu-dk-khxb-cxb/quan-ly" },
                     {
                         title: "2.1.5 Phiếu trình CXB tăng số lượng",
                         type: "link",
@@ -48,7 +48,7 @@ export const dashboard: NodeDashboard[] = [
                     {
                         title: "2.1.7 Phiếu chuyển bản thảo",
                         type: "link",
-                        routes: "",
+                        routes: "/phieu-chuyen-ban-thao/quan-ly",
                     },
                     {
                         title: "2.1.8 Danh mục sách thầu",

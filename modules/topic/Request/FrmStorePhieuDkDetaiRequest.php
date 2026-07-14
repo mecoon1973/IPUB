@@ -21,6 +21,9 @@ class FrmStorePhieuDkDetaiRequest extends FormRequest
         'PTXB' => 'boolean',
         'IsSachDienTu' => 'boolean',
         'CanhBao' => 'boolean',
+        'NgayDK' => 'date',
+        'NgayKyHDBS' => 'date',
+        'TuNgayHDBS' => 'date',
         'DungLuongTep' => 'string',
         'SoTrangDK' => 'integer',
         'Rong' => 'string',
@@ -188,6 +191,13 @@ class FrmStorePhieuDkDetaiRequest extends FormRequest
             "KieuBanQuyen.required" => "Kiểu bản quyền là bắt buộc",
             "KieuBanQuyen.integer" => "Kiểu bản quyền phải là số nguyên",
             "BanQuyenTuNgay.required" => "Ngày bắt đầu bản quyền là bắt buộc",
+            "BanQuyenTuNgay.date" => "Ngày bắt đầu bản quyền phải là ngày",
+            "BanQuyenDenNgay.date" => "Ngày kết thúc bản quyền phải là ngày",
+            "DenNgayHDBS.date" => "Đến ngày HDBS phải là ngày",
+            "ID_DonVi.required" => "Mã đơn vị là bắt buộc",
+            "ID_DonVi.integer" => "Mã đơn vị phải là số nguyên",
+            "IsXetDuyet.required" => "Xét duyệt là bắt buộc",
+            "IsXetDuyet.boolean" => "Xét duyệt phải là boolean",
 
         ];
     }

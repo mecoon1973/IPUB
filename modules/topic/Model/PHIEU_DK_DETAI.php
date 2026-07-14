@@ -4,6 +4,7 @@ namespace Modules\Topic\Model;
 
 use Core\Model\Model;
 use DateTime;
+use Modules\Topic\Object\PhieuDkDetaiTrangThai;
 use Modules\System\Model\DM_BOSACH;
 use Modules\System\Model\DM_DONVI;
 use Modules\System\Model\DM_LOP;
@@ -321,7 +322,7 @@ class PHIEU_DK_DETAI extends Model {
         "YKHDDD" => "",
         "BanQuyen" => false,
         "CoMSISBN" => false,
-        "IsXetDuyet" => true,
+        "IsXetDuyet" => false,
         "IsSachDienTu" => false,
         "DinhDangTep" => "",
         "DungLuongTep" => "",

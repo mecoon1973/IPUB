@@ -11,6 +11,8 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\View\View;
 use Modules\System\Service\DonviService;
 use Modules\System\Traits\TraitsGetData;
+use Modules\Topic\Request\FrmCapMaSoNxbgdRequest;
+use Modules\Topic\Request\FrmPreviewMaSoNxbgdRequest;
 use Modules\Topic\Request\FrmSearchPhieuDkDetaiRequest;
 use Modules\Topic\Request\FrmStorePhieuDkDetaiRequest;
 use Modules\Topic\Service\PhieuDkDetaiService;
@@ -55,22 +57,22 @@ class PhieuDkDetaiController extends Controller {
         /** @var PhieuDkDetaiService $phieuDkDetaiService */
         $phieuDkDetaiService = app(PhieuDkDetaiService::class);
         $phieuDkDetai = $id ? $phieuDkDetaiService->findOne("no-cache",['id' => $id]) : null;
-        $dataView = $this->getDataView(["listDoituong", "listMangsach", "mapTrangThai", "listLop", "listMonhoc", "listBosach", "listTusach"]);
+        $dataView = $this->getDataView(["listDoituong", "listMangsach", "mapTrangThai", "listLop", "listMonhoc", "listBosach", "listTusach", "listDonvi"]);
         /** tìm đơn vị của phiếu đăng ký đề tài */
         $idDonvi = 0;
         if($phieuDkDetai){
             $idDonvi = $phieuDkDetai->ID_DonVi;
-        }else{
-            if($user && isset($user->ID_DonVi)){
-                $idDonvi = $user->ID_DonVi;
-            }
+        }elseif($user && !empty($user->ID_DonVi)){
+            $idDonvi = (int) $user->ID_DonVi;
         }
         /** @var DonviService $donviService */
         $donviService = app(DonviService::class);
-        $donvi = $idDonvi ? $donviService->findOne("no-cache",['id' => $idDonvi]) : null;
-        //
-
-        //
+        $donviModel = $idDonvi ? $donviService->findOne("no-cache", ['_id' => $idDonvi]) : null;
+        $donvi = null;
+        if($donviModel){
+            $donvi = $donviModel->toArray();
+            $donvi['id'] = (int) $donviModel->_id;
+        }
         /** @var UserService $userService */
         $userService = app(UserService::class);
         $listBTV = $userService->getListBTV();
@@ -134,5 +136,70 @@ class PhieuDkDetaiController extends Controller {
                 'message' => $exception->getMessage(),
             ], 500);
         }
+    }
+
+    public function xetDuyetDeTai(Request $request): JsonResponse {
+        $idDeTai = (int) $request->input('id');
+        /** @var PhieuDkDetaiService $phieuDkDetaiService */
+        $phieuDkDetaiService = app(PhieuDkDetaiService::class);
+        try {
+            $idCanBo = $this->resolveIdCanBoNguoiDuyet();
+            $result = $phieuDkDetaiService->xetDuyetDeTai($idDeTai, $idCanBo);
+            return response()->json($result, 200);
+        } catch (Exception $exception) {
+            return response()->json([
+                'message' => $exception->getMessage(),
+            ], 500);
+        }
+    }
+
+    public function xetDuyetNxbgdvn(Request $request): JsonResponse {
+        $idDeTai = (int) $request->input('id');
+        /** @var PhieuDkDetaiService $phieuDkDetaiService */
+        $phieuDkDetaiService = app(PhieuDkDetaiService::class);
+        try {
+            $idCanBo = $this->resolveIdCanBoNguoiDuyet();
+            $result = $phieuDkDetaiService->xetDuyetNxbgdvn($idDeTai, $idCanBo);
+            return response()->json($result, 200);
+        } catch (Exception $exception) {
+            return response()->json([
+                'message' => $exception->getMessage(),
+            ], 500);
+        }
+    }
+
+    public function previewMaSoNxbgd(FrmPreviewMaSoNxbgdRequest $request): JsonResponse {
+        /** @var PhieuDkDetaiService $phieuDkDetaiService */
+        $phieuDkDetaiService = app(PhieuDkDetaiService::class);
+
+        $maSo = $phieuDkDetaiService->previewMaSoNxbgd(
+            (int) $request->input('id'),
+            (bool) $request->input('isMa12KiTu')
+        );
+        return response()->json(['maSo' => $maSo], 200);
+
+    }
+
+    public function capMaSoNxbgd(FrmCapMaSoNxbgdRequest $request): JsonResponse {
+        /** @var PhieuDkDetaiService $phieuDkDetaiService */
+        $phieuDkDetaiService = app(PhieuDkDetaiService::class);
+        $validated = $request->validated();
+
+        $result = $phieuDkDetaiService->capMaSoNxbgd(
+            (int) $validated['id'],
+            (string) $validated['maSo'],
+            (bool) $validated['isMa12KiTu'],
+            $this->resolveIdCanBoNguoiDuyet()
+        );
+        return response()->json($result, 200);
+    }
+
+    private function resolveIdCanBoNguoiDuyet(): int {
+        /** @var User|null $user */
+        $user = Auth::user();
+        if (!$user) {
+            throw new Exception("Người dùng chưa đăng nhập");
+        }
+        return (int) $user->_id;
     }
 }

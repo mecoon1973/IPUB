@@ -28,7 +28,20 @@ class SachServiceImpl extends BaseService implements SachService
             "conditions" => $conditions,
             "limit" => 15,
             "page" => $page,
-            "loadRelations" => $filter->relations
+            "loadRelations" => $filter->relations,
+        ]);
+        $result = $this->pagination($paginate);
+        return [
+            "listResult" => $result->list,
+            "pagiInfo" => $result->pagi_info
+        ];
+    }
+
+    public function paginateWithConditions(array $conditions, string $page = 'page-1', int $limit = 100): array {
+        $paginate = new Paginate([
+            "conditions" => $conditions,
+            "limit" => $limit,
+            "page" => $page,
         ]);
         $result = $this->pagination($paginate);
         return [

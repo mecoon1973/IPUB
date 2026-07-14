@@ -9,6 +9,7 @@ export interface Sach {
     BanQuyenTuNgay: string;
     BanQuyenDenNgay: string;
     BienTapBien: string;
+    BienTapVien?: string;
     CanhBao: boolean;
     CoMSISBN: boolean;
     CreateBy: number;
@@ -97,11 +98,13 @@ export interface Sach {
 
 export interface FilterSach extends Relationships {
     title: string;
+    MaSo?: string;
     ID_MangSach: number;
     ID_DonVi: number;
     NamXuatBan: string;
     NamTaiBan: string;
-    HTXB: number;
+    HTXB?: number;
     NgayDK: Date[];
-    IsDeleted: boolean;
+    IsDeleted?: boolean;
+    KetChuyenThanhSach?: boolean;
 }

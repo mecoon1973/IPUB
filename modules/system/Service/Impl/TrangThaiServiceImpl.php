@@ -41,6 +41,28 @@ class TrangThaiServiceImpl extends BaseService implements TrangThaiService
         return $result;
     }
 
+    public function getListOrdered(?FilterTrangThai $filter = null) {
+        $filter = $filter ?? new FilterTrangThai(['DaGui' => true]);
+        $fields = ['_id', 'DaGui', 'MaTrangThai', 'Order', 'TenTrangThai'];
+
+        return $this->baseRepo->findAll(
+            $filter->buildConditions(),
+            ['Order' => 1],
+            $fields
+        );
+    }
+
+    public function getMapTrangThai(?FilterTrangThai $filter = null): array {
+        $list = $this->getListOrdered($filter);
+        $map = [];
+
+        foreach ($list as $trangThai) {
+            $map[(int) $trangThai->MaTrangThai] = (string) $trangThai->TenTrangThai;
+        }
+
+        return $map;
+    }
+
     public function store(array $data) : DM_TRANG_THAI {
         if(data_get($data, "id", 0) != 0) {
             /** @var DM_TRANG_THAI $trangThai */

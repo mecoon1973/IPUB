@@ -10,6 +10,7 @@
         "listMonhoc" => $listMonhoc,
         "listBosach" => $listBosach,
         "listTusach" => $listTusach,
+        "listDonvi" => $listDonvi,
         "Donvi" => $Donvi,
         "listBTV" => $listBTV,
     ];

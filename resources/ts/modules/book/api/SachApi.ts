@@ -29,6 +29,20 @@ export class SachApi {
             return [];
         }
     }
+
+    static async getById(id: number): Promise<Sach | null> {
+        const url = "/api/book/list";
+        try {
+            const list: Sach[] = await window._apiGet(url, {
+                id,
+                IsDeleted: false,
+                relations: ["don_vi"],
+            });
+            return list.find((item) => item.id === id) ?? list[0] ?? null;
+        } catch {
+            return null;
+        }
+    }
     static async upsert(data: Partial<Sach>): Promise<Sach|null> {
         const url = "/api/book/store";
         try {
