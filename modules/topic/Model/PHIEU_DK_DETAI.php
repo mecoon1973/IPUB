@@ -4,7 +4,6 @@ namespace Modules\Topic\Model;
 
 use Core\Model\Model;
 use DateTime;
-use Modules\Topic\Object\PhieuDkDetaiTrangThai;
 use Modules\System\Model\DM_BOSACH;
 use Modules\System\Model\DM_DONVI;
 use Modules\System\Model\DM_LOP;
@@ -17,7 +16,7 @@ use Modules\System\Model\DM_MANGSACH_CXB;
 
 /**
  * @property int $_id
- * @property DateTime $NgayDk
+ * @property DateTime $NgayDK
  * @property string $MaSo
  * @property string $MaSoCXB
  * @property string $SoGPXB
@@ -148,7 +147,7 @@ class PHIEU_DK_DETAI extends Model {
 
     protected $fillable = [
         "_id",
-        "NgayDk",
+        "NgayDK",
         "MaSo",
         "MaSoCXB",
         "SoGPXB",
@@ -256,7 +255,7 @@ class PHIEU_DK_DETAI extends Model {
      */
     protected $attributes = [
         "_id" => 0,
-        "NgayDk" => null,
+        "NgayDK" => null,
         "MaSo" => "",
         "MaSoCXB" => "",
         "SoGPXB" => "",
@@ -359,7 +358,7 @@ class PHIEU_DK_DETAI extends Model {
     ];
 
     protected $casts = [
-        "NgayDk" => "datetime",
+        "NgayDK" => "datetime",
         "CreatedOn" => "datetime",
         "EditedOn" => "datetime",
     ];

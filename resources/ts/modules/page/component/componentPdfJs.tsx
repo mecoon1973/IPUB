@@ -9,14 +9,13 @@ import pdfWorkerSrc from "pdfjs-dist/build/pdf.worker.min.mjs?url";
 import {
     CaretDownOutlined,
     CaretUpOutlined,
-    DownloadOutlined,
     MenuOutlined,
     MinusOutlined,
     PlusOutlined,
     PrinterOutlined,
     SearchOutlined,
 } from "@ant-design/icons";
-import "./componentPdfJs.css";
+import "../../../../css/modules/topic/PhieuDkDetai/componentPdfJs.css";
 
 GlobalWorkerOptions.workerSrc = pdfWorkerSrc;
 
@@ -25,6 +24,11 @@ export interface ComponentPdfJsProps {
     /** Chiều cao khung xem. Mặc định "calc(100vh - 120px)" */
     height?: string | number;
     className?: string;
+    /**
+     * Slot bên phải toolbar (sau nút In).
+     * Thường truyền Dropdown / menu chọn hành động từ phía ngoài.
+     */
+    actions?: React.ReactNode;
 }
 
 const MIN_SCALE = 0.25;
@@ -92,7 +96,7 @@ function ToolbarIconButton(props: {
 }
 
 const _ComponentPdfJs = (props: ComponentPdfJsProps) => {
-    const { url, height = "calc(100vh - 120px)", className } = props;
+    const { url, height = "calc(100vh - 120px)", className, actions } = props;
 
     const canvasRef = useRef<HTMLCanvasElement | null>(null);
     const renderTaskRef = useRef<RenderTask | null>(null);
@@ -322,19 +326,6 @@ const _ComponentPdfJs = (props: ComponentPdfJsProps) => {
         }, 400);
     }, [url]);
 
-    const handleDownload = useCallback(() => {
-        if (!url) {
-            return;
-        }
-        const link = document.createElement("a");
-        link.href = url;
-        link.download = url.split("/").pop()?.split("?")[0] || "document.pdf";
-        link.rel = "noopener";
-        document.body.appendChild(link);
-        link.click();
-        link.remove();
-    }, [url]);
-
     const runSearch = useCallback(async () => {
         const query = searchQuery.trim().toLowerCase();
         if (!pdfDoc || !query) {
@@ -452,9 +443,7 @@ const _ComponentPdfJs = (props: ComponentPdfJsProps) => {
                     <ToolbarIconButton title="In" onClick={handlePrint} disabled={!url || loading}>
                         <PrinterOutlined />
                     </ToolbarIconButton>
-                    <ToolbarIconButton title="Tải xuống" onClick={handleDownload} disabled={!url || loading}>
-                        <DownloadOutlined />
-                    </ToolbarIconButton>
+                    {actions != null && <div className="pdf-toolbar__actions">{actions}</div>}
                 </div>
             </div>
 

@@ -3,6 +3,8 @@
 @php
     $pageProps = [
         "url" => $url,
+        "id" => $id,
+        "path_file_docx" => $path_file_docx,
     ];
 @endphp
 

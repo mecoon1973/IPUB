@@ -3,14 +3,16 @@
 namespace Modules\System\Model;
 
 use Core\Model\Model;
+use DateTime;
+
 /**
  * @property int $_id
  * @property string $MaLop
  * @property string $TenLop
  * @property int $CreatedBy
- * @property datetime $CreatedOn
+ * @property DateTime $CreatedOn
  * @property int $EditedBy
- * @property datetime $EditedOn
+ * @property DateTime $EditedOn
  * @property boolean $InUsed
  * @property boolean $IsDeleted
  * @property boolean $DaGui

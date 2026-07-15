@@ -18,6 +18,8 @@ interface PhieuDkDetaiService extends IBaseService {
 
     public function delete(int $id): bool;
 
+    public function printPhieuDkDeTai(int $id, array $data): string;
+
     /** chuẩn hóa dữ liệu biên tập viên trong phiếu DK đề tài
      * thêm giá trị idListBTV chứa các _id User BTV trong phiếu
      */
@@ -34,4 +36,6 @@ interface PhieuDkDetaiService extends IBaseService {
     public function previewMaSoNxbgd(int $idDeTai, bool $isMa12KiTu): string;
 
     public function capMaSoNxbgd(int $idDeTai, string $maSo, bool $isMa12KiTu, int $idCanBo): PHIEU_DK_DETAI;
+
+    public function helperPrintPhieuDkDeTai(array $data): array;
 }

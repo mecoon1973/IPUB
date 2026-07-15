@@ -1,6 +1,6 @@
-import { defaultPagiInfo, type PagiResult } from "../../page/type";
+﻿import { defaultPagiInfo, type PagiResult } from "../../page/type";
 import { formatDateToIso8601UtcOffset } from "../../core/utils/helpersDayjs";
-import type { FilterPhieuDkDetai, PhieuDkDetai, PhieuDkDetaiDateKey } from '../type/PhieuDkDetai';
+import type { FilterPhieuDkDetai, FormDataPrintPhieuDkDeTai, PhieuDkDetai, PhieuDkDetaiDateKey } from '../type/PhieuDkDetai';
 
 const STORE_DATE_KEYS: PhieuDkDetaiDateKey[] = [
     "NgayDK",
@@ -16,13 +16,29 @@ export class PhieuDkDetaiApi {
         IsDeleted : false,
     }
 
+    /**
+     * Date → ISO string trước khi POST (jQuery form-urlencoded gọi Date.toString() nếu để nguyên Date).
+     * Không gán `null`: `$.param` bỏ qua null/undefined → field biến mất khỏi body.
+     * Mongo trả `_id` — gửi lên API bằng `id` để update.
+     */
     static readonly serializePayloadForStore = (data: Partial<PhieuDkDetai>): Record<string, unknown> => {
         const payload: Record<string, unknown> = { ...data };
+        const raw = payload as { id?: unknown; _id?: unknown };
+        if ((raw.id == null || raw.id === 0) && raw._id != null) {
+            payload.id = Number(raw._id);
+        }
+        delete raw._id;
+
         for (const key of STORE_DATE_KEYS) {
             if (!(key in payload) || payload[key] == null) {
                 continue;
             }
-            payload[key] = formatDateToIso8601UtcOffset(payload[key] as Date);
+            const formatted = formatDateToIso8601UtcOffset(payload[key]);
+            if (formatted == null) {
+                delete payload[key];
+                continue;
+            }
+            payload[key] = formatted;
         }
         return payload;
     };
@@ -107,6 +123,19 @@ export class PhieuDkDetaiApi {
         } catch (err: any) {
             window._toastbox(err.responseJSON?.message || "Có lỗi xảy ra, vui lòng thử lại", "danger");
             return null;
+        }
+    }
+    static async printPhieuDkDeTai(id: number, data: FormDataPrintPhieuDkDeTai): Promise<string> {
+        const url = `/api/topic/phieu-dk-detai/print/${id}`;
+        try {
+            window._toastbox("Đang xử lý...", "info");
+            const res = await window._apiGet(url, data);
+            window._toastbox("Xử lý hoàn tất", "success");
+            const fileUrl = typeof res === "string" ? res : (res?.url ?? "");
+            return typeof fileUrl === "string" ? fileUrl : "";
+        } catch (err: any) {
+            window._toastbox(err.responseJSON?.message || "Có lỗi xảy ra, vui lòng thử lại", "danger");
+            return "";
         }
     }
 }

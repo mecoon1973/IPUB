@@ -15,6 +15,7 @@ use Modules\Topic\Object\FilterPhieuDkDetai;
 use Modules\Topic\Model\PHIEU_DK_DETAI;
 
 use Exception;
+use ExportFile\ExportFile;
 use Modules\System\Object\FilterTrangThai;
 use Modules\System\Service\DonviService;
 use Modules\System\Service\TrangThaiService;
@@ -51,11 +52,14 @@ class PhieuDkDetaiServiceImpl extends BaseService implements PhieuDkDetaiService
     }
 
     public function store(array $data): PHIEU_DK_DETAI {
-        $isCreate = data_get($data, "id", 0) == 0;
+        $id = (int) data_get($data, "id", 0);
+        unset($data["id"], $data["_id"]);
+
+        $isCreate = $id === 0;
 
         if(!$isCreate) {
             /** @var PHIEU_DK_DETAI $phieuDkDetai */
-            $phieuDkDetai = $this->baseRepo->get($data["id"]);
+            $phieuDkDetai = $this->baseRepo->get($id);
             if($phieuDkDetai) {
                 $phieuDkDetai->update($data);
                 return $phieuDkDetai;
@@ -106,6 +110,51 @@ class PhieuDkDetaiServiceImpl extends BaseService implements PhieuDkDetaiService
         }
 
         return $saved;
+    }
+
+    public function printPhieuDkDeTai(int $id, array $data): string {
+        $phieuDkDetai = $this->baseRepo->get($id);
+        if(!$phieuDkDetai){
+            throw new Exception("Phiếu đăng ký đề tài không tồn tại");
+        }
+
+        $templateName = (string) data_get($data, "template_name", "Template_Phieu_DK_DE_TAI");
+        $templateFormat = (string) data_get($data, "template_format", "pdf");
+        $pathFileDocx = (string) data_get($data, "path_file_docx", "");
+        $exportFile = new ExportFile($templateName, [
+            "phieu_dk_detai" => $phieuDkDetai,
+        ], $templateFormat);
+        if ($pathFileDocx !== '' && is_file($pathFileDocx)) {
+            $exportFile->setPathFileDocx($pathFileDocx);
+        }
+
+        return $exportFile->export();
+    }
+    /**
+     * hàm này nhận dữ liệu callback từ ExportFile để thay đổi giá trị khi cần thiết
+     *
+    */
+    public function helperPrintPhieuDkDeTai(array $data): array {
+        if (data_get($data, "!CanhBao!", false)) {
+            $data['!CanhBao!'] = "";
+            $data['!1CanhBao!'] = "X";
+        } else {
+            $data['!CanhBao!'] = "X";
+            $data['!1CanhBao!'] = "";
+        }
+
+        // true nếu "!Lop!" chứa chuỗi "Lớp"
+        if((string) data_get($data, "!Lop!", "") !== ""){
+            $befString = "";
+            if (str_contains((string) data_get($data, "!Lop!", ""), "Lớp")) {
+                $befString = "9.2 ";
+            }else{
+                $befString = "9.3 ";
+            }
+            $data["!Lop!"] = $befString . (string) data_get($data, "!Lop!", "");
+        }
+        dd($data);
+        return $data;
     }
 
     public function convertDataListBTV(){

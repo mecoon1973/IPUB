@@ -29,8 +29,48 @@ export function formatDateToNumber(date: number | string | Date | undefined): nu
  * @param date Chuỗi ngày tháng năm
  * @returns Số giây
  */
-export function convertValueToDayjs(date: string | number | Date | undefined | null | dayjs.Dayjs): dayjs.Dayjs | undefined {
-    return date && dayjs(date).isValid() ? dayjs(date) : undefined;
+export function convertValueToDayjs(date: string | number | Date | undefined | null | dayjs.Dayjs | unknown): dayjs.Dayjs | undefined {
+    const normalized = normalizeDateInput(date);
+    if (normalized === null) {
+        return undefined;
+    }
+    const d = dayjs(normalized);
+    return d.isValid() ? d : undefined;
+}
+
+/**
+ * Chuẩn hoá input ngày về Date/string/number mà dayjs parse được.
+ * Hỗ trợ thêm Carbon JSON `{ date: "..." }` và Mongo `{ $date: "..." }`.
+ */
+export function normalizeDateInput(value: unknown): string | number | Date | dayjs.Dayjs | null {
+    if (value === null || value === undefined || value === "" || value === 0) {
+        return null;
+    }
+    if (value instanceof Date || typeof value === "string" || typeof value === "number") {
+        return value;
+    }
+    if (dayjs.isDayjs(value)) {
+        return value;
+    }
+    if (typeof value === "object") {
+        const obj = value as Record<string, unknown>;
+        if (typeof obj.date === "string") {
+            return obj.date;
+        }
+        if (typeof obj.$date === "string" || typeof obj.$date === "number") {
+            return obj.$date;
+        }
+        if (obj.$date && typeof obj.$date === "object") {
+            const inner = obj.$date as Record<string, unknown>;
+            if (typeof inner.$numberLong === "string" || typeof inner.$numberLong === "number") {
+                return Number(inner.$numberLong);
+            }
+        }
+        if (typeof (obj as { toDate?: () => Date }).toDate === "function") {
+            return (obj as { toDate: () => Date }).toDate();
+        }
+    }
+    return null;
 }
 
 /**
@@ -38,12 +78,13 @@ export function convertValueToDayjs(date: string | number | Date | undefined | n
  * Dùng trước khi gửi API vì jQuery form-urlencoded sẽ gọi Date.toString() nếu để nguyên Date.
  */
 export function formatDateToIso8601UtcOffset(
-    date: string | number | Date | undefined | null | dayjs.Dayjs
+    date: string | number | Date | undefined | null | dayjs.Dayjs | unknown
 ): string | null {
-    if (date === null || date === undefined || date === "" || date === 0) {
+    const normalized = normalizeDateInput(date);
+    if (normalized === null) {
         return null;
     }
-    const d = dayjs(date);
+    const d = dayjs(normalized);
     if (!d.isValid()) {
         return null;
     }
@@ -60,11 +101,8 @@ export function toIso8601UtcOffset(value: unknown): string | null {
     if (value === null || value === undefined || value === 0) {
         return null;
     }
-    if (value instanceof Date || typeof value === "string") {
-        return formatDateToIso8601UtcOffset(value);
-    }
     if (typeof value === "number") {
         return formatDateToIso8601UtcOffset(dayjs.unix(value));
     }
-    return null;
+    return formatDateToIso8601UtcOffset(value);
 };

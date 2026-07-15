@@ -14,6 +14,7 @@ class FrmStorePhieuDkDetaiRequest extends FormRequest
      * @var array<string, string>
      */
     protected $casts = [
+        'id' => 'integer',
         'HTXB' => 'boolean',
         'BanQuyen' => 'boolean',
         'IsXetDuyet' => 'boolean',
@@ -102,14 +103,16 @@ class FrmStorePhieuDkDetaiRequest extends FormRequest
             "ID_DonVi" => "required|integer",
             "IsXetDuyet" => "required|boolean",
 
+            // dùng phân nhánh create/update trong service (validated() chỉ trả field có rule)
+            "id" => "sometimes|nullable|integer",
 
             // các field bắt buộc nhưng có option có thể chọn hay không
             "DungLuongTep" => "sometimes|nullable|integer",
             "SoTrangDK" => "sometimes|integer",
             "Rong" => "sometimes|string",
             "Dai" => "sometimes|string",
-            "BanQuyenDenNgay" => "sometimes|date",
-            "DenNgayHDBS" => "sometimes|date",
+            "BanQuyenDenNgay" => "sometimes|date|nullable",
+            "DenNgayHDBS" => "sometimes|date|nullable",
 
             // các field có thể có hoặc không gửi
             "TenNguyenBan" => "sometimes|string",
@@ -207,6 +210,10 @@ class FrmStorePhieuDkDetaiRequest extends FormRequest
      */
     protected function prepareForValidation(): void
     {
+        // jQuery gửi "" cho field optional → nullable|integer fail; chuẩn hoá về null
+        if ($this->has('DungLuongTep') && $this->input('DungLuongTep') === '') {
+            $this->merge(['DungLuongTep' => null]);
+        }
 
         $normalized = [];
         foreach ($this->casts as $field => $type) {

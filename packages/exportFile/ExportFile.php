@@ -8,19 +8,23 @@ use LibreOffice\LibreOfficeCMD;
 use Modules\System\Model\DM_TEMPLATE_EXPORT;
 use Modules\System\Object\ContentEditTemplate;
 use Modules\System\Service\TemplateExportService;
+use Modules\Topic\Service\PhieuDkDetaiService;
 
 class ExportFile {
     /** @var DM_TEMPLATE_EXPORT $template */
-    public DM_TEMPLATE_EXPORT $template;
+    protected DM_TEMPLATE_EXPORT $template;
 
     /** @var TemplateExportService $templateExportService */
-    public TemplateExportService $templateExportService;
+    protected TemplateExportService $templateExportService;
+
+    /** @var string $path_file_docx file gốc để tránh tạo nhiều file docx */
+    protected string $path_file_docx;
 
     /** @var array $data dữ liệu xuất file */
-    public array $data;
+    protected array $data;
 
     /** @var string $type định dạng muốn xuất */
-    public string $type;
+    protected string $type;
 
     public function __construct(string $keyTemplate, array $data, string $type){
         /** @var TemplateExportService $templateExportService */
@@ -29,6 +33,7 @@ class ExportFile {
         $this->template = $this->getTemplate($keyTemplate);
         $this->data = $data;
         $this->type = $type;
+        $this->path_file_docx = "";
     }
 
     /**
@@ -47,6 +52,14 @@ class ExportFile {
 
     protected function getKeyTemplate(): string {
         return $this->template->key;
+    }
+
+    public function getPathFileDocx(): string {
+        return $this->path_file_docx;
+    }
+
+    public function setPathFileDocx(string $pathFileDocx): void {
+        $this->path_file_docx = $pathFileDocx;
     }
 
     public function getArrayContentEdit(): array{
@@ -85,13 +98,21 @@ class ExportFile {
         $contentHtml = ContentEditTemplate::getTypeData($this->getArrayContentEdit(), $this->data, ['getHtml' => true]);
         $outputPath = '';
 
+        if ($this->path_file_docx !== '' && is_file($this->path_file_docx)) {
+            return $this->path_file_docx;
+        }
+
         switch($this->getKeyTemplate()){
             case "Template_Phieu_DK_DE_TAI":
+                /** @var PhieuDkDetaiService $phieuDkDetaiService */
+                $phieuDkDetaiService = app(PhieuDkDetaiService::class);
+                $contentText = $phieuDkDetaiService->helperPrintPhieuDkDeTai($contentText);
                 $editDocx->replateContent($contentText);
                 $editDocx->replateHtmlContent($contentHtml);
-                $editDocx->applyLoopRows(ContentEditTemplate::getTypeDataLoop($this->getArrayContentEdit(), $this->data));
-                $outputPath = core_build_unique_public_tmp_path('rpPhieuDkDetai', 'docx');
+                // $editDocx->applyLoopRows(ContentEditTemplate::getTypeDataLoop($this->getArrayContentEdit(), $this->data));
+                $outputPath = core_build_unique_public_tmp_path('Template_Phieu_DK_DE_TAI', 'docx');
                 $editDocx->save($outputPath);
+                $this->path_file_docx = $outputPath;
                 break;
             default:
                 throw new Exception("Template này đang không hỗ trợ xuất file docx");
@@ -163,7 +184,7 @@ class ExportFile {
      */
     public function export(): string {
         switch($this->type){
-            case "excel":
+            case "xlsx":
                 return $this->exportExcel();
             case "docx":
                 return $this->exportDocx();

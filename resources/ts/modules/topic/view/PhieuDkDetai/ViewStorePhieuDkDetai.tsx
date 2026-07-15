@@ -1,4 +1,4 @@
-import {
+﻿import {
     mountReactComponentOnReady,
     readRootDataProps,
 } from "../../../core/utils/helpers";
@@ -130,7 +130,11 @@ export const ViewStorePhieuDkDetai = React.memo((props: ViewStorePhieuDkDetaiPro
     const { phieuDkDetai, mapTrangThai, listMangsach, listDoituong, listLop, listMonhoc, listBosach, listTusach, listDonvi, Donvi, listBTV } = props;
     const [form, setForm] = useState<Partial<PhieuDkDetai>>(() => {
         if (phieuDkDetai) {
-            return phieuDkDetai;
+            const raw = phieuDkDetai as PhieuDkDetai & { _id?: number };
+            return {
+                ...phieuDkDetai,
+                id: phieuDkDetai.id || Number(raw._id) || 0,
+            };
         }
         const idDonVi = resolveDonviId(Donvi);
         return {
@@ -235,7 +239,12 @@ export const ViewStorePhieuDkDetai = React.memo((props: ViewStorePhieuDkDetaiPro
         PhieuDkDetaiApi.upsert(form).then((res: PhieuDkDetai | null) => {
             if (res) {
                 window._toastbox("Cập nhật đề tài thành công", "success");
-                setForm( (prev: Partial<PhieuDkDetai>) => ({ ...prev, ...res}));
+                const raw = res as PhieuDkDetai & { _id?: number };
+                setForm((prev: Partial<PhieuDkDetai>) => ({
+                    ...prev,
+                    ...res,
+                    id: res.id || Number(raw._id) || prev.id || 0,
+                }));
             }
         }).finally(() => {
             setSubmitting(false);

@@ -1,4 +1,4 @@
-import type { Relationships } from "../../page/type";
+﻿import type { Relationships } from "../../page/type";
 import type { User } from "../../user/type";
 
 export enum KieuBanQuyen {
@@ -443,4 +443,12 @@ export interface LuuXetDuyetPhieuDkKhxbCxbPayload {
     }>;
 }
 
+export interface FormDataPrintPhieuDkDeTai {
+    /** Tên template */
+    template_name: string;
+    /** định dạng muốn xuất */
+    template_format: "pdf" | "docx" | "xlsx" | "html" | "txt";
+    /** file docx gốc */
+    path_file_docx?: string;
+}
 //

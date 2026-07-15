@@ -328,7 +328,7 @@ class PhieuDkKhxbCxbServiceImpl extends BaseService implements PhieuDkKhxbCxbSer
             'ID_DeTai' => (int) $deTai->_id,
             'MaSo' => (string) ($deTai->MaSo ?? ''),
             'MaSoCXB' => (string) ($deTai->MaSoCXB ?? ''),
-            'NgayDK' => $deTai->NgayDk,
+            'NgayDK' => $deTai->NgayDK,
             'NgayCapPhep' => $deTai->NgayCapPhep,
             'TenSach' => (string) ($deTai->TenDeTai ?? ''),
             'BienTapVien' => (string) ($deTai->BienTapVien ?? ''),

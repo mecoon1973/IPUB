@@ -61,3 +61,19 @@ export function formatFileSize(bytes: number): string {
     }
     return `${(bytes / (1024 * 1024)).toFixed(1)} MB`;
 }
+
+/** Tải file từ URL public (vd: /file_tmp/...). */
+export function downloadFileFromUrl(fileUrl: string, fileName?: string): void {
+    const trimmed = fileUrl.trim();
+    if (!trimmed) {
+        return;
+    }
+
+    const link = document.createElement("a");
+    link.href = trimmed;
+    link.download = fileName || getFileNameFromPath(trimmed) || "download";
+    link.rel = "noopener";
+    document.body.appendChild(link);
+    link.click();
+    link.remove();
+}

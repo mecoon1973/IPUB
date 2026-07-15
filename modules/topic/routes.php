@@ -16,6 +16,7 @@ Route::group(['middleware' => ['web', 'auth.custom']], function () {
                 Route::get('/paginate/{page?}', [PhieuDkDetaiController::class, 'getPaginatePhieuDkDetai'])->name('phieu-dk-detai.paginate')->where('page', regexRoute("page"));
                 Route::get('/list', [PhieuDkDetaiController::class, 'getListPhieuDkDetai'])->name('phieu-dk-detai.list');
                 Route::post('/store', [PhieuDkDetaiController::class, 'store'])->name('phieu-dk-detai.store');
+                Route::get('/print/{id}', [PhieuDkDetaiController::class, 'printPhieuDkDeTai'])->name('phieu-dk-detai.print');
                 Route::post('/xet-duyet', [PhieuDkDetaiController::class, 'xetDuyetDeTai'])->name('phieu-dk-detai.xet-duyet');
                 Route::post('/xet-duyet-nxbgdvn', [PhieuDkDetaiController::class, 'xetDuyetNxbgdvn'])->name('phieu-dk-detai.xet-duyet-nxbgdvn');
                 Route::get('/cap-ma-so/preview', [PhieuDkDetaiController::class, 'previewMaSoNxbgd'])->name('phieu-dk-detai.cap-ma-so.preview');

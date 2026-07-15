@@ -35,8 +35,16 @@ export const TablePhieuDkDetaiComponent = React.memo(() => {
             width: 120,
             render: (_, phieuDkDetai, index) => {
                 const items: MenuProps["items"] = [
-                    { key: "mp1", label: "In mẫu 1 (MP1)" },
-                    { key: "mp2", label: "In mẫu 2 (MP2)" },
+                    {
+                        key: "mp2",
+                        label: "In mẫu",
+                        onClick: () => {
+                            if (!phieuDkDetai.id) {
+                                return;
+                            }
+                            window.location.href = `/phieu-dk-detai/in/${phieuDkDetai.id}`;
+                        },
+                    },
                     {
                         key: "detail",
                         label: "Xem chi tiết",

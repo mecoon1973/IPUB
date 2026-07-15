@@ -1,4 +1,4 @@
-import { Checkbox, Input, Radio, Select, Space, Typography } from "antd";
+﻿import { Checkbox, Input, Radio, Select, Space, Typography } from "antd";
 import { KieuBanQuyen, type PhieuDkDetai } from "../../../type/PhieuDkDetai";
 import React, { useCallback, useMemo, useState } from "react";
 import "../../../../../../css/modules/topic/PhieuDkDetai/FormFieldPhieuDkDetai.css";
@@ -185,7 +185,7 @@ const FormFieldPhieuDkDetai = React.memo((props: FormFieldPhieuDkDetaiProps) => 
                                 placeholder="Ngày đăng ký"
                                 value={convertValueToDayjs(form.NgayDK)}
                                 onChange={(date: Dayjs | null | undefined) => {
-                                    setField("NgayDK", date ? date.toDate() : undefined);
+                                    setField("NgayDK", date?.isValid() ? date.toDate() : undefined);
                                 }}
                                 format="DD/MM/YYYY"
                             />
